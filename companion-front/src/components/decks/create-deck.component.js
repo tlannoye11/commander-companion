@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
+import CommanderList from './commander-list.component';
 
 class CreateDeck extends Component {
     constructor(props) {
@@ -7,56 +10,62 @@ class CreateDeck extends Component {
 
         // Bindings
         this.onChangeDeckName = this.onChangeDeckName.bind(this);
-        this.onChangeDeckColors = this.onChangeDeckColors.bind(this);
-        this.onChangeDeckCount = this.onChangeDeckCount.bind(this);
-        this.onChangeDeckAverageCMC = this.onChangeDeckAverageCMC.bind(this);
-        this.onChangeDeckFoils = this.onChangeDeckFoils.bind(this);
+        this.onChangeDeckCommander = this.onChangeDeckCommander.bind(this);
         this.onChangeDeckTheme = this.onChangeDeckTheme.bind(this);
         this.onChangeDeckSleeveColor = this.onChangeDeckSleeveColor.bind(this);
-        this.onChangeDeckBasicLands = this.onChangeDeckBasicLands.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
 
         // Empty state
         this.state = {
             deck_name: "",
+            deck_commander: "",
             deck_colors: "",
             deck_count: 0,
             deck_average_cmc: 0.0,
             deck_foils: "",
             deck_theme: "",
             deck_sleeve_color: "",
-            deck_basic_lands: []
+            deck_basic_lands: [],
+            commanders: []
         }    
     }
 
+    // Get commanders for the given name
+    getCommanders(str) {
+        axios.get(`https://api.scryfall.com/cards/search?q=is%3Acommander+name%3D${str}`)
+        .then(response => {
+            return response.data.data;
+        })
+        .then(data => {
+            this.setState({
+                commanders: data
+            });
+        })
+        .catch((err) => {
+            console.log(`Error getting list of commanders: ${err}`);
+        });
+    }
+
+    // onChange methods
     onChangeDeckName(e) {
         this.setState({
             deck_name: e.target.value
         });
     }
 
-    onChangeDeckColors(e) {
+    onChangeDeckCommander(e) {
         this.setState({
-            deck_colors: e.target.value
+            deck_commander: e.target.value
         });
-    }
 
-    onChangeDeckCount(e) {
-        this.setState({
-            deck_count: e.target.value
-        });
-    }
-
-    onChangeDeckAverageCMC(e) {
-        this.setState({
-            deck_average_cmc: e.target.value
-        });
-    }
-
-    onChangeDeckFoils(e) {
-        this.setState({
-            deck_foils: e.target.value
-        });
+        if (e.target.value.length >= 3) {
+            this.getCommanders(e.target.value);
+        }
+        else {
+            this.setState({
+                commanders: []
+            })
+        }
     }
 
     onChangeDeckTheme(e) {
@@ -71,19 +80,12 @@ class CreateDeck extends Component {
         });
     }
 
-    onChangeDeckBasicLands(e) {
-        this.setState({
-            deck_basic_lands: e.target.value
-        });
-    }
-
     onSubmit(e) {
         e.preventDefault();
 
-        console.log(`Deck Edit Form Submitted`);
-
         const newDeck = {
             deck_name: this.state.deck_name,
+            deck_commander: this.state.deck_commander,
             deck_colors: this.state.deck_colors,
             deck_count: this.state.deck_count,
             deck_average_cmc: this.state.deck_average_cmc,
@@ -100,6 +102,7 @@ class CreateDeck extends Component {
         
         this.setState({
             deck_name: "",
+            deck_commander: "",
             deck_colors: "",
             deck_count: 0,
             deck_average_cmc: 0.0,
@@ -111,29 +114,24 @@ class CreateDeck extends Component {
     }
 
     render() {
+        let filteredCommanders = this.state.commanders.filter(commander => {
+            return commander.name.toLowerCase().includes(this.state.deck_commander.toLowerCase());
+        });
+
         return (
             <div style= {{ marginTop: 20 }}>
-                <h3>Create New Deck</h3>
-                <form onSubmit={this.onSubmit}>
+                <Link to="/">
+                    <Button size="sm" variant="info">Back icon here</Button>
+                </Link>
+                <h3>Create Deck</h3>
+                <form className="form-inline" onSubmit={this.onSubmit}>
                     <div className="form-group">
                         <label>Name</label>
                         <input type="text" className="form-control" value={this.state.deck_name} onChange={this.onChangeDeckName} />
                     </div>
                     <div className="form-group">
-                        <label>Colors</label>
-                        <input type="text" className="form-control" value={this.state.deck_colors} onChange={this.onChangeDeckColors} />
-                    </div>
-                    <div className="form-group">
-                        <label>Count</label>
-                        <input type="text" className="form-control" value={this.state.deck_count} onChange={this.onChangeDeckCount} />
-                    </div>
-                    <div className="form-group">
-                        <label>Avg CMC</label>
-                        <input type="text" className="form-control" value={this.state.deck_average_cmc} onChange={this.onChangeDeckAverageCMC} />
-                    </div>
-                    <div className="form-group">
-                        <label>Foils</label>
-                        <input type="text" className="form-control" value={this.state.deck_foils} onChange={this.onChangeDeckFoils} />
+                        <label>Commander</label>
+                        <input type="text" className="form-control" value={this.state.deck_commander} onChange={this.onChangeDeckCommander} />
                     </div>
                     <div className="form-group">
                         <label>Theme</label>
@@ -144,15 +142,14 @@ class CreateDeck extends Component {
                         <input type="text" className="form-control" value={this.state.deck_sleeve_color} onChange={this.onChangeDeckSleeveColor} />
                     </div>
                     <div className="form-group">
-                        <label>Basic Lands</label>
-                        <input type="text" className="form-control" value={this.state.deck_basic_lands} onChange={this.onChangeDeckBasicLands} />
-                    </div>
-                    <div className="form-group">
                         <input type="submit" value="Create Deck" className="btn btn-primary" />
                     </div>
                 </form>
+                <div id="cardNames">
+                    <CommanderList commanders={filteredCommanders} />
+                </div>
             </div>
-        );
+        )
     }
 }
 

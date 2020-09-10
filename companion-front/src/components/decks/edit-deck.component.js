@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 
 class EditDeck extends Component {
     constructor(props) {
@@ -7,18 +9,15 @@ class EditDeck extends Component {
 
         // Bindings
         this.onChangeDeckName = this.onChangeDeckName.bind(this);
-        this.onChangeDeckColors = this.onChangeDeckColors.bind(this);
-        this.onChangeDeckCount = this.onChangeDeckCount.bind(this);
-        this.onChangeDeckAverageCMC = this.onChangeDeckAverageCMC.bind(this);
-        this.onChangeDeckFoils = this.onChangeDeckFoils.bind(this);
+        this.onChangeDeckCommander = this.onChangeDeckCommander.bind(this);
         this.onChangeDeckTheme = this.onChangeDeckTheme.bind(this);
         this.onChangeDeckSleeveColor = this.onChangeDeckSleeveColor.bind(this);
-        this.onChangeDeckBasicLands = this.onChangeDeckBasicLands.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
 
         // Empty state
         this.state = {
             deck_name: "",
+            deck_commander: "",
             deck_colors: "",
             deck_count: 0,
             deck_average_cmc: 0.0,
@@ -34,6 +33,7 @@ class EditDeck extends Component {
             .then((response) => {
                 this.setState({
                     deck_name: response.data.deck_name,
+                    deck_commander: response.data.deck_commander,
                     deck_colors: response.data.deck_colors,
                     deck_count: response.data.deck_count,
                     deck_average_cmc: response.data.deck_average_cmc,
@@ -54,27 +54,9 @@ class EditDeck extends Component {
         });
     }
 
-    onChangeDeckColors(e) {
-        this.setState({
-            deck_colors: e.target.value
-        });
-    }
-
-    onChangeDeckCount(e) {
-        this.setState({
-            deck_count: e.target.value
-        });
-    }
-
-    onChangeDeckAverageCMC(e) {
-        this.setState({
-            deck_average_cmc: e.target.value
-        });
-    }
-
-    onChangeDeckFoils(e) {
-        this.setState({
-            deck_foils: e.target.value
+    onChangeDeckCommander(e) {
+        this.setStage({
+            deck_commander: e.target.value
         });
     }
 
@@ -90,15 +72,12 @@ class EditDeck extends Component {
         });
     }
 
-    onChangeDeckBasicLands(e) {
-        this.setState({
-            deck_basic_lands: e.target.value
-        });
-    }
-
     onSubmit(e) {
+        e.preventDefault();
+
         const updatedDeck = {
             deck_name: this.state.deck_name,
+            deck_commander: this.state.deck_commander,
             deck_colors: this.state.deck_colors,
             deck_count: this.state.deck_count,
             deck_average_cmc: this.state.deck_average_cmc,
@@ -118,27 +97,18 @@ class EditDeck extends Component {
     render() {
         return (
             <div style= {{ marginTop: 20 }}>
+                <Link to="/">
+                    <Button size="sm" variant="info">Back icon here</Button>
+                </Link>
                 <h3>Update Deck</h3>
-                <form onSubmit={this.onSubmit}>
+                <form className="form-inline" onSubmit={this.onSubmit}>
                     <div className="form-group">
                         <label>Name</label>
                         <input type="text" className="form-control" value={this.state.deck_name} onChange={this.onChangeDeckName} />
                     </div>
                     <div className="form-group">
-                        <label>Colors</label>
-                        <input type="text" className="form-control" value={this.state.deck_colors} onChange={this.onChangeDeckColors} />
-                    </div>
-                    <div className="form-group">
-                        <label>Count</label>
-                        <input type="text" className="form-control" value={this.state.deck_count} onChange={this.onChangeDeckCount} />
-                    </div>
-                    <div className="form-group">
-                        <label>Avg CMC</label>
-                        <input type="text" className="form-control" value={this.state.deck_average_cmc} onChange={this.onChangeDeckAverageCMC} />
-                    </div>
-                    <div className="form-group">
-                        <label>Foils</label>
-                        <input type="text" className="form-control" value={this.state.deck_foils} onChange={this.onChangeDeckFoils} />
+                        <label>Commander</label>
+                        <input type="text" className="form-control" value={this.state.deck_commander} onChange={this.onChangeDeckCommander} />
                     </div>
                     <div className="form-group">
                         <label>Theme</label>
@@ -149,15 +119,11 @@ class EditDeck extends Component {
                         <input type="text" className="form-control" value={this.state.deck_sleeve_color} onChange={this.onChangeDeckSleeveColor} />
                     </div>
                     <div className="form-group">
-                        <label>Basic Lands</label>
-                        <input type="text" className="form-control" value={this.state.deck_basic_lands} onChange={this.onChangeDeckBasicLands} />
-                    </div>
-                    <div className="form-group">
                         <input type="submit" value="Update Deck" className="btn btn-primary" />
                     </div>
                 </form>
             </div>
-        );
+        )
     }
 }
 

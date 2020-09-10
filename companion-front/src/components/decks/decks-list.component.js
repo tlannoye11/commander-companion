@@ -2,17 +2,20 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
-import Deck from './deck.component';
+import DeckRow from './deck-row.component';
 
 class DecksList extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { decks: [] };
+        this.state = {
+            decks: [],
+            commanders: []
+        };
     }
 
     getDeckList() {
-        axios.get('http://localhost:4000')
+        axios.get('http://localhost:4000/decks')
             .then(response => {
                 this.setState({ decks: response.data });
             })
@@ -26,14 +29,9 @@ class DecksList extends Component {
         this.getDeckList();
     }
 
-    componentDidUpdate() {
-        // Need to generate list of decks here when a deck is deleted.
-        this.getDeckList();
-    }
-
     showDeckList() {
         return this.state.decks.map((currentDeck, i) => {
-            return <Deck deck={currentDeck} key={i} />;
+            return <DeckRow deck={currentDeck} key={i} />;
         });
     }
 

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
 
-class Deck extends Component {
+class DeckRow extends Component {
     constructor(props) {
         super(props);
         
@@ -23,7 +23,11 @@ class Deck extends Component {
     render() {
         return (
             <tr>
-                <td>{this.props.deck.deck_name}</td>
+                <td>
+                    <Link to={`/cards/${this.props.deck._id}`}>
+                        {this.props.deck.deck_name}
+                    </Link>
+                </td>
                 <td>{this.props.deck.deck_colors}</td>
                 <td>{this.props.deck.deck_count}</td>
                 <td>{this.props.deck.deck_average_cmc}</td>
@@ -44,4 +48,4 @@ class Deck extends Component {
     }
 }
 
-export default Deck;
+export default DeckRow;
