@@ -6,7 +6,8 @@ import axios from 'axios';
 class DeckRow extends Component {
     constructor(props) {
         super(props);
-        
+
+        // Binding
         this.deleteDeck = this.deleteDeck.bind(this);
     }
 

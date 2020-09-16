@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
+import AddCard from '../cards/add-card.component';
+import CardList from './card-list.component';
 
 class EditDeck extends Component {
     constructor(props) {
@@ -24,28 +26,45 @@ class EditDeck extends Component {
             deck_foils: "",
             deck_theme: "",
             deck_sleeve_color: "",
-            deck_basic_lands: []
+            deck_basic_lands: [],
+            commanders: []
         }    
     }
 
     componentDidMount() {
-        axios.get(`http://localhost:4000/decks/${this.props.match.params.id}`)
-            .then((response) => {
+        console.log("EDIT MOUNTED",this.props.match.params.id);
+        axios.get('http://localhost:4000/decks/'+this.props.match.params.id)
+            .then(response => {
+                console.log("EDIT RESPONSE:",response.data);
                 this.setState({
                     deck_name: response.data.deck_name,
-                    deck_commander: response.data.deck_commander,
-                    deck_colors: response.data.deck_colors,
-                    deck_count: response.data.deck_count,
-                    deck_average_cmc: response.data.deck_average_cmc,
-                    deck_foils: response.data.deck_foils,
                     deck_theme: response.data.deck_theme,
-                    deck_sleeve_color: response.data.deck_sleeve_color,
-                    deck_basic_lands: response.data.deck_basic_lands
+                    deck_sleeve_color: response.data.deck_sleeve_color
                 });
             })
             .catch((err) => {
-                console.log(`Error getting deck: ${err}`);
+                console.log(`Error getting deck information: ${err}`);
             });
+    }
+
+    // Get commanders for the given name
+    getCommanders(str) {
+        axios.get(`https://api.scryfall.com/cards/search?q=is%3Acommander+name%3D${str}`)
+        .then(response => {
+            return response.data.data;
+        })
+        .then(data => {
+            this.setState({
+                commanders: data
+            });
+        })
+        .catch((err) => {
+            console.log(`Error getting list of commanders: ${err}`);
+        });
+    }
+
+    handleAddCard() {
+        // do stuff here
     }
 
     onChangeDeckName(e) {
@@ -58,6 +77,15 @@ class EditDeck extends Component {
         this.setStage({
             deck_commander: e.target.value
         });
+
+        if (e.target.value.length >= 3) {
+            this.getCommanders(e.target.value);
+        }
+        else {
+            this.setState({
+                commanders: []
+            })
+        }
     }
 
     onChangeDeckTheme(e) {
@@ -95,6 +123,10 @@ class EditDeck extends Component {
     }
 
     render() {
+        let filteredCommanders = this.state.commanders.filter(commander => {
+            return commander.name.toLowerCase().includes(this.state.deck_commander.toLowerCase());
+        });
+
         return (
             <div style= {{ marginTop: 20 }}>
                 <Link to="/">
@@ -122,6 +154,12 @@ class EditDeck extends Component {
                         <input type="submit" value="Update Deck" className="btn btn-primary" />
                     </div>
                 </form>
+                <div id="findCards">
+                    <AddCard  />
+                </div>
+                <div id="commanderNames">
+                    <CardList cards={filteredCommanders} />
+                </div>
             </div>
         )
     }

@@ -19,6 +19,7 @@ deckRouter.get('/', (request, response) => {
 // Get a single deck by ID
 deckRouter.get('/:id', (request, response) => {
     let id = request.params.id;
+    
     DeckModel.findById(id, (err, deck) => {
         response.json(deck);
     });
@@ -33,7 +34,7 @@ deckRouter.post('/add', (request, response) => {
     });
 
     deck.save()
-        .then((todo) => {
+        .then((deck) => {
             response.status(200).json({ deck: 'Deck added successfully' });
         })
         .catch((err) => {

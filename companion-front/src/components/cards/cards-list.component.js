@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
+import CardRow from './card-row.component';
 
 class CardsList extends Component {
     constructor(props) {
@@ -10,20 +13,24 @@ class CardsList extends Component {
         this.state = { cards: [] };
     }
 
+    componentDidMount() {
+        // Retrieve list of cards in the deck.
+    }
+
     showCardList() {
         return this.state.cards.map((currentCard, i) => {
-            return <CardRow card={currentCard} key={i} />;
+            return <CardRow card={currentCard} deck_id={this.props.deck_id} key={i} />;
         });
     }
 
     render() {
         return (
             <div>
-                <h3>{this.props.deck.deck_name}</h3>
                 <table className="table table-striped" style={{ marginTop: 20 }}>
                     <thead>
                         <tr>
                             <th>Name</th>
+                            <th>Set</th>
                             <th>Foil</th>
                             <th>CMC</th>
                             <th>Ramp</th>
@@ -34,13 +41,13 @@ class CardsList extends Component {
                             <th>Wraths</th>
                             <th>
                                 <Link to="/create">
-                                    <Button size="sm" variant="info">Plus</Button>
+                                    <Button size="sm" variant="info">Add Tag</Button>
                                 </Link>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        { this.showDeck() }
+                        { this.showCardList() }
                     </tbody>
                 </table>
             </div>

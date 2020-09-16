@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import CommanderList from './commander-list.component';
+import CardList from './card-list.component';
 
 class CreateDeck extends Component {
     constructor(props) {
@@ -146,7 +146,7 @@ class CreateDeck extends Component {
                     </div>
                 </form>
                 <div id="cardNames">
-                    <CommanderList commanders={filteredCommanders} />
+                    <CardList cards={filteredCommanders} />
                 </div>
             </div>
         )

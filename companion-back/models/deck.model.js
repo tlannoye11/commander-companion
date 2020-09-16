@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { triggerAsyncId } = require('async_hooks');
 const Schema = mongoose.Schema;
 
 let DeckModel = new Schema({
