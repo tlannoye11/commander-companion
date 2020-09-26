@@ -5,10 +5,9 @@ let CardModel = require('../models/card.model');
 const { request, response } = require('express');
 
 // Get all cards within a deck
-cardRouter.get('/', (request, response) => {
-    console.log("REQ QUERY:",request.params.query);
+cardRouter.get('/deck/', (request, response) => {
     CardModel.find({
-        'deck_id': request.params.query
+        'deck_id': request.query.deck_id
     }, (err, cards) => {
         if (err) {
             console.log(`Error getting cards: ${err}`);
@@ -20,7 +19,7 @@ cardRouter.get('/', (request, response) => {
 });
 
 // Get a single card within a deck by ID
-cardRouter.get('/:id', (request, response) => {
+cardRouter.get('/deck/:id', (request, response) => {
     let id = request.params.id;
     CardModel.findById(id, (err, card) => {
         response.json(card);

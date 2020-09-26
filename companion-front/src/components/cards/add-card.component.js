@@ -7,14 +7,32 @@ class AddCard extends Component {
 		super(props);
 
 		// Bindings
+		this.addToDeck = this.addToDeck.bind(this);
 		this.onChangeCardSearch = this.onChangeCardSearch.bind(this);
 
 		// Empty state
 		this.state = {
 			cards: [],
+			deck_id: "",
 			selectedCard: "",
 			show: false,
 		};
+	}
+
+	addToDeck = (card) => {
+		const currentCard = {
+			card_id: card.id,
+			deck_id: this.props.deck_id,
+			is_foil: false
+		}
+
+		console.log("current card:",currentCard);
+
+		axios
+			.post('http://localhost:4000/cards/add',currentCard)
+			.then(response => {
+				console.log(response.data);
+			})
 	}
 
 	handleAddCard = () => {
@@ -57,10 +75,7 @@ class AddCard extends Component {
 				return (
 					<ListGroup.Item
 						key={i}
-						onClick={() => {
-                            console.log("YOU CHOSE",card.id);
-                            // do something with this choice!
-                        }}
+						action onClick={() => {this.addToDeck(card)}}
 					>
 						{card.name}
 					</ListGroup.Item>

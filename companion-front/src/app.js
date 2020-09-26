@@ -11,13 +11,15 @@ class App extends Component {
 			<Router>
 				<div className="container">
 					<Route path="/" exact component={DecksList} />
-					{/* <Route path="/edit/:id" exact component={EditDeck} />
-                    <Route path="/create" exact component={CreateDeck} /> */}
 					<Route
 						path="/edit/:id"
 						exact
 						render={(props) => (
-							<Deck {...props} title={`Update Deck`} deck_id={this.props.id} />
+							<Deck
+								{...props}
+								title={`Update Deck`}
+								deck_id={this.props.id}
+							/>
 						)}
 					/>
 					<Route

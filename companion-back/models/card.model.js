@@ -16,4 +16,4 @@ let CardModel = new Schema({
     }
 });
 
-module.exports = mongoose.model('CardModel', CardModel);
+module.exports = mongoose.model('Card', CardModel);

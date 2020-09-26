@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import CardRow from './card-row.component';
+import axios from 'axios';
 
 class CardsList extends Component {
     constructor(props) {
@@ -14,7 +15,22 @@ class CardsList extends Component {
     }
 
     componentDidMount() {
-        // Retrieve list of cards in the deck.
+        this.getCardsList();
+    }
+
+    getCardsList() {
+        axios
+            .get('http://localhost:4000/cards/deck/', {
+                params: {
+                    deck_id: this.props.deck_id
+                }
+            })
+            .then(response => {
+                this.setState({ cards: response.data });
+            })
+            .catch((err) => {
+                console.log(`Error getting cards for deck: ${err}`);
+            });
     }
 
     showCardList() {

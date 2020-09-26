@@ -31,4 +31,4 @@ let DeckModel = new Schema({
     }
 });
 
-module.exports = mongoose.model('DeckModel', DeckModel);
+module.exports = mongoose.model('Deck', DeckModel);

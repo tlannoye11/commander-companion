@@ -8,14 +8,15 @@ class DecksList extends Component {
     constructor(props) {
         super(props);
 
+        // Empty state
         this.state = {
-            decks: [],
-            commanders: []
+            decks: []
         };
     }
 
     getDeckList() {
-        axios.get('http://localhost:4000/decks')
+        axios
+            .get('http://localhost:4000/decks')
             .then(response => {
                 this.setState({ decks: response.data });
             })
@@ -29,7 +30,7 @@ class DecksList extends Component {
         this.getDeckList();
     }
 
-    showDeckList() {
+    showDecksList() {
         return this.state.decks.map((currentDeck, i) => {
             return <DeckRow deck={currentDeck} key={i} />;
         });
@@ -58,7 +59,7 @@ class DecksList extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        { this.showDeckList() }
+                        { this.showDecksList() }
                     </tbody>
                 </table>
             </div>
