@@ -17,7 +17,7 @@ class App extends Component {
 						render={(props) => (
 							<Deck
 								{...props}
-								title={`Update Deck`}
+								// title={`Update Deck`}
 								deck_id={this.props.id}
 							/>
 						)}
@@ -26,7 +26,7 @@ class App extends Component {
 						path="/create"
 						exact
 						render={(props) => (
-							<Deck {...props} title={`Create Deck`} />
+							<Deck {...props} />
 						)}
 					/>
 				</div>

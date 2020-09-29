@@ -35,7 +35,10 @@ deckRouter.post('/add', (request, response) => {
 
     deck.save()
         .then((deck) => {
-            response.status(200).json({ deck: 'Deck added successfully' });
+            response.status(200).json({
+                message: 'Deck added successfully',
+                id: deck._id
+            });
         })
         .catch((err) => {
             response.status(400).send('Failed to add new deck');
