@@ -15,19 +15,13 @@ class App extends Component {
 						path="/edit/:id"
 						exact
 						render={(props) => (
-							<Deck
-								{...props}
-								// title={`Update Deck`}
-								deck_id={this.props.id}
-							/>
+							<Deck {...props} deck_id={this.props.id} />
 						)}
 					/>
 					<Route
 						path="/create"
 						exact
-						render={(props) => (
-							<Deck {...props} />
-						)}
+						render={(props) => <Deck {...props} />}
 					/>
 				</div>
 			</Router>

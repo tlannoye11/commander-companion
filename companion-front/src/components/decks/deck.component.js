@@ -34,9 +34,7 @@ class Deck extends Component {
 			});
 
 			axios
-				.get(
-					"http://localhost:4000/decks/" + this.props.match.params.id
-				)
+				.get("http://localhost:4000/decks/" + this.props.match.params.id)
 				.then((response) => {
 					this.setState({
 						deck_name: response.data.deck_name,
@@ -67,6 +65,7 @@ class Deck extends Component {
 		}
 	}
 
+	// Pass onChangeCards to CardList component here, once implemented.
 	isCreated() {
 		return this.state.deck_id ? (
 			<div>
