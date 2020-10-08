@@ -18,9 +18,7 @@ deckRouter.get('/', (request, response) => {
 
 // Get a single deck by ID
 deckRouter.get('/:id', (request, response) => {
-    let id = request.params.id;
-    
-    DeckModel.findById(id, (err, deck) => {
+    DeckModel.findById(request.params.id, (err, deck) => {
         response.json(deck);
     });
 });

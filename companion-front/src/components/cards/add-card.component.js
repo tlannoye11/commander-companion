@@ -20,16 +20,18 @@ class AddCard extends Component {
 	}
 
 	addToDeck = (card) => {
-		const currentCard = {
-			card_id: card.id,
+		let apiString = 'http://localhost:4000/cards/add';
+		let currentCard = {
 			deck_id: this.props.deck_id,
+			scryfall_id: card.id,
+			card_set: card.set,
 			is_foil: false
 		}
 
-		console.log("current card:",currentCard);
+		console.log("adding this card to deck",currentCard);
 
 		axios
-			.post('http://localhost:4000/cards/add',currentCard)
+			.post(apiString,currentCard)
 			.then(response => {
 				console.log(response.data);
 			})
@@ -65,6 +67,7 @@ class AddCard extends Component {
 
 	onChangeCardSearch(e) {
 		if (e.target.value.length >= 3) {
+			console.log("searching for",e.target.value);
 			this.findCards(e.target.value);
 		}
     }

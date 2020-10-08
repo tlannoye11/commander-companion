@@ -2,11 +2,15 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let CardModel = new Schema({
-    card_id: {
+    deck_id: {
         type: String,
         required: true
     },
-    deck_id: {
+    scryfall_id: {
+        type: String,
+        required: true
+    },
+    card_set: {
         type: String,
         required: true
     },

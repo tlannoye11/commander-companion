@@ -22,7 +22,7 @@ class Deck extends Component {
 			deck_theme: "",
 			deck_sleeve_color: "",
 			cards: [],
-			changes: false,
+			deck_header_changes: false,
 		};
 	}
 
@@ -44,7 +44,7 @@ class Deck extends Component {
 				})
 				.then((response) => {
 					axios
-						.get("http://localhost:4000/cards/deck/", {
+						.get("http://localhost:4000/cards/", {
 							params: {
 								deck_id: this.props.match.params.id,
 							},
@@ -56,7 +56,7 @@ class Deck extends Component {
 							});
 						})
 						.catch((err) => {
-							console.log(`Error getting card list: ${err}`);
+							console.log(`Error getting card list for deck: ${err}`);
 						});
 				})
 				.catch((err) => {
@@ -81,48 +81,57 @@ class Deck extends Component {
 	onChangeDeckName(e) {
 		this.setState({
 			deck_name: e.target.value,
-			changes: true,
+			deck_header_changes: true,
 		});
 	}
 
 	onChangeDeckTheme(e) {
 		this.setState({
 			deck_theme: e.target.value,
-			changes: true,
+			deck_header_changes: true,
 		});
 	}
 
 	onChangeDeckSleeveColor(e) {
 		this.setState({
 			deck_sleeve_color: e.target.value,
-			changes: true,
+			deck_header_changes: true,
 		});
 	}
 
 	onChangeCards(e) {
 		// Not yet implemented
-		console.log("E:", e.target.value);
+		console.log("Change cards:", e.target.value);
+		this.setState({
+			deck_header_changes: true
+		})
 	}
 
 	onSubmitHeader(e) {
 		e.preventDefault();
 
 		let apiString =	"http://localhost:4000/decks/" + (this.state.deck_id ? "update/" + this.state.deck_id : "add");
-
-		const currentDeck = {
+		let currentDeck = {
 			deck_name: this.state.deck_name,
 			deck_theme: this.state.deck_theme,
-			deck_sleeve_color: this.state.deck_sleeve_color,
-			cards: this.state.cards,
+			deck_sleeve_color: this.state.deck_sleeve_color
 		};
 
-		axios.post(apiString, currentDeck).then((response) => {
-			this.setState({ changes: false });
+		console.log("api,deck");
+		console.log(apiString);
+		console.log(currentDeck);
 
-			if (response.data.id) {
-				this.setState({ deck_id: response.data.id });
-			}
-		});
+		axios
+			.post(apiString, currentDeck)
+			.then((response) => {
+				this.setState({ deck_header_changes: false });
+
+				if (response.data.id) {
+					this.setState({ deck_id: response.data.id });
+				}
+
+				console.log(response.data);
+			});
 	}
 
 	render() {
@@ -133,7 +142,7 @@ class Deck extends Component {
 					deck_name={this.state.deck_name}
 					deck_theme={this.state.deck_theme}
 					deck_sleeve_color={this.state.deck_sleeve_color}
-					changes={this.state.changes}
+					deck_header_changes={this.state.deck_header_changes}
 					onChangeDeckName={this.onChangeDeckName}
 					onChangeDeckTheme={this.onChangeDeckTheme}
 					onChangeDeckSleeveColor={this.onChangeDeckSleeveColor}

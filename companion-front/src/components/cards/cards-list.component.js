@@ -11,22 +11,24 @@ class CardsList extends Component {
         // Binding
 
         // Empty state
-        this.state = { cards: [] };
+        this.state = { cardsInDeck: [] };
     }
 
     componentDidMount() {
-        this.getCardsList();
-    }
-
-    getCardsList() {
         axios
-            .get('http://localhost:4000/cards/deck/', {
+            .get('http://localhost:4000/cards/', {
                 params: {
                     deck_id: this.props.deck_id
                 }
             })
             .then(response => {
-                this.setState({ cards: response.data });
+                let cardsInDeck = [];
+                
+                for (let card in response.data) {
+                    cardsInDeck.push(response.data[card]._id);
+                }
+
+                this.setState({ cardsInDeck: cardsInDeck });
             })
             .catch((err) => {
                 console.log(`Error getting cards for deck: ${err}`);
@@ -34,12 +36,15 @@ class CardsList extends Component {
     }
 
     showCardList() {
-        return this.state.cards.map((currentCard, i) => {
-            return <CardRow card={currentCard} deck_id={this.props.deck_id} key={i} />;
+        return this.state.cardsInDeck.map((currentCard, i) => {
+            return <CardRow card_id={currentCard} key={i} />;
         });
     }
 
     render() {
+		if (this.state.is_loading) {
+			return <div>"Loading..."</div>;
+		}
         return (
             <div>
                 <table className="table table-striped" style={{ marginTop: 20 }}>

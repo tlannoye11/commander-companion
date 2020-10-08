@@ -14,6 +14,11 @@ class DecksList extends Component {
         };
     }
 
+    componentDidMount() {
+        // Need to generate list of decks here when the page loads.
+        this.getDeckList();
+    }
+
     getDeckList() {
         axios
             .get('http://localhost:4000/decks')
@@ -23,11 +28,6 @@ class DecksList extends Component {
             .catch((err) => {
                 console.log(`Error getting list of decks: ${err}`);
             });
-    }
-
-    componentDidMount() {
-        // Need to generate list of decks here when the page loads.
-        this.getDeckList();
     }
 
     showDecksList() {

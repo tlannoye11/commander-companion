@@ -5,16 +5,24 @@ let CardModel = require('../models/card.model');
 const { request, response } = require('express');
 
 // Get a number of cards within a deck
-cardRouter.get('/deck/', (request, response) => {
-    let query = {
-        'deck_id': request.query.deck_id,
-    };
+cardRouter.get('/', (request, response) => {
+    // response.status(200).send("Getting list of cards");
+    let query = {};
 
-    // Optional card_id param
+    // Optional params
     if (request.query.card_id) {
-        query.card_id = request.query.card_id;
+        query._id = request.query.card_id;
     }
 
+    if (request.query.deck_id) {
+        query.deck_id = request.query.deck_id;
+    }
+
+    if (request.query.scryfall_id) {
+        query.scryfall_id = request.query.scryfall_id;
+    }
+
+    // Run the query
     CardModel.find(query, (err, cards) => {
         if (err) {
             console.log(`Error getting cards: ${err}`);
@@ -28,14 +36,15 @@ cardRouter.get('/deck/', (request, response) => {
 // Add a card to a deck
 cardRouter.post('/add', (request, response) => {
     let card = new CardModel({
-        card_id: request.body.card_id,
         deck_id: request.body.deck_id,
+        scryfall_id: request.body.scryfall_id,
+        card_set: request.body.card_set,
         is_foil: request.body.is_foil
     });
 
     card.save()
         .then((card) => {
-            response.status(200).json({ deck: 'Card added to deck'});
+            response.status(200).json({ card: 'Card added to deck' });
         })
         .catch((err) => {
             response.status(400).send('Failed to add card to deck');
@@ -45,17 +54,33 @@ cardRouter.post('/add', (request, response) => {
 // Update an existing card in a deck.
 cardRouter.post('/update/:id', (request, response) => {
     CardModel.findById(request.params.id, (err, card) => {
-        if (!card) {
-            response.status(400).send("Couldn't find a card");
+        if (err) {
+            console.log(`Error updating cards: ${err}`);
+            response.status(400).send(`Error updating cards: ${err}`);
+        }
+        else if (!card) {
+            response.status(400).send(`Couldn't find a card with id ${request.params.id}`);
         }
         else {
-            card.card_id = request.body.card_id;
-            card.deck_id = request.body.deck_id;
-            card.is_foil = request.body.is_foil;
+            if (request.body.deck_id) {
+                card.deck_id = request.body.deck_id;
+            }
 
+            if (request.body.scryfall_id) {
+                card.scryfall_id = request.body.scryfall_id;
+            }
+            
+            if (request.body.card_set) {
+                card.card_set = request.body.card_set;
+            }
+            
+            if (request.body.is_foil) {
+                card.is_foil = request.body.is_foil;
+            }
+            
             card.save()
                 .then((card) => {
-                    response.json('Card has been updated');
+                    response.status(200).send(`Card ${request.params.id} has been updated`);
                 })
                 .catch((err) => {
                     response.status(400).send('Failed to update card');
@@ -68,7 +93,7 @@ cardRouter.post('/update/:id', (request, response) => {
 cardRouter.delete('delete/:id/', (request, response) => {
     CardModel.findByIdAndRemove(request.params.id, (err, deck) => {
         if (err) {
-            console.log(`Error deleting card: ${id}`);
+            response.json(`Error deleting card: ${id}`);
         }
         else {
             response.json(card);
