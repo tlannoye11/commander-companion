@@ -7,6 +7,7 @@ mongocli
 /.pnp
 .pnp.js
 /smart-todo
+.vscode
 
 # testing
 /coverage
