@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { Button } from 'react-bootstrap';
 import CardSetDropdown from "./card-set-dropdown.component";
 
 class CardRow extends Component {
@@ -7,6 +8,7 @@ class CardRow extends Component {
 		super(props);
 
 		// Bindings
+		this.deleteCard = this.deleteCard.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.updateCardRow = this.updateCardRow.bind(this);
 
@@ -16,6 +18,7 @@ class CardRow extends Component {
 			card_id: "",
 			deck_id: "",
 			scryfall_id: "",
+			card_type: "",
 			card_set: "",
 			is_foil: false,
 			card_cmc: 0,
@@ -45,8 +48,9 @@ class CardRow extends Component {
 					.then((response) => {
 						this.setState({
 							card_name: response.data.name,
+							card_type: response.data.type_line,
 							card_set: response.data.set,
-							card_cmc: response.data.card_cmc
+							card_cmc: response.data.cmc
 						});
 		
 						this.setState({
@@ -62,6 +66,16 @@ class CardRow extends Component {
 			});
 	}
 
+	deleteCard() {
+        axios.delete(`http://localhost:4000/cards/delete/${this.state.card_id}`)
+            .then(response => {
+                console.log("Card deleted");
+            })
+            .catch(err => {
+                console.log(`Error deleting card: ${err}`);
+            });
+	}
+	
 	handleInputChange(e) {
 		const target = e.target;
 		const value = target.type === "checkbox" ? target.checked : target.value;
@@ -111,7 +125,10 @@ class CardRow extends Component {
 
 		return (
 			<tr>
-				<td>{this.state.card_name}</td>
+				<td>
+				<Button onClick={this.deleteCard} size="sm" variant="danger">X</Button>
+					{this.state.card_name}
+				</td>
 				<td>
 					<CardSetDropdown card_id={this.state.card_id} card_name={this.state.card_name} card_set = {this.state.card_set} updateCardRow={this.updateCardRow}></CardSetDropdown>
 				</td>
@@ -122,6 +139,9 @@ class CardRow extends Component {
 						checked={this.state.is_foil}
 						onChange={this.handleInputChange}
 					/>
+				</td>
+				<td>
+					<span>{this.state.card_cmc}</span>
 				</td>
 			</tr>
 		);

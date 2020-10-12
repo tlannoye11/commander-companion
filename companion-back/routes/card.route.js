@@ -90,7 +90,7 @@ cardRouter.post('/update/:id', (request, response) => {
 });
 
 // Delete a card from a deck list.
-cardRouter.delete('delete/:id/', (request, response) => {
+cardRouter.delete('/delete/:id/', (request, response) => {
     CardModel.findByIdAndRemove(request.params.id, (err, deck) => {
         if (err) {
             response.json(`Error deleting card: ${id}`);
