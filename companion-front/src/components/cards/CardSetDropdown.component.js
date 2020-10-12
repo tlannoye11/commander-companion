@@ -1,81 +1,93 @@
-import React, { Component } from "react";
-import axios from "axios";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import Dropdown from "react-bootstrap/Dropdown";
+import React, { Component } from 'react';
+import axios from 'axios';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 class CardSetDropdown extends Component {
-    constructor(props) {
-        super(props);
+	constructor(props) {
+		super(props);
 
-        // Bindings
-        this.handleSetDropDownSelect = this.handleSetDropDownSelect.bind(this);
+		// Bindings
+		this.handleSetDropDownSelect = this.handleSetDropDownSelect.bind(this);
 
-        // Empty state
-        this.state = {
-            is_loading: true,
-            card_id: "",
-            card_set: "",
-            sets: []
-        }
-    }
+		// Empty state
+		this.state = {
+			is_loading: true,
+			card_id: '',
+			card_set: '',
+			sets: [],
+		};
+	}
 
 	componentDidMount() {
 		this.setState({
-            card_id: this.props.card_id,
-            card_set: this.props.card_set
-        });
+			card_id: this.props.card_id,
+			card_set: this.props.card_set,
+		});
 
-        axios
-            .get(`https://api.scryfall.com/cards/search?q="${this.props.card_name}"&unique=prints`)
-            .then((response) => {
-                let sets = [];
-                for (let card in response.data.data) {
-                    let currentSet = [];
-                    currentSet.push(response.data.data[card].set.toUpperCase());
-                    currentSet.push(response.data.data[card].id)
-                    sets.push(currentSet);
-                }
+		axios
+			.get(
+				`https://api.scryfall.com/cards/search?q="${this.props.card_name}"&unique=prints`
+			)
+			.then((response) => {
+				let sets = [];
+				for (let card in response.data.data) {
+					let currentSet = [];
+					currentSet.push(response.data.data[card].set.toUpperCase());
+					currentSet.push(response.data.data[card].id);
+					sets.push(currentSet);
+				}
 
-                this.setState({
-                    is_loading: false,
-                    sets: sets
-                });
-            })
-            .catch((err) => {
-                console.log(`Error getting sets for card ${this.props.card_name}: ${err}`);
-            });
-    }
+				this.setState({
+					is_loading: false,
+					sets: sets,
+				});
+			})
+			.catch((err) => {
+				console.log(
+					`Error getting sets for card ${this.props.card_name}: ${err}`
+				);
+			});
+	}
 
 	createCardSetDropDown() {
-		return this.state.sets.map((set,i) => {
-			return <Dropdown.Item id={set[1]} eventKey={set[0]} key={i}>{set[0]}</Dropdown.Item>;
+		return this.state.sets.map((set, i) => {
+			return (
+				<Dropdown.Item id={set[1]} eventKey={set[0]} key={i}>
+					{set[0]}
+				</Dropdown.Item>
+			);
 		});
 	}
 
 	handleSetDropDownSelect(e) {
 		this.setState({
-			card_set: e
+			card_set: e,
 		});
 
 		let currentCard = {
 			card_set: e,
-			scryfall_id: this.state.sets.find(set => set[0] === e)[1]
+			scryfall_id: this.state.sets.find((set) => set[0] === e)[1],
 		};
 
 		this.props.updateCardRow(currentCard);
 	}
 
-    render() {
-        if (this.state.is_loading) {
-            return "Loading...";
-        }
+	render() {
+		if (this.state.is_loading) {
+			return 'Loading...';
+		}
 
-        return (
-            <DropdownButton id="card-set-dropdown" title={this.state.card_set.toUpperCase()} size="sm" onSelect={this.handleSetDropDownSelect}>
-                {this.createCardSetDropDown()}
-            </DropdownButton>
-        );
-    }
+		return (
+			<DropdownButton
+				id='card-set-dropdown'
+				title={this.state.card_set.toUpperCase()}
+				size='sm'
+				onSelect={this.handleSetDropDownSelect}>
+				{this.createCardSetDropDown()}
+			</DropdownButton>
+		);
+	}
 }
 
 export default CardSetDropdown;

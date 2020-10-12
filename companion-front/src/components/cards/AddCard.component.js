@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import axios from "axios";
-import { Button, ListGroup, Modal } from "react-bootstrap";
+import React, { Component } from 'react';
+import axios from 'axios';
+import { Button, ListGroup, Modal } from 'react-bootstrap';
 
 class AddCard extends Component {
 	constructor(props) {
@@ -13,8 +13,8 @@ class AddCard extends Component {
 		// Empty state
 		this.state = {
 			cards: [],
-			deck_id: "",
-			selectedCard: "",
+			deck_id: '',
+			selectedCard: '',
 			show: false,
 		};
 	}
@@ -25,17 +25,15 @@ class AddCard extends Component {
 			deck_id: this.props.deck_id,
 			scryfall_id: card.id,
 			card_set: card.set,
-			is_foil: false
-		}
+			is_foil: false,
+		};
 
-		console.log("adding this card to deck",currentCard);
+		console.log('adding this card to deck', currentCard);
 
-		axios
-			.post(apiString,currentCard)
-			.then(response => {
-				console.log(response.data);
-			})
-	}
+		axios.post(apiString, currentCard).then((response) => {
+			console.log(response.data);
+		});
+	};
 
 	handleAddCard = () => {
 		this.setState({
@@ -67,10 +65,10 @@ class AddCard extends Component {
 
 	onChangeCardSearch(e) {
 		if (e.target.value.length >= 3) {
-			console.log("searching for",e.target.value);
+			console.log('searching for', e.target.value);
 			this.findCards(e.target.value);
 		}
-    }
+	}
 
 	showCardResults() {
 		if (this.state.cards.length >= 3) {
@@ -78,8 +76,10 @@ class AddCard extends Component {
 				return (
 					<ListGroup.Item
 						key={i}
-						action onClick={() => {this.addToDeck(card)}}
-					>
+						action
+						onClick={() => {
+							this.addToDeck(card);
+						}}>
 						{card.name}
 					</ListGroup.Item>
 				);
@@ -90,24 +90,24 @@ class AddCard extends Component {
 	render() {
 		return (
 			<div>
-				<Button size="sm" variant="info" onClick={this.handleAddCard}>
+				<Button size='sm' variant='info' onClick={this.handleAddCard}>
 					Add card to deck
 				</Button>
 
 				<Modal show={this.state.show} onHide={this.handleClose}>
 					<Modal.Header closeButton>
 						<Modal.Title>
-							Add card:{" "}
+							Add card:{' '}
 							<input
-								type="text"
-								id="cardSearch"
+								type='text'
+								id='cardSearch'
 								onChange={this.onChangeCardSearch}
 							/>
 						</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<div id="cardNames">
-							<ListGroup variant="flush">
+						<div id='cardNames'>
+							<ListGroup variant='flush'>
 								{this.showCardResults()}
 							</ListGroup>
 						</div>

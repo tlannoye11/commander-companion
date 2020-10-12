@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import axios from "axios";
-import DeckHeader from "./deck-header.component";
-import CardsList from "../cards/cards-list.component";
-import AddCard from "../cards/add-card.component";
+import React, { Component } from 'react';
+import axios from 'axios';
+import DeckHeader from './deck-header.component';
+import CardsList from '../cards/cards-list.component';
+import AddCard from '../cards/add-card.component';
 
 class Deck extends Component {
 	constructor(props) {
@@ -17,10 +17,10 @@ class Deck extends Component {
 
 		// Empty state
 		this.state = {
-			deck_id: "",
-			deck_name: "",
-			deck_theme: "",
-			deck_sleeve_color: "",
+			deck_id: '',
+			deck_name: '',
+			deck_theme: '',
+			deck_sleeve_color: '',
 			cards: [],
 			deck_header_changes: false,
 		};
@@ -34,7 +34,9 @@ class Deck extends Component {
 			});
 
 			axios
-				.get("http://localhost:4000/decks/" + this.props.match.params.id)
+				.get(
+					'http://localhost:4000/decks/' + this.props.match.params.id
+				)
 				.then((response) => {
 					this.setState({
 						deck_name: response.data.deck_name,
@@ -44,7 +46,7 @@ class Deck extends Component {
 				})
 				.then((response) => {
 					axios
-						.get("http://localhost:4000/cards/", {
+						.get('http://localhost:4000/cards/', {
 							params: {
 								deck_id: this.props.match.params.id,
 							},
@@ -56,7 +58,9 @@ class Deck extends Component {
 							});
 						})
 						.catch((err) => {
-							console.log(`Error getting card list for deck: ${err}`);
+							console.log(
+								`Error getting card list for deck: ${err}`
+							);
 						});
 				})
 				.catch((err) => {
@@ -73,7 +77,7 @@ class Deck extends Component {
 				<AddCard deck_id={this.state.deck_id} />
 			</div>
 		) : (
-			""
+			''
 		);
 	}
 
@@ -101,37 +105,37 @@ class Deck extends Component {
 
 	onChangeCards(e) {
 		// Not yet implemented
-		console.log("Change cards:", e.target.value);
+		console.log('Change cards:', e.target.value);
 		this.setState({
-			deck_header_changes: true
-		})
+			deck_header_changes: true,
+		});
 	}
 
 	onSubmitHeader(e) {
 		e.preventDefault();
 
-		let apiString =	"http://localhost:4000/decks/" + (this.state.deck_id ? "update/" + this.state.deck_id : "add");
+		let apiString =
+			'http://localhost:4000/decks/' +
+			(this.state.deck_id ? 'update/' + this.state.deck_id : 'add');
 		let currentDeck = {
 			deck_name: this.state.deck_name,
 			deck_theme: this.state.deck_theme,
-			deck_sleeve_color: this.state.deck_sleeve_color
+			deck_sleeve_color: this.state.deck_sleeve_color,
 		};
 
-		console.log("api,deck");
+		console.log('api,deck');
 		console.log(apiString);
 		console.log(currentDeck);
 
-		axios
-			.post(apiString, currentDeck)
-			.then((response) => {
-				this.setState({ deck_header_changes: false });
+		axios.post(apiString, currentDeck).then((response) => {
+			this.setState({ deck_header_changes: false });
 
-				if (response.data.id) {
-					this.setState({ deck_id: response.data.id });
-				}
+			if (response.data.id) {
+				this.setState({ deck_id: response.data.id });
+			}
 
-				console.log(response.data);
-			});
+			console.log(response.data);
+		});
 	}
 
 	render() {

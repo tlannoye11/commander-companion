@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import axios from "axios";
+import React, { Component } from 'react';
+import axios from 'axios';
 import { Button } from 'react-bootstrap';
-import CardSetDropdown from "./card-set-dropdown.component";
+import CardSetDropdown from './CardSetDropdown.component';
 
 class CardRow extends Component {
 	constructor(props) {
@@ -15,11 +15,11 @@ class CardRow extends Component {
 		// Empty state
 		this.state = {
 			is_loading: true,
-			card_id: "",
-			deck_id: "",
-			scryfall_id: "",
-			card_type: "",
-			card_set: "",
+			card_id: '',
+			deck_id: '',
+			scryfall_id: '',
+			card_type: '',
+			card_set: '',
 			is_foil: false,
 			card_cmc: 0,
 		};
@@ -33,32 +33,36 @@ class CardRow extends Component {
 		axios
 			.get('http://localhost:4000/cards/', {
 				params: {
-					card_id: this.props.card_id
-				}
+					card_id: this.props.card_id,
+				},
 			})
 			.then((response) => {
 				this.setState({
 					deck_id: response.data[0].deck_id,
 					scryfall_id: response.data[0].scryfall_id,
-					is_foil: response.data[0].is_foil
+					is_foil: response.data[0].is_foil,
 				});
 
 				axios
-					.get(`https://api.scryfall.com/cards/${this.state.scryfall_id}`)
+					.get(
+						`https://api.scryfall.com/cards/${this.state.scryfall_id}`
+					)
 					.then((response) => {
 						this.setState({
 							card_name: response.data.name,
 							card_type: response.data.type_line,
 							card_set: response.data.set,
-							card_cmc: response.data.cmc
+							card_cmc: response.data.cmc,
 						});
-		
+
 						this.setState({
 							is_loading: false,
 						});
 					})
 					.catch((err) => {
-						console.log(`Error getting card by Scryfall ID: ${err}`);
+						console.log(
+							`Error getting card by Scryfall ID: ${err}`
+						);
 					});
 			})
 			.catch((err) => {
@@ -67,49 +71,51 @@ class CardRow extends Component {
 	}
 
 	deleteCard() {
-        axios.delete(`http://localhost:4000/cards/delete/${this.state.card_id}`)
-            .then(response => {
-                console.log("Card deleted");
-            })
-            .catch(err => {
-                console.log(`Error deleting card: ${err}`);
-            });
+		axios
+			.delete(`http://localhost:4000/cards/delete/${this.state.card_id}`)
+			.then((response) => {
+				console.log('Card deleted');
+			})
+			.catch((err) => {
+				console.log(`Error deleting card: ${err}`);
+			});
 	}
-	
+
 	handleInputChange(e) {
 		const target = e.target;
-		const value = target.type === "checkbox" ? target.checked : target.value;
+		const value =
+			target.type === 'checkbox' ? target.checked : target.value;
 		const name = target.name;
 
 		this.setState({
-			[name]: value
+			[name]: value,
 		});
 
 		let currentCard = {
-			[name]: value
+			[name]: value,
 		};
 
 		this.updateCardRow(currentCard);
 	}
 
 	updateCardRow(updatedCardRow) {
-		let apiString = "http://localhost:4000/cards/update/" + this.state.card_id;
+		let apiString =
+			'http://localhost:4000/cards/update/' + this.state.card_id;
 
 		axios
-			.post(apiString,updatedCardRow)
+			.post(apiString, updatedCardRow)
 			.then((response) => {
-				console.log("Card update response",response);
+				console.log('Card update response', response);
 			})
 			.catch((err) => {
-				console.log("Error updating deck",err);
+				console.log('Error updating deck', err);
 
 				if (err.response) {
-					console.log("Error response data",err.response.data);
-					console.log("Error response headers",err.response.headers);
-					console.log("Error response config",err.response.config);
-				}
-				else if (err.request) {
-					console.log("Error request",err.request);
+					console.log('Error response data', err.response.data);
+					console.log('Error response headers', err.response.headers);
+					console.log('Error response config', err.response.config);
+				} else if (err.request) {
+					console.log('Error request', err.request);
 				}
 			});
 	}
@@ -126,16 +132,25 @@ class CardRow extends Component {
 		return (
 			<tr>
 				<td>
-				<Button onClick={this.deleteCard} size="sm" variant="danger">X</Button>
+					<Button
+						onClick={this.deleteCard}
+						size='sm'
+						variant='danger'>
+						X
+					</Button>
 					{this.state.card_name}
 				</td>
 				<td>
-					<CardSetDropdown card_id={this.state.card_id} card_name={this.state.card_name} card_set = {this.state.card_set} updateCardRow={this.updateCardRow}></CardSetDropdown>
+					<CardSetDropdown
+						card_id={this.state.card_id}
+						card_name={this.state.card_name}
+						card_set={this.state.card_set}
+						updateCardRow={this.updateCardRow}></CardSetDropdown>
 				</td>
 				<td>
 					<input
-						name="is_foil"
-						type="checkbox"
+						name='is_foil'
+						type='checkbox'
 						checked={this.state.is_foil}
 						onChange={this.handleInputChange}
 					/>
