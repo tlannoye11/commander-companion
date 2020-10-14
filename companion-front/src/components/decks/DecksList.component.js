@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
-import DeckRow from './deck-row.component';
+import DeckRow from './DeckRow.component';
 
 class DecksList extends Component {
 	constructor(props) {

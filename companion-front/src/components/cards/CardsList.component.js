@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
-import CardRow from './card-row.component';
+import { Button, Table } from 'react-bootstrap';
+import CardRow from './CardRow.component';
+import AddCard from '../cards/AddCard.component';
 import axios from 'axios';
 
 class CardsList extends Component {
@@ -9,9 +10,13 @@ class CardsList extends Component {
 		super(props);
 
 		// Binding
+		this.addCard = this.addCard.bind(this);
+		this.deleteCard = this.deleteCard.bind(this);
 
 		// Empty state
-		this.state = { cardsInDeck: [] };
+		this.state = {
+			cardsInDeck: [],
+		};
 	}
 
 	componentDidMount() {
@@ -35,9 +40,27 @@ class CardsList extends Component {
 			});
 	}
 
+	addCard(id) {
+		this.setState({
+			cardsInDeck: [...this.state.cardsInDeck, id],
+		});
+	}
+
+	deleteCard(id) {
+		this.setState({
+			cardsInDeck: this.state.cardsInDeck.filter((card) => card !== id),
+		});
+	}
+
 	showCardList() {
 		return this.state.cardsInDeck.map((currentCard, i) => {
-			return <CardRow card_id={currentCard} key={i} />;
+			return (
+				<CardRow
+					card_id={currentCard}
+					key={i}
+					onDelete={this.deleteCard}
+				/>
+			);
 		});
 	}
 
@@ -47,15 +70,13 @@ class CardsList extends Component {
 		}
 		return (
 			<div>
-				<table
-					className='table table-striped'
-					style={{ marginTop: 20 }}>
+				<Table striped size='sm'>
 					<thead>
 						<tr>
 							<th>Name</th>
-							<th>Set</th>
-							<th>Foil</th>
-							<th>CMC</th>
+							<th className='center-column'>Set</th>
+							<th className='center-column'>Foil</th>
+							<th className='center-column'>CMC</th>
 							<th>Ramp</th>
 							<th>Draw</th>
 							<th>Tutor</th>
@@ -72,7 +93,8 @@ class CardsList extends Component {
 						</tr>
 					</thead>
 					<tbody>{this.showCardList()}</tbody>
-				</table>
+				</Table>
+				<AddCard deck_id={this.props.deck_id} addCard={this.addCard} />
 			</div>
 		);
 	}

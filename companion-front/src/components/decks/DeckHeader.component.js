@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 
 class DeckHeader extends Component {
 	canBeSubmitted() {
@@ -22,55 +22,62 @@ class DeckHeader extends Component {
 		const isEnabled = this.canBeSubmitted();
 
 		return (
-			<div style={{ marginTop: 20 }}>
-				<Link to='/'>
-					<Button size='sm' variant='info'>
-						Back icon here
-					</Button>
-				</Link>
-				<h3>{this.props.title}</h3>
-				<form className='form-inline' onSubmit={this.props.onSubmit}>
-					<div className='form-group'>
-						<label>Name</label>
-						<input
-							type='text'
-							className='form-control'
-							value={this.props.deck_name || ''}
-							onChange={this.props.onChangeDeckName}
-						/>
-					</div>
-					<div className='form-group'>
-						<label>Theme</label>
-						<input
-							type='text'
-							className='form-control'
-							value={this.props.deck_theme || ''}
-							onChange={this.props.onChangeDeckTheme}
-						/>
-					</div>
-					<div className='form-group'>
-						<label>Sleeves</label>
-						<input
-							type='text'
-							className='form-control'
-							value={this.props.deck_sleeve_color || ''}
-							onChange={this.props.onChangeDeckSleeveColor}
-						/>
-					</div>
-					<div className='form-group'>
-						<input
-							type='submit'
-							value={
+			<header>
+				<Form inline onSubmit={this.props.onSubmit}>
+					<Link to='/'>
+						<Button size='sm' variant='info' className='btn btn-sm'>
+							<i className='fas fa-arrow-left'></i>
+						</Button>
+					</Link>
+					<Form.Label
+						htmlFor='inlineFormInputDeckName'
+						className='px-2'>
+						Deck
+					</Form.Label>
+					<Form.Control
+						type='text'
+						id='inlineFormInputDeckName'
+						placeholder='Deck Name'
+						value={this.props.deck_name || ''}
+						onChange={this.props.onChangeDeckName}
+					/>
+					<Form.Label
+						htmlFor='inlineFormInputDeckTheme'
+						className='px-2'>
+						Theme
+					</Form.Label>
+					<Form.Control
+						type='text'
+						id='inlineFormInputDeckTheme'
+						placeholder='Theme'
+						value={this.props.deck_theme || ''}
+						onChange={this.props.onChangeDeckTheme}
+					/>
+					<Form.Label
+						htmlFor='inlineFormInputDeckSleeves'
+						className='px-2'>
+						Sleeves
+					</Form.Label>
+					<Form.Control
+						type='text'
+						id='inlineFormInputDeckSleeves'
+						placeholder='Sleeves'
+						value={this.props.deck_sleeve_color || ''}
+						onChange={this.props.onChangeDeckSleeveColor}
+					/>
+					<Button
+						type='submit'
+						className='mx-2 btn btn-primary btn-sm'
+						disabled={!isEnabled}>
+						<i
+							className={
 								this.props.deck_header_changes
-									? this.props.title
-									: `Make a change`
-							}
-							className='btn btn-primary'
-							disabled={!isEnabled}
-						/>
-					</div>
-				</form>
-			</div>
+									? 'fas fa-save'
+									: 'fas fa-ban'
+							}></i>
+					</Button>
+				</Form>
+			</header>
 		);
 	}
 }

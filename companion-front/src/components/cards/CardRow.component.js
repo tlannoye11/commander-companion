@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Button } from 'react-bootstrap';
+import { Button, Container, Row, Col } from 'react-bootstrap';
 import CardSetDropdown from './CardSetDropdown.component';
 
 class CardRow extends Component {
@@ -53,9 +53,6 @@ class CardRow extends Component {
 							card_type: response.data.type_line,
 							card_set: response.data.set,
 							card_cmc: response.data.cmc,
-						});
-
-						this.setState({
 							is_loading: false,
 						});
 					})
@@ -75,6 +72,7 @@ class CardRow extends Component {
 			.delete(`http://localhost:4000/cards/delete/${this.state.card_id}`)
 			.then((response) => {
 				console.log('Card deleted');
+				this.props.onDelete(this.state.card_id);
 			})
 			.catch((err) => {
 				console.log(`Error deleting card: ${err}`);
@@ -105,7 +103,7 @@ class CardRow extends Component {
 		axios
 			.post(apiString, updatedCardRow)
 			.then((response) => {
-				console.log('Card update response', response);
+				// console.log('Card update response', response);
 			})
 			.catch((err) => {
 				console.log('Error updating deck', err);
@@ -132,22 +130,32 @@ class CardRow extends Component {
 		return (
 			<tr>
 				<td>
-					<Button
-						onClick={this.deleteCard}
-						size='sm'
-						variant='danger'>
-						X
-					</Button>
-					{this.state.card_name}
+					<Container>
+						<Row>
+							<Col xs={1} className='px-0'>
+								<Button
+									className='btn btn-small'
+									onClick={this.deleteCard}
+									size='sm'>
+									<i className='fas fa-trash-alt'></i>
+								</Button>
+							</Col>
+							<Col>
+								<span className='align-middle'>
+									{this.state.card_name}
+								</span>
+							</Col>
+						</Row>
+					</Container>
 				</td>
-				<td>
+				<td className='center-column'>
 					<CardSetDropdown
 						card_id={this.state.card_id}
 						card_name={this.state.card_name}
 						card_set={this.state.card_set}
 						updateCardRow={this.updateCardRow}></CardSetDropdown>
 				</td>
-				<td>
+				<td className='center-column'>
 					<input
 						name='is_foil'
 						type='checkbox'
@@ -155,7 +163,7 @@ class CardRow extends Component {
 						onChange={this.handleInputChange}
 					/>
 				</td>
-				<td>
+				<td className='center-column'>
 					<span>{this.state.card_cmc}</span>
 				</td>
 			</tr>

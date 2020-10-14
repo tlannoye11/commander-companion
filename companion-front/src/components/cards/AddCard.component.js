@@ -28,10 +28,8 @@ class AddCard extends Component {
 			is_foil: false,
 		};
 
-		console.log('adding this card to deck', currentCard);
-
 		axios.post(apiString, currentCard).then((response) => {
-			console.log(response.data);
+			this.props.addCard(response.data.card_id);
 		});
 	};
 
@@ -65,7 +63,6 @@ class AddCard extends Component {
 
 	onChangeCardSearch(e) {
 		if (e.target.value.length >= 3) {
-			console.log('searching for', e.target.value);
 			this.findCards(e.target.value);
 		}
 	}
@@ -91,7 +88,7 @@ class AddCard extends Component {
 		return (
 			<div>
 				<Button size='sm' variant='info' onClick={this.handleAddCard}>
-					Add card to deck
+					Add card to list
 				</Button>
 
 				<Modal show={this.state.show} onHide={this.handleClose}>
