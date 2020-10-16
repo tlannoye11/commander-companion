@@ -67,6 +67,9 @@ class CardRow extends Component {
 	}
 
 	deleteCard() {
+		console.log('About to delete this:', this.state.card_name);
+		console.log(`...in this set: ${this.state.card_set}`);
+		console.log('...with this card_id:', this.props.card_id);
 		axios
 			.delete(`http://localhost:4000/cards/delete/${this.props.card_id}`)
 			.then((response) => {
@@ -96,7 +99,6 @@ class CardRow extends Component {
 	}
 
 	updateCardRow(updatedCardRow) {
-		console.log('updating this card:', updatedCardRow);
 		let apiString =
 			'http://localhost:4000/cards/update/' + this.props.card_id;
 
@@ -133,11 +135,13 @@ class CardRow extends Component {
 					<span>{this.state.card_qty}</span>
 				</td>
 				<td>
-					<span className='align-middle'>{this.state.card_name}</span>
+					<span className='align-middle'>
+						{this.state.card_name} {this.props.card_id}
+					</span>
 				</td>
 				<td className='center-column'>
 					<CardSetDropdown
-						card_id={this.state.card_id}
+						card_id={this.props.card_id}
 						card_name={this.state.card_name}
 						card_set={this.state.card_set}
 						updateCardRow={this.updateCardRow}></CardSetDropdown>
