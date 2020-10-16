@@ -87,9 +87,18 @@ class CardsList extends Component {
 	}
 
 	deleteCard(id) {
-		this.setState({
-			cardsInDeck: this.state.cardsInDeck.filter((card) => card !== id),
-		});
+		axios
+			.delete(`http://localhost:4000/cards/delete/${id}`)
+			.then((response) => {
+				this.setState({
+					cardsInDeck: this.state.cardsInDeck.filter(
+						(card) => card !== id
+					),
+				});
+			})
+			.catch((err) => {
+				console.log(`Error deleting card: ${err}`);
+			});
 	}
 
 	updateCard(updatedCard) {

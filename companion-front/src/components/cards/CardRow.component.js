@@ -67,14 +67,7 @@ class CardRow extends Component {
 	}
 
 	deleteCard() {
-		axios
-			.delete(`http://localhost:4000/cards/delete/${this.props.card_id}`)
-			.then((response) => {
-				this.props.deleteCard(this.props.card_id);
-			})
-			.catch((err) => {
-				console.log(`Error deleting card: ${err}`);
-			});
+		this.props.deleteCard(this.props.card_id);
 	}
 
 	handleInputChange(e) {
@@ -82,6 +75,9 @@ class CardRow extends Component {
 		const value =
 			target.type === 'checkbox' ? target.checked : target.value;
 		const name = target.name;
+
+		console.log('Target', e.target);
+		console.log('e', e);
 
 		this.setState({
 			[name]: value,
@@ -135,6 +131,7 @@ class CardRow extends Component {
 				</td>
 				<td className='center-column'>
 					<Button
+						name='deleteCard'
 						className='btn btn-small'
 						onClick={this.deleteCard}
 						size='sm'>
