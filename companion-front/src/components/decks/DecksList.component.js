@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
 import axios from 'axios';
 import DeckRow from './DeckRow.component';
 
@@ -40,9 +40,7 @@ class DecksList extends Component {
 		return (
 			<div>
 				<h3>My Deck Box</h3>
-				<table
-					className='table table-striped'
-					style={{ marginTop: 20 }}>
+				<Table bordered striped responsive hover size='sm'>
 					<thead>
 						<tr>
 							<th>
@@ -55,15 +53,15 @@ class DecksList extends Component {
 							<th>Name</th>
 							<th>Colors</th>
 							<th>Count</th>
-							<th>Avg CMC</th>
 							<th>Foils</th>
+							<th>Avg CMC</th>
 							<th>Theme</th>
 							<th>Sleeves</th>
 							<th>Basic Lands</th>
 						</tr>
 					</thead>
 					<tbody>{this.showDecksList()}</tbody>
-				</table>
+				</Table>
 			</div>
 		);
 	}

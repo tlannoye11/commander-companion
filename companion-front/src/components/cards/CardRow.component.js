@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Button, Container, Row, Col } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import CardSetDropdown from './CardSetDropdown.component';
 
 class CardRow extends Component {
@@ -130,23 +130,10 @@ class CardRow extends Component {
 		return (
 			<tr>
 				<td>
-					<Container>
-						<Row>
-							<Col xs={1} className='px-0'>
-								<Button
-									className='btn btn-small'
-									onClick={this.deleteCard}
-									size='sm'>
-									<i className='fas fa-trash-alt'></i>
-								</Button>
-							</Col>
-							<Col>
-								<span className='align-middle'>
-									{this.state.card_name}
-								</span>
-							</Col>
-						</Row>
-					</Container>
+					<span>{this.state.card_qty}</span>
+				</td>
+				<td>
+					<span className='align-middle'>{this.state.card_name}</span>
 				</td>
 				<td className='center-column'>
 					<CardSetDropdown
@@ -165,6 +152,14 @@ class CardRow extends Component {
 				</td>
 				<td className='center-column'>
 					<span>{this.state.card_cmc}</span>
+				</td>
+				<td>
+					<Button
+						className='btn btn-small'
+						onClick={this.deleteCard}
+						size='sm'>
+						<i className='fas fa-trash-alt'></i>
+					</Button>
 				</td>
 			</tr>
 		);

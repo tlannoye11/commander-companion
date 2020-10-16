@@ -70,7 +70,7 @@ class CardsList extends Component {
 		}
 		return (
 			<div>
-				<Table striped size='sm'>
+				<Table bordered striped responsive hover size='sm'>
 					<thead>
 						<tr>
 							<th>
@@ -83,12 +83,6 @@ class CardsList extends Component {
 							<th className='center-column'>Set</th>
 							<th className='center-column'>Foil</th>
 							<th className='center-column'>CMC</th>
-							<th>Ramp</th>
-							<th>Draw</th>
-							<th>Tutor</th>
-							<th>Recur</th>
-							<th>Removal</th>
-							<th>Wraths</th>
 							<th>
 								<Link to='/create'>
 									<Button size='sm' variant='info'>

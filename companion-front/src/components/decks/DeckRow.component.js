@@ -25,8 +25,9 @@ class DeckRow extends Component {
 	render() {
 		return (
 			<tr>
+				<td></td>
 				<td>
-					<Link to={`/cards/${this.props.deck._id}`}>
+					<Link to={`/edit/${this.props.deck._id}`}>
 						{this.props.deck.deck_name}
 					</Link>
 				</td>
@@ -37,13 +38,6 @@ class DeckRow extends Component {
 				<td>{this.props.deck.deck_theme}</td>
 				<td>{this.props.deck.deck_sleeve_color}</td>
 				<td>{this.props.deck.deck_basic_lands}</td>
-				<td>
-					<Link to={`/edit/${this.props.deck._id}`}>
-						<Button size='sm'>
-							<i className='fas fa-pencil-alt'></i>
-						</Button>
-					</Link>
-				</td>
 				<td>
 					<Button onClick={this.deleteDeck} size='sm'>
 						<i className='fas fa-trash-alt'></i>

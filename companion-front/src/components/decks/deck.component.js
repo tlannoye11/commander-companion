@@ -106,7 +106,6 @@ class Deck extends Component {
 		return (
 			<div>
 				<DeckHeader
-					title={this.state.deck_id ? `Update` : `Create`}
 					deck_name={this.state.deck_name}
 					deck_theme={this.state.deck_theme}
 					deck_sleeve_color={this.state.deck_sleeve_color}
