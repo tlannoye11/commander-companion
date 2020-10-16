@@ -136,7 +136,8 @@ class CardRow extends Component {
 				</td>
 				<td>
 					<span className='align-middle'>
-						{this.state.card_name} {this.props.card_id}
+						<strong>{this.state.card_name}</strong>{' '}
+						{this.props.card_id}
 					</span>
 				</td>
 				<td className='center-column'>

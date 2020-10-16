@@ -35,6 +35,7 @@ class CardSetDropdown extends Component {
 					let currentSet = [];
 					currentSet.push(response.data.data[card].set.toUpperCase());
 					currentSet.push(response.data.data[card].id);
+					currentSet.push(response.data.data[card].set_name);
 					sets.push(currentSet);
 				}
 
@@ -54,7 +55,7 @@ class CardSetDropdown extends Component {
 		return this.state.sets.map((set, i) => {
 			return (
 				<Dropdown.Item id={set[1]} eventKey={set[0]} key={i}>
-					{set[0]}
+					{set[2]}
 				</Dropdown.Item>
 			);
 		});
