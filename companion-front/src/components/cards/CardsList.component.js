@@ -73,6 +73,12 @@ class CardsList extends Component {
 				<Table striped size='sm'>
 					<thead>
 						<tr>
+							<th>
+								<AddCard
+									deck_id={this.props.deck_id}
+									addCard={this.addCard}
+								/>
+							</th>
 							<th>Name</th>
 							<th className='center-column'>Set</th>
 							<th className='center-column'>Foil</th>
@@ -94,7 +100,6 @@ class CardsList extends Component {
 					</thead>
 					<tbody>{this.showCardList()}</tbody>
 				</Table>
-				<AddCard deck_id={this.props.deck_id} addCard={this.addCard} />
 			</div>
 		);
 	}

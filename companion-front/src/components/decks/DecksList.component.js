@@ -39,12 +39,19 @@ class DecksList extends Component {
 	render() {
 		return (
 			<div>
-				<h3>List of Decks</h3>
+				<h3>My Deck Box</h3>
 				<table
 					className='table table-striped'
 					style={{ marginTop: 20 }}>
 					<thead>
 						<tr>
+							<th>
+								<Link to='/create'>
+									<Button size='sm' variant='info'>
+										<i className='fas fa-plus'></i>
+									</Button>
+								</Link>
+							</th>
 							<th>Name</th>
 							<th>Colors</th>
 							<th>Count</th>
@@ -53,13 +60,6 @@ class DecksList extends Component {
 							<th>Theme</th>
 							<th>Sleeves</th>
 							<th>Basic Lands</th>
-							<th>
-								<Link to='/create'>
-									<Button size='sm' variant='info'>
-										<i className='fas fa-plus'></i>
-									</Button>
-								</Link>
-							</th>
 						</tr>
 					</thead>
 					<tbody>{this.showDecksList()}</tbody>
