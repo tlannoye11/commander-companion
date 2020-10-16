@@ -1,8 +1,6 @@
-const express = require('express');
+import express from 'express';
 const cardRouter = express.Router();
-
-let CardModel = require('../models/card.model');
-const { request, response } = require('express');
+import CardModel from '../models/card.model.js';
 
 // Get a number of cards within a deck
 cardRouter.get('/', (request, response) => {
@@ -43,12 +41,10 @@ cardRouter.post('/add', (request, response) => {
 
 	card.save()
 		.then((card) => {
-			response
-				.status(200)
-				.json({
-					message: `Card ${card} added to deck`,
-					card_id: card._id,
-				});
+			response.status(200).json({
+				message: `Card ${card} added to deck`,
+				card_id: card._id,
+			});
 		})
 		.catch((err) => {
 			response.status(400).send('Failed to add card to deck');
@@ -106,4 +102,4 @@ cardRouter.delete('/delete/:id/', (request, response) => {
 	});
 });
 
-module.exports = cardRouter;
+export default cardRouter;

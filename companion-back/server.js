@@ -1,24 +1,30 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const mongoose = require('mongoose');
+import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
-const deckRoutes = require('./routes/deck.route');
-const cardRoutes = require('./routes/card.route');
-const db = require('./config/keys').deckURI;
+import deckRoutes from './routes/deck.route.js';
+import cardRoutes from './routes/card.route.js';
+//const db = require('./config/keys').deckURI;
 
+dotenv.config();
 const app = express();
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/decks', deckRoutes);
 app.use('/cards', cardRoutes);
 
-mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log(`Connected to MongoDB`))
-    .catch((err) => console.log(`Error connecting to MongoDB: ${err}`));
+mongoose
+	.connect(process.env.DECK_URI, {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+	})
+	.then(() => console.log(`Connected to MongoDB`))
+	.catch((err) => console.log(`Error connecting to MongoDB: ${err}`));
 
 app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`);
+	console.log(`Server started in ${process.env.NODE_ENV} on port ${PORT}`);
 });

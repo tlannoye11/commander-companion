@@ -1,0 +1,31 @@
+{
+  "name": "commander-companion",
+  "version": "1.0.0",
+  "description": "Companion app for Commander decks",
+  "main": "server.js",
+  "type": "module",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "concurrently": "^5.3.0",
+    "nodemon": "^2.0.5"
+  },
+  "scripts": {
+    "start": "node companion-back/server",
+    "server": "nodemon companion-back/server",
+    "client": "npm start --prefix companion-front",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tlannoye11/commander-companion.git"
+  },
+  "author": "Travis Lannoye",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tlannoye11/commander-companion/issues"
+  },
+  "homepage": "https://github.com/tlannoye11/commander-companion#readme"
+}
