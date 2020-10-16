@@ -96,8 +96,9 @@ class CardRow extends Component {
 	}
 
 	updateCardRow(updatedCardRow) {
+		console.log('updating this card:', updatedCardRow);
 		let apiString =
-			'http://localhost:4000/cards/update/' + this.state.card_id;
+			'http://localhost:4000/cards/update/' + this.props.card_id;
 
 		axios
 			.post(apiString, updatedCardRow)
@@ -105,7 +106,7 @@ class CardRow extends Component {
 				// console.log('Card update response', response);
 			})
 			.catch((err) => {
-				console.log('Error updating deck', err);
+				console.log('Error updating card', err);
 
 				if (err.response) {
 					console.log('Error response data', err.response.data);

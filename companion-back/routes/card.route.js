@@ -70,27 +70,27 @@ cardRouter.post('/update/:id', (request, response) => {
 				.status(400)
 				.send(`Error finding a card with id ${request.params.id}`);
 		} else {
-			if (request.body.deck_id) {
+			if ('deck_id' in request.body) {
 				card.deck_id = request.body.deck_id;
 			}
 
-			if (request.body.scryfall_id) {
+			if ('scryfall_id' in request.body) {
 				card.scryfall_id = request.body.scryfall_id;
 			}
 
-			if (request.body.card_qty) {
+			if ('card_qty' in request.body) {
 				card.card_qty = request.body.card_qty;
 			}
 
-			if (request.body.card_name) {
+			if ('card_name' in request.body) {
 				card.card_name = request.body.card_name;
 			}
 
-			if (request.body.card_set) {
+			if ('card_set' in request.body) {
 				card.card_set = request.body.card_set;
 			}
 
-			if (request.body.is_foil) {
+			if ('is_foil' in request.body) {
 				card.is_foil = request.body.is_foil;
 			}
 
