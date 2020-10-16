@@ -10,7 +10,6 @@ class CardRow extends Component {
 		// Bindings
 		this.deleteCard = this.deleteCard.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
-		this.updateCardRow = this.updateCardRow.bind(this);
 
 		// Empty state
 		this.state = {
@@ -36,6 +35,7 @@ class CardRow extends Component {
 			})
 			.then((response) => {
 				this.setState({
+					card_id: response.data.cards[0].card_id,
 					deck_id: response.data.cards[0].deck_id,
 					scryfall_id: response.data.cards[0].scryfall_id,
 					card_qty: response.data.cards[0].card_qty,
@@ -67,14 +67,10 @@ class CardRow extends Component {
 	}
 
 	deleteCard() {
-		console.log('About to delete this:', this.state.card_name);
-		console.log(`...in this set: ${this.state.card_set}`);
-		console.log('...with this card_id:', this.props.card_id);
 		axios
 			.delete(`http://localhost:4000/cards/delete/${this.props.card_id}`)
 			.then((response) => {
-				console.log('Card deleted');
-				this.props.onDelete(this.props.card_id);
+				this.props.deleteCard(this.props.card_id);
 			})
 			.catch((err) => {
 				console.log(`Error deleting card: ${err}`);
@@ -92,32 +88,11 @@ class CardRow extends Component {
 		});
 
 		let currentCard = {
+			card_id: this.props.card_id,
 			[name]: value,
 		};
 
-		this.updateCardRow(currentCard);
-	}
-
-	updateCardRow(updatedCardRow) {
-		let apiString =
-			'http://localhost:4000/cards/update/' + this.props.card_id;
-
-		axios
-			.post(apiString, updatedCardRow)
-			.then((response) => {
-				// console.log('Card update response', response);
-			})
-			.catch((err) => {
-				console.log('Error updating card', err);
-
-				if (err.response) {
-					console.log('Error response data', err.response.data);
-					console.log('Error response headers', err.response.headers);
-					console.log('Error response config', err.response.config);
-				} else if (err.request) {
-					console.log('Error request', err.request);
-				}
-			});
+		this.props.updateCard(currentCard);
 	}
 
 	render() {
@@ -131,7 +106,7 @@ class CardRow extends Component {
 
 		return (
 			<tr>
-				<td>
+				<td className='center-column'>
 					<span>{this.state.card_qty}</span>
 				</td>
 				<td>
@@ -145,7 +120,7 @@ class CardRow extends Component {
 						card_id={this.props.card_id}
 						card_name={this.state.card_name}
 						card_set={this.state.card_set}
-						updateCardRow={this.updateCardRow}></CardSetDropdown>
+						updateCard={this.props.updateCard}></CardSetDropdown>
 				</td>
 				<td className='center-column'>
 					<input
@@ -158,7 +133,7 @@ class CardRow extends Component {
 				<td className='center-column'>
 					<span>{this.state.card_cmc}</span>
 				</td>
-				<td>
+				<td className='center-column'>
 					<Button
 						className='btn btn-small'
 						onClick={this.deleteCard}

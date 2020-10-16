@@ -7,7 +7,6 @@ class AddCard extends Component {
 		super(props);
 
 		// Bindings
-		this.addToDeck = this.addToDeck.bind(this);
 		this.onChangeCardSearch = this.onChangeCardSearch.bind(this);
 
 		// Empty state
@@ -19,30 +18,16 @@ class AddCard extends Component {
 		};
 	}
 
-	addToDeck = (card) => {
-		let apiString = 'http://localhost:4000/cards/add';
-		let currentCard = {
-			deck_id: this.props.deck_id,
-			scryfall_id: card.id,
-			card_qty: 1,
-			card_name: card.name,
-			card_set: card.set,
-			is_foil: false,
-		};
-
-		axios.post(apiString, currentCard).then((response) => {
-			this.props.addCard(response.data.card_id);
-		});
-	};
-
 	handleAddCard = () => {
 		this.setState({
+			cards: [],
 			show: true,
 		});
 	};
 
 	handleClose = () => {
 		this.setState({
+			cards: [],
 			show: false,
 		});
 	};
@@ -76,7 +61,7 @@ class AddCard extends Component {
 					key={i}
 					action
 					onClick={() => {
-						this.addToDeck(card);
+						this.props.addCard(card);
 					}}>
 					{card.name}
 				</ListGroup.Item>

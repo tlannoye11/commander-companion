@@ -13,7 +13,6 @@ class CardSetDropdown extends Component {
 		// Empty state
 		this.state = {
 			is_loading: true,
-			card_id: '',
 			card_set: '',
 			sets: [],
 		};
@@ -21,7 +20,6 @@ class CardSetDropdown extends Component {
 
 	componentDidMount() {
 		this.setState({
-			card_id: this.props.card_id,
 			card_set: this.props.card_set,
 		});
 
@@ -67,11 +65,12 @@ class CardSetDropdown extends Component {
 		});
 
 		let currentCard = {
-			card_set: e,
+			card_id: this.props.card_id,
 			scryfall_id: this.state.sets.find((set) => set[0] === e)[1],
+			card_set: e,
 		};
 
-		this.props.updateCardRow(currentCard);
+		this.props.updateCard(currentCard);
 	}
 
 	render() {

@@ -11,7 +11,7 @@ const cardSchema = new Schema({
 		required: true,
 	},
 	card_qty: {
-		type: String,
+		type: Number,
 		required: true,
 	},
 	card_name: {
