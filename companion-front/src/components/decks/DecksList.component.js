@@ -56,7 +56,7 @@ class DecksList extends Component {
 							<th>
 								<Link to='/create'>
 									<Button size='sm' variant='info'>
-										Plus sign here
+										<i className='fas fa-plus'></i>
 									</Button>
 								</Link>
 							</th>

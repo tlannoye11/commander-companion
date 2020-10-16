@@ -86,7 +86,7 @@ class CardsList extends Component {
 							<th>
 								<Link to='/create'>
 									<Button size='sm' variant='info'>
-										Add Tag
+										<i className='fas fa-tag'></i>
 									</Button>
 								</Link>
 							</th>

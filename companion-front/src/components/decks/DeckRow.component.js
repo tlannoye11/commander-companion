@@ -39,17 +39,14 @@ class DeckRow extends Component {
 				<td>{this.props.deck.deck_basic_lands}</td>
 				<td>
 					<Link to={`/edit/${this.props.deck._id}`}>
-						<Button size='sm' variant='warning'>
-							Pencil icon here
+						<Button size='sm'>
+							<i className='fas fa-pencil-alt'></i>
 						</Button>
 					</Link>
 				</td>
 				<td>
-					<Button
-						onClick={this.deleteDeck}
-						size='sm'
-						variant='danger'>
-						Trash icon here
+					<Button onClick={this.deleteDeck} size='sm'>
+						<i className='fas fa-trash-alt'></i>
 					</Button>
 				</td>
 			</tr>

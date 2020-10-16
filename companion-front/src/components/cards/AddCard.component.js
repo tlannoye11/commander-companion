@@ -88,7 +88,7 @@ class AddCard extends Component {
 		return (
 			<div>
 				<Button size='sm' variant='info' onClick={this.handleAddCard}>
-					Add card to list
+					<i className='fas fa-plus'></i>
 				</Button>
 
 				<Modal show={this.state.show} onHide={this.handleClose}>
