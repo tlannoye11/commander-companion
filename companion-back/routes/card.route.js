@@ -20,12 +20,19 @@ cardRouter.get('/', (request, response) => {
 		query.scryfall_id = request.query.scryfall_id;
 	}
 
+	if (request.query.card_name) {
+		query.card_name = request.query.card_name;
+	}
+
 	// Run the query
 	CardModel.find(query, (err, cards) => {
 		if (err) {
-			console.log(`Error getting cards: ${err}`);
+			response.status(400).json(`Error getting cards: ${err}`);
 		} else {
-			response.json(cards);
+			response.status(200).json({
+				message: `Cards found successfully`,
+				cards: cards,
+			});
 		}
 	});
 });
@@ -35,6 +42,8 @@ cardRouter.post('/add', (request, response) => {
 	let card = new CardModel({
 		deck_id: request.body.deck_id,
 		scryfall_id: request.body.scryfall_id,
+		card_qty: request.body.card_qty,
+		card_name: request.body.card_name,
 		card_set: request.body.card_set,
 		is_foil: request.body.is_foil,
 	});
@@ -47,7 +56,7 @@ cardRouter.post('/add', (request, response) => {
 			});
 		})
 		.catch((err) => {
-			response.status(400).send('Failed to add card to deck');
+			response.status(400).json(`Error adding card to deck: ${err}`);
 		});
 });
 
@@ -55,12 +64,11 @@ cardRouter.post('/add', (request, response) => {
 cardRouter.post('/update/:id', (request, response) => {
 	CardModel.findById(request.params.id, (err, card) => {
 		if (err) {
-			console.log(`Error updating cards: ${err}`);
-			response.status(400).send(`Error updating cards: ${err}`);
+			response.status(400).send(`Error updating card: ${err}`);
 		} else if (!card) {
 			response
 				.status(400)
-				.send(`Couldn't find a card with id ${request.params.id}`);
+				.send(`Error finding a card with id ${request.params.id}`);
 		} else {
 			if (request.body.deck_id) {
 				card.deck_id = request.body.deck_id;
@@ -68,6 +76,14 @@ cardRouter.post('/update/:id', (request, response) => {
 
 			if (request.body.scryfall_id) {
 				card.scryfall_id = request.body.scryfall_id;
+			}
+
+			if (request.body.card_qty) {
+				card.card_qty = request.body.card_qty;
+			}
+
+			if (request.body.card_name) {
+				card.card_name = request.body.card_name;
 			}
 
 			if (request.body.card_set) {
@@ -85,7 +101,7 @@ cardRouter.post('/update/:id', (request, response) => {
 						.send(`Card ${request.params.id} has been updated`);
 				})
 				.catch((err) => {
-					response.status(400).send('Failed to update card');
+					response.status(400).send(`Error updating card: ${err}`);
 				});
 		}
 	});
@@ -95,9 +111,9 @@ cardRouter.post('/update/:id', (request, response) => {
 cardRouter.delete('/delete/:id/', (request, response) => {
 	CardModel.findByIdAndRemove(request.params.id, (err) => {
 		if (err) {
-			response.json(`Error deleting card: ${id}`);
+			response.status(400).json(`Error deleting card: ${err}`);
 		} else {
-			response.json(`Card has been deleted`);
+			response.status(200).json(`Card has been deleted`);
 		}
 	});
 });

@@ -29,8 +29,8 @@ class CardsList extends Component {
 			.then((response) => {
 				let cardsInDeck = [];
 
-				for (let card in response.data) {
-					cardsInDeck.push(response.data[card]._id);
+				for (let card in response.data.cards) {
+					cardsInDeck.push(response.data.cards[card]._id);
 				}
 
 				this.setState({ cardsInDeck: cardsInDeck });
@@ -70,7 +70,7 @@ class CardsList extends Component {
 		}
 		return (
 			<div>
-				<Table bordered striped responsive hover size='sm'>
+				<Table bordered striped hover size='sm'>
 					<thead>
 						<tr>
 							<th>

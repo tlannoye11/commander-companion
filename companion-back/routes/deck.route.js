@@ -6,9 +6,9 @@ import DeckModel from '../models/deck.model.js';
 deckRouter.get('/', (request, response) => {
 	DeckModel.find((err, decks) => {
 		if (err) {
-			console.log(`Error getting decks: ${err}`);
+			response.status(400).json(`Error getting decks: ${err}`);
 		} else {
-			response.json(decks);
+			response.status(200).json(decks);
 		}
 	});
 });
@@ -16,7 +16,11 @@ deckRouter.get('/', (request, response) => {
 // Get a single deck by ID
 deckRouter.get('/:id', (request, response) => {
 	DeckModel.findById(request.params.id, (err, deck) => {
-		response.json(deck);
+		if (err) {
+			response.status(400).json(`Error getting a single deck: ${err}`);
+		} else {
+			response.status(200).json(deck);
+		}
 	});
 });
 
@@ -36,15 +40,19 @@ deckRouter.post('/add', (request, response) => {
 			});
 		})
 		.catch((err) => {
-			response.status(400).send('Failed to add new deck');
+			response.status(400).json(`Error adding new deck: ${err}`);
 		});
 });
 
 // Update an existing deck in the database
 deckRouter.post('/update/:id', (request, response) => {
 	DeckModel.findById(request.params.id, (err, deck) => {
-		if (!deck) {
-			response.status(400).send("Couldn't find a deck");
+		if (err) {
+			response.status(400).send(`Error updating deck: ${err}`);
+		} else if (!deck) {
+			response
+				.status(400)
+				.json(`Error finding a deck with id: ${request.params.id}`);
 		} else {
 			deck.deck_name = request.body.deck_name;
 			deck.deck_theme = request.body.deck_theme;
@@ -52,10 +60,12 @@ deckRouter.post('/update/:id', (request, response) => {
 
 			deck.save()
 				.then((deck) => {
-					response.json('Deck has been updated');
+					response
+						.status(200)
+						.json(`Deck ${request.params.id} has been updated`);
 				})
 				.catch((err) => {
-					response.status(400).send('Failed to update deck');
+					response.status(400).send(`Error updating deck: ${err}`);
 				});
 		}
 	});
@@ -65,9 +75,9 @@ deckRouter.post('/update/:id', (request, response) => {
 deckRouter.delete('/delete/:id', (request, response) => {
 	DeckModel.findByIdAndRemove(request.params.id, (err, deck) => {
 		if (err) {
-			console.log(`Error deleting deck: ${id}`);
+			response.status(400).json(`Error deleting deck: ${id}`);
 		} else {
-			response.json(deck);
+			response.status(200).json(`Deck has been deleted`);
 		}
 	});
 });

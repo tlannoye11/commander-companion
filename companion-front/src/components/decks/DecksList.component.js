@@ -40,7 +40,7 @@ class DecksList extends Component {
 		return (
 			<div>
 				<h3>My Deck Box</h3>
-				<Table bordered striped responsive hover size='sm'>
+				<Table bordered striped hover size='sm'>
 					<thead>
 						<tr>
 							<th>

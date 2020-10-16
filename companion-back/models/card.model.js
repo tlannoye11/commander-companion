@@ -10,6 +10,14 @@ const cardSchema = new Schema({
 		type: String,
 		required: true,
 	},
+	card_qty: {
+		type: String,
+		required: true,
+	},
+	card_name: {
+		type: String,
+		required: true,
+	},
 	card_set: {
 		type: String,
 		required: true,

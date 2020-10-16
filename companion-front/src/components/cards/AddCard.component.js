@@ -24,6 +24,8 @@ class AddCard extends Component {
 		let currentCard = {
 			deck_id: this.props.deck_id,
 			scryfall_id: card.id,
+			card_qty: 1,
+			card_name: card.name,
 			card_set: card.set,
 			is_foil: false,
 		};
@@ -68,20 +70,18 @@ class AddCard extends Component {
 	}
 
 	showCardResults() {
-		if (this.state.cards.length >= 3) {
-			return this.state.cards.map((card, i) => {
-				return (
-					<ListGroup.Item
-						key={i}
-						action
-						onClick={() => {
-							this.addToDeck(card);
-						}}>
-						{card.name}
-					</ListGroup.Item>
-				);
-			});
-		}
+		return this.state.cards.map((card, i) => {
+			return (
+				<ListGroup.Item
+					key={i}
+					action
+					onClick={() => {
+						this.addToDeck(card);
+					}}>
+					{card.name}
+				</ListGroup.Item>
+			);
+		});
 	}
 
 	render() {

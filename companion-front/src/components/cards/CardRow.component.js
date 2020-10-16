@@ -18,6 +18,8 @@ class CardRow extends Component {
 			card_id: '',
 			deck_id: '',
 			scryfall_id: '',
+			card_qty: 0,
+			card_name: '',
 			card_type: '',
 			card_set: '',
 			is_foil: false,
@@ -26,10 +28,6 @@ class CardRow extends Component {
 	}
 
 	componentDidMount() {
-		this.setState({
-			card_id: this.props.card_id,
-		});
-
 		axios
 			.get('http://localhost:4000/cards/', {
 				params: {
@@ -38,9 +36,11 @@ class CardRow extends Component {
 			})
 			.then((response) => {
 				this.setState({
-					deck_id: response.data[0].deck_id,
-					scryfall_id: response.data[0].scryfall_id,
-					is_foil: response.data[0].is_foil,
+					deck_id: response.data.cards[0].deck_id,
+					scryfall_id: response.data.cards[0].scryfall_id,
+					card_qty: response.data.cards[0].card_qty,
+					card_name: response.data.cards[0].card_name,
+					is_foil: response.data.cards[0].is_foil,
 				});
 
 				axios
@@ -49,7 +49,6 @@ class CardRow extends Component {
 					)
 					.then((response) => {
 						this.setState({
-							card_name: response.data.name,
 							card_type: response.data.type_line,
 							card_set: response.data.set,
 							card_cmc: response.data.cmc,
@@ -69,10 +68,10 @@ class CardRow extends Component {
 
 	deleteCard() {
 		axios
-			.delete(`http://localhost:4000/cards/delete/${this.state.card_id}`)
+			.delete(`http://localhost:4000/cards/delete/${this.props.card_id}`)
 			.then((response) => {
 				console.log('Card deleted');
-				this.props.onDelete(this.state.card_id);
+				this.props.onDelete(this.props.card_id);
 			})
 			.catch((err) => {
 				console.log(`Error deleting card: ${err}`);
