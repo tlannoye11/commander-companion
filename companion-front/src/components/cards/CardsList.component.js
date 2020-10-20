@@ -25,6 +25,7 @@ class CardsList extends Component {
 	}
 
 	getCardsInDeck() {
+		this.setState({ cardsInDeck: [] });
 		axios
 			.get('http://localhost:4000/cards/', {
 				params: {
@@ -74,12 +75,13 @@ class CardsList extends Component {
 							axios
 								.post(apiString, currentCard)
 								.then((response) => {
-									this.setState({
-										cardsInDeck: [
-											...this.state.cardsInDeck,
-											response.data.card_id,
-										],
-									});
+									// this.setState({
+									// 	cardsInDeck: [
+									// 		...this.state.cardsInDeck,
+									// 		response.data.card_id,
+									// 	],
+									// });
+									this.getCardsInDeck();
 								});
 						});
 				}
@@ -93,11 +95,12 @@ class CardsList extends Component {
 		axios
 			.delete(`http://localhost:4000/cards/delete/${id}`)
 			.then((response) => {
-				this.setState({
-					cardsInDeck: this.state.cardsInDeck.filter(
-						(card) => card !== id
-					),
-				});
+				// this.setState({
+				// 	cardsInDeck: this.state.cardsInDeck.filter(
+				// 		(card) => card !== id
+				// 	),
+				// });
+				this.getCardsInDeck();
 			})
 			.catch((err) => {
 				console.log(`Error deleting card: ${err}`);

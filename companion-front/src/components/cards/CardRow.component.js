@@ -29,6 +29,10 @@ class CardRow extends Component {
 	}
 
 	componentDidMount() {
+		this.getCardInfo();
+	}
+
+	getCardInfo() {
 		axios
 			.get('http://localhost:4000/cards/', {
 				params: {
