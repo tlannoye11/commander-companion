@@ -40,7 +40,7 @@ class AddCard extends Component {
 			})
 			.then((data) => {
 				this.setState({
-					cards: data,
+					cards: data.length < 5 ? data : data.slice(0, 5),
 				});
 			})
 			.catch((err) => {
