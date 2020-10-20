@@ -45,40 +45,43 @@ class CardsList extends Component {
 			});
 	}
 
-	addCard(cardToAdd) {
+	addCard(cardNameToAdd) {
 		axios
 			.get('http://localhost:4000/cards/', {
 				params: {
-					card_name: cardToAdd.name,
+					card_name: cardNameToAdd,
 				},
 			})
 			.then((response) => {
-				if (response.data.cards.length > 0) {
-					// Don't allow the quantity to update by way of the AddCard component,
-					// because there is currently no way to update the state of the row from AddCard.
-					// this.updateCard({
-					// 	card_id: response.data.cards[0]._id,
-					// 	card_qty: response.data.cards[0].card_qty + 1,
-					// });
-				} else {
-					let apiString = 'http://localhost:4000/cards/add';
-					let currentCard = {
-						deck_id: this.props.deck_id,
-						scryfall_id: cardToAdd.id,
-						card_qty: 1,
-						card_name: cardToAdd.name,
-						card_set: cardToAdd.set,
-						is_foil: false,
-					};
+				// Don't allow the quantity to update by way of the AddCard component,
+				// because there is currently no way to update the state of the row from AddCard.
+				if (response.data.cards.length === 0) {
+					axios
+						.get(
+							`https://api.scryfall.com/cards/search?q=name%3D${cardNameToAdd}`
+						)
+						.then((response) => {
+							let apiString = 'http://localhost:4000/cards/add';
+							let currentCard = {
+								deck_id: this.props.deck_id,
+								scryfall_id: response.data.data[0].id,
+								card_qty: 1,
+								card_name: response.data.data[0].name,
+								card_set: response.data.data[0].set,
+								is_foil: false,
+							};
 
-					axios.post(apiString, currentCard).then((response) => {
-						this.setState({
-							cardsInDeck: [
-								...this.state.cardsInDeck,
-								response.data.card_id,
-							],
+							axios
+								.post(apiString, currentCard)
+								.then((response) => {
+									this.setState({
+										cardsInDeck: [
+											...this.state.cardsInDeck,
+											response.data.card_id,
+										],
+									});
+								});
 						});
-					});
 				}
 			})
 			.catch((err) => {

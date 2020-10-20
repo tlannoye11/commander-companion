@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
+import NumericInput from 'react-numeric-input';
 import CardSetDropdown from './CardSetDropdown.component';
 
 class CardRow extends Component {
@@ -10,6 +11,7 @@ class CardRow extends Component {
 		// Bindings
 		this.deleteCard = this.deleteCard.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
+		this.handleQtyChange = this.handleQtyChange.bind(this);
 
 		// Empty state
 		this.state = {
@@ -76,9 +78,6 @@ class CardRow extends Component {
 			target.type === 'checkbox' ? target.checked : target.value;
 		const name = target.name;
 
-		console.log('Target', e.target);
-		console.log('e', e);
-
 		this.setState({
 			[name]: value,
 		});
@@ -89,6 +88,20 @@ class CardRow extends Component {
 		};
 
 		this.props.updateCard(currentCard);
+	}
+
+	handleQtyChange(newQty) {
+		this.setState({ card_qty: newQty });
+		let currentCard = {
+			card_id: this.props.card_id,
+			card_qty: newQty,
+		};
+
+		if (newQty === 0) {
+			this.deleteCard();
+		} else {
+			this.props.updateCard(currentCard);
+		}
 	}
 
 	render() {
@@ -103,7 +116,12 @@ class CardRow extends Component {
 		return (
 			<tr>
 				<td className='center-column'>
-					<span>{this.state.card_qty}</span>
+					<NumericInput
+						min={0}
+						max={100}
+						value={this.state.card_qty}
+						onChange={this.handleQtyChange}
+					/>
 				</td>
 				<td>
 					<span className='align-middle'>

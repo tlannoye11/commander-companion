@@ -11,7 +11,7 @@ class AddCard extends Component {
 
 		// Empty state
 		this.state = {
-			cards: [],
+			cardNames: [],
 			deck_id: '',
 			selectedCard: '',
 			show: false,
@@ -20,31 +20,32 @@ class AddCard extends Component {
 
 	handleAddCard = () => {
 		this.setState({
-			cards: [],
+			cardNames: [],
 			show: true,
 		});
 	};
 
 	handleClose = () => {
 		this.setState({
-			cards: [],
+			cardNames: [],
 			show: false,
 		});
 	};
 
 	findCards(str) {
 		axios
-			.get(`https://api.scryfall.com/cards/search?q=name%3D${str}`)
+			//.get(`https://api.scryfall.com/cards/search?q=name%3D${str}`)
+			.get(`https://api.scryfall.com/cards/autocomplete?q=${str}`)
 			.then((response) => {
-				return response.data.data;
-			})
-			.then((data) => {
 				this.setState({
-					cards: data.length < 5 ? data : data.slice(0, 5),
+					cardNames:
+						response.data.data.length < 5
+							? response.data.data
+							: response.data.data.slice(0, 5),
 				});
 			})
 			.catch((err) => {
-				console.log(`Error getting list of cards: ${err}`);
+				console.log(`Error getting list of card names: ${err}`);
 			});
 	}
 
@@ -55,15 +56,16 @@ class AddCard extends Component {
 	}
 
 	showCardResults() {
-		return this.state.cards.map((card, i) => {
+		return this.state.cardNames.map((card, i) => {
 			return (
 				<ListGroup.Item
 					key={i}
 					action
+					// disabled={existingCards.includes(card)}
 					onClick={() => {
 						this.props.addCard(card);
 					}}>
-					{card.name}
+					{card}
 				</ListGroup.Item>
 			);
 		});
