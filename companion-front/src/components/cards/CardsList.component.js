@@ -74,7 +74,12 @@ class CardsList extends Component {
 									response.data.type_line
 								),
 								card_set: response.data.set,
-								card_cmc: response.data.cmc,
+								card_cmc:
+									this.showCardType(
+										response.data.type_line
+									) === 'L'
+										? 0
+										: response.data.cmc,
 								is_foil: false,
 							};
 
@@ -150,7 +155,9 @@ class CardsList extends Component {
 	}
 
 	showCardType(cardTypeLine) {
-		return cardTypeLine.includes('Creature')
+		return cardTypeLine.includes('Land')
+			? 'L'
+			: cardTypeLine.includes('Creature')
 			? 'C'
 			: cardTypeLine.includes('Planeswalker')
 			? 'P'
@@ -162,7 +169,7 @@ class CardsList extends Component {
 			? 'I'
 			: cardTypeLine.includes('Sorcery')
 			? 'S'
-			: 'L';
+			: 'X';
 	}
 
 	sortCards(thingsToSort) {

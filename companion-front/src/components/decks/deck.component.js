@@ -100,8 +100,6 @@ class Deck extends Component {
 			if (response.data.id) {
 				this.setState({ deck_id: response.data.id });
 			}
-
-			console.log(response.data);
 		});
 	}
 

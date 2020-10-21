@@ -80,9 +80,9 @@ class DecksList extends Component {
 							</th>
 							<th>Name</th>
 							<th>Colors</th>
-							<th>Count</th>
-							<th>Foils</th>
-							<th>Avg CMC</th>
+							<th className='center-column'>Count</th>
+							<th className='center-column'>Foils</th>
+							<th className='center-column'>Avg CMC</th>
 							<th>Theme</th>
 							<th>Sleeves</th>
 							<th>Basic Lands</th>
