@@ -156,7 +156,9 @@ class CardsList extends Component {
 	}
 
 	showCardType(cardTypeLine) {
-		return cardTypeLine.includes('Land')
+		return cardTypeLine.includes('Basic')
+			? 'B'
+			: cardTypeLine.includes('Land')
 			? 'L'
 			: cardTypeLine.includes('Creature')
 			? 'C'
@@ -174,7 +176,7 @@ class CardsList extends Component {
 	}
 
 	sortCards(thingsToSort) {
-		let typeOrder = ['C', 'P', 'A', 'E', 'I', 'S', 'L'];
+		let typeOrder = ['C', 'P', 'A', 'E', 'I', 'S', 'L', 'B'];
 		let ordering = {};
 
 		for (let i = 0; i < typeOrder.length; i++) {

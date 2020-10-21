@@ -63,7 +63,7 @@ class DeckRow extends Component {
 		let spell_count = 0;
 
 		for (let card in cards) {
-			cards[card].card_type === 'L'
+			cards[card].card_type === 'L' || cards[card].card_type === 'B'
 				? (land_count += cards[card].card_qty)
 				: (spell_count += cards[card].card_qty);
 
