@@ -89,6 +89,10 @@ cardRouter.post('/update/:id', (request, response) => {
 				card.card_name = request.body.card_name;
 			}
 
+			if ('card_type' in request.body) {
+				card.card_type = request.body.card_type;
+			}
+
 			if ('card_set' in request.body) {
 				card.card_set = request.body.card_set;
 			}

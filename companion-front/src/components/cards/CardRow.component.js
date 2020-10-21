@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
 import NumericInput from 'react-numeric-input';
+import CardTypeDropdown from './CardTypeDropdown.component';
 import CardSetDropdown from './CardSetDropdown.component';
 
 class CardRow extends Component {
@@ -120,7 +121,12 @@ class CardRow extends Component {
 						{this.props.card_id}
 					</span>
 				</td>
-				<td className='center-column'>{this.state.card_type}</td>
+				<td className='center-column'>
+					<CardTypeDropdown
+						card_id={this.props.card_id}
+						card_type={this.state.card_type}
+						updateCard={this.props.updateCard}></CardTypeDropdown>
+				</td>
 				<td className='center-column'>
 					<CardSetDropdown
 						card_id={this.props.card_id}

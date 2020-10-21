@@ -8,7 +8,7 @@ class CardSetDropdown extends Component {
 		super(props);
 
 		// Bindings
-		this.handleSetDropDownSelect = this.handleSetDropDownSelect.bind(this);
+		this.handleSetDropdownSelect = this.handleSetDropdownSelect.bind(this);
 
 		// Empty state
 		this.state = {
@@ -49,7 +49,7 @@ class CardSetDropdown extends Component {
 			});
 	}
 
-	createCardSetDropDown() {
+	createCardSetDropdown() {
 		return this.state.sets.map((set, i) => {
 			return (
 				<Dropdown.Item id={set[1]} eventKey={set[0]} key={i}>
@@ -59,7 +59,7 @@ class CardSetDropdown extends Component {
 		});
 	}
 
-	handleSetDropDownSelect(e) {
+	handleSetDropdownSelect(e) {
 		this.setState({
 			card_set: e,
 		});
@@ -83,8 +83,8 @@ class CardSetDropdown extends Component {
 				id='card-set-dropdown'
 				title={this.state.card_set.toUpperCase()}
 				size='sm'
-				onSelect={this.handleSetDropDownSelect}>
-				{this.createCardSetDropDown()}
+				onSelect={this.handleSetDropdownSelect}>
+				{this.createCardSetDropdown()}
 			</DropdownButton>
 		);
 	}
