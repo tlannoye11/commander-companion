@@ -52,6 +52,7 @@ class CardsList extends Component {
 		axios
 			.get('http://localhost:4000/cards/', {
 				params: {
+					deck_id: this.props.deck_id,
 					card_name: cardNameToAdd,
 				},
 			})
