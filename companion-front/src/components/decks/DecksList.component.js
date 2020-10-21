@@ -8,6 +8,9 @@ class DecksList extends Component {
 	constructor(props) {
 		super(props);
 
+		// Binding
+		this.deleteDeck = this.deleteDeck.bind(this);
+
 		// Empty state
 		this.state = {
 			decks: [],
@@ -20,19 +23,44 @@ class DecksList extends Component {
 	}
 
 	getDeckList() {
+		this.setState({ decks: [] });
 		axios
 			.get('http://localhost:4000/decks')
 			.then((response) => {
-				this.setState({ decks: response.data });
+				let decks = [];
+
+				for (let deck in response.data.decks) {
+					decks.push(response.data.decks[deck]._id);
+				}
+
+				this.setState({ decks: decks });
 			})
 			.catch((err) => {
 				console.log(`Error getting list of decks: ${err}`);
 			});
 	}
 
+	deleteDeck(id) {
+		axios
+			.delete(`http://localhost:4000/decks/delete/${id}`)
+			.then((response) => {
+				this.getDeckList();
+			})
+			.catch((err) => {
+				console.log(`Error deleting deck: ${err}`);
+			});
+	}
+
 	showDecksList() {
 		return this.state.decks.map((currentDeck, i) => {
-			return <DeckRow deck={currentDeck} key={i} />;
+			return (
+				<DeckRow
+					deck_id={currentDeck}
+					key={i}
+					deleteDeck={this.deleteDeck}
+					updateCard={this.updateCard}
+				/>
+			);
 		});
 	}
 

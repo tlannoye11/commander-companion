@@ -16,7 +16,6 @@ class CardRow extends Component {
 		// Empty state
 		this.state = {
 			is_loading: true,
-			card_id: '',
 			deck_id: '',
 			scryfall_id: '',
 			card_qty: 0,
@@ -41,7 +40,6 @@ class CardRow extends Component {
 			})
 			.then((response) => {
 				this.setState({
-					card_id: response.data.cards[0].card_id,
 					deck_id: response.data.cards[0].deck_id,
 					scryfall_id: response.data.cards[0].scryfall_id,
 					card_qty: response.data.cards[0].card_qty,
@@ -72,6 +70,7 @@ class CardRow extends Component {
 			});
 	}
 
+	// Need a separate delete method here in order to use it in the render method below.
 	deleteCard() {
 		this.props.deleteCard(this.props.card_id);
 	}

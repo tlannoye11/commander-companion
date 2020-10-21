@@ -24,6 +24,7 @@ class Deck extends Component {
 	}
 
 	componentDidMount() {
+		console.log('deck loading', this.props);
 		// If this deck already exists, load its contents.
 		if (this.props.match.params.id) {
 			this.setState({
@@ -31,14 +32,18 @@ class Deck extends Component {
 			});
 
 			axios
-				.get(
-					'http://localhost:4000/decks/' + this.props.match.params.id
-				)
+				.get('http://localhost:4000/decks/', {
+					params: {
+						deck_id: this.props.match.params.id,
+					},
+				})
 				.then((response) => {
+					console.log('deck loading response', response.data);
 					this.setState({
-						deck_name: response.data.deck_name,
-						deck_theme: response.data.deck_theme,
-						deck_sleeve_color: response.data.deck_sleeve_color,
+						deck_name: response.data.decks[0].deck_name,
+						deck_theme: response.data.decks[0].deck_theme,
+						deck_sleeve_color:
+							response.data.decks[0].deck_sleeve_color,
 					});
 				})
 				.catch((err) => {

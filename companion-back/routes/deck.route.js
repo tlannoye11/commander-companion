@@ -2,24 +2,28 @@ import express from 'express';
 const deckRouter = express.Router();
 import DeckModel from '../models/deck.model.js';
 
-// Get all decks
+// Get a number of decks
 deckRouter.get('/', (request, response) => {
-	DeckModel.find((err, decks) => {
+	let query = {};
+
+	// Optional params
+	if (request.query.deck_id) {
+		query._id = request.query.deck_id;
+	}
+
+	// Run the query
+	DeckModel.find(query, (err, decks) => {
 		if (err) {
 			response.status(400).json(`Error getting decks: ${err}`);
 		} else {
-			response.status(200).json(decks);
-		}
-	});
-});
-
-// Get a single deck by ID
-deckRouter.get('/:id', (request, response) => {
-	DeckModel.findById(request.params.id, (err, deck) => {
-		if (err) {
-			response.status(400).json(`Error getting a single deck: ${err}`);
-		} else {
-			response.status(200).json(deck);
+			// response.status(200).json({
+			// 	message: 'Deck found using this ID:',
+			// 	requestIn: request.query,
+			// });
+			response.status(200).json({
+				message: 'Decks found successfully',
+				decks: decks,
+			});
 		}
 	});
 });

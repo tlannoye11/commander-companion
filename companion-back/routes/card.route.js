@@ -30,7 +30,7 @@ cardRouter.get('/', (request, response) => {
 			response.status(400).json(`Error getting cards: ${err}`);
 		} else {
 			response.status(200).json({
-				message: `Cards found successfully`,
+				message: 'Cards found successfully',
 				cards: cards,
 			});
 		}
@@ -64,11 +64,11 @@ cardRouter.post('/add', (request, response) => {
 cardRouter.post('/update/:id', (request, response) => {
 	CardModel.findById(request.params.id, (err, card) => {
 		if (err) {
-			response.status(400).send(`Error updating card: ${err}`);
+			response.status(400).json(`Error updating card: ${err}`);
 		} else if (!card) {
 			response
 				.status(400)
-				.send(`Error finding a card with id ${request.params.id}`);
+				.json(`Error finding a card with id ${request.params.id}`);
 		} else {
 			if ('deck_id' in request.body) {
 				card.deck_id = request.body.deck_id;
@@ -98,10 +98,10 @@ cardRouter.post('/update/:id', (request, response) => {
 				.then((card) => {
 					response
 						.status(200)
-						.send(`Card ${request.params.id} has been updated`);
+						.json(`Card ${request.params.id} has been updated`);
 				})
 				.catch((err) => {
-					response.status(400).send(`Error updating card: ${err}`);
+					response.status(400).json(`Error updating card: ${err}`);
 				});
 		}
 	});
