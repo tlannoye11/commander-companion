@@ -18,8 +18,16 @@ const cardSchema = new Schema({
 		type: String,
 		required: true,
 	},
+	card_type: {
+		type: String,
+		required: true,
+	},
 	card_set: {
 		type: String,
+		required: true,
+	},
+	card_cmc: {
+		type: Number,
 		required: true,
 	},
 	is_foil: {

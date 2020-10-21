@@ -35,6 +35,8 @@ class CardsList extends Component {
 			.then((response) => {
 				let cardsInDeck = [];
 
+				this.sortCards(response.data.cards);
+
 				for (let card in response.data.cards) {
 					cardsInDeck.push(response.data.cards[card]._id);
 				}
@@ -59,16 +61,20 @@ class CardsList extends Component {
 				if (response.data.cards.length === 0) {
 					axios
 						.get(
-							`https://api.scryfall.com/cards/search?q=name%3D${cardNameToAdd}`
+							`https://api.scryfall.com/cards/named?exact=${cardNameToAdd}`
 						)
 						.then((response) => {
 							let apiString = 'http://localhost:4000/cards/add';
 							let currentCard = {
 								deck_id: this.props.deck_id,
-								scryfall_id: response.data.data[0].id,
+								scryfall_id: response.data.id,
 								card_qty: 1,
-								card_name: response.data.data[0].name,
-								card_set: response.data.data[0].set,
+								card_name: response.data.name,
+								card_type: this.showCardType(
+									response.data.type_line
+								),
+								card_set: response.data.set,
+								card_cmc: response.data.cmc,
 								is_foil: false,
 							};
 
@@ -115,7 +121,7 @@ class CardsList extends Component {
 			.post(apiString, updatedCard)
 			.then((response) => {
 				// console.log('Card update response', response);
-				this.getCardsInDeck();
+				// this.getCardsInDeck();
 			})
 			.catch((err) => {
 				console.log('Error updating card', err);
@@ -143,6 +149,49 @@ class CardsList extends Component {
 		});
 	}
 
+	showCardType(cardTypeLine) {
+		return cardTypeLine.includes('Creature')
+			? 'C'
+			: cardTypeLine.includes('Planeswalker')
+			? 'P'
+			: cardTypeLine.includes('Artifact')
+			? 'A'
+			: cardTypeLine.includes('Enchantment')
+			? 'E'
+			: cardTypeLine.includes('Instant')
+			? 'I'
+			: cardTypeLine.includes('Sorcery')
+			? 'S'
+			: 'L';
+	}
+
+	sortCards(thingsToSort) {
+		let typeOrder = ['C', 'P', 'A', 'E', 'I', 'S', 'L'];
+		let ordering = {};
+
+		for (let i = 0; i < typeOrder.length; i++) {
+			ordering[typeOrder[i]] = i;
+		}
+
+		// Sort by card type, then by CMC, then by name
+		thingsToSort.sort((a, b) => {
+			let n1 = a.card_name.toLowerCase();
+			let n2 = b.card_name.toLowerCase();
+			let t1 = a.card_type;
+			let t2 = b.card_type;
+			let c1 = a.card_cmc;
+			let c2 = b.card_cmc;
+
+			if (ordering[t1] < ordering[t2]) return -1;
+			if (ordering[t1] > ordering[t2]) return 1;
+			if (c1 < c2) return -1;
+			if (c1 > c2) return 1;
+			if (n1 < n2) return -1;
+			if (n1 > n2) return 1;
+			return 0;
+		});
+	}
+
 	render() {
 		if (this.state.is_loading) {
 			return <div>"Loading..."</div>;
@@ -152,13 +201,14 @@ class CardsList extends Component {
 				<Table bordered striped hover size='sm'>
 					<thead>
 						<tr>
-							<th className='center-column'>
+							<th>
 								<AddCard
 									deck_id={this.props.deck_id}
 									addCard={this.addCard}
 								/>
 							</th>
 							<th>Name</th>
+							<th className='center-column'>Type</th>
 							<th className='center-column'>Set</th>
 							<th className='center-column'>Foil</th>
 							<th className='center-column'>CMC</th>

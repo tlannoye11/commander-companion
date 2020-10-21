@@ -44,8 +44,10 @@ cardRouter.post('/add', (request, response) => {
 		scryfall_id: request.body.scryfall_id,
 		card_qty: request.body.card_qty,
 		card_name: request.body.card_name,
+		card_type: request.body.card_type,
 		card_set: request.body.card_set,
 		is_foil: request.body.is_foil,
+		card_cmc: request.body.card_cmc,
 	});
 
 	card.save()

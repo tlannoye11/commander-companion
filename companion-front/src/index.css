@@ -2,7 +2,8 @@
 	text-align: center;
 }
 
+/* Make sure the card quantity field doesn't get too big */
 .react-numeric-input input {
-	width: 50px;
+	max-width: 50px;
 	text-align: center;
 }

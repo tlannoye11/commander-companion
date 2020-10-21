@@ -44,26 +44,26 @@ class CardRow extends Component {
 					scryfall_id: response.data.cards[0].scryfall_id,
 					card_qty: response.data.cards[0].card_qty,
 					card_name: response.data.cards[0].card_name,
+					card_type: response.data.cards[0].card_type,
+					card_set: response.data.cards[0].card_set,
 					is_foil: response.data.cards[0].is_foil,
+					card_cmc: response.data.cards[0].card_cmc,
+					is_loading: false,
 				});
 
-				axios
-					.get(
-						`https://api.scryfall.com/cards/${this.state.scryfall_id}`
-					)
-					.then((response) => {
-						this.setState({
-							card_type: response.data.type_line,
-							card_set: response.data.set,
-							card_cmc: response.data.cmc,
-							is_loading: false,
-						});
-					})
-					.catch((err) => {
-						console.log(
-							`Error getting card by Scryfall ID: ${err}`
-						);
-					});
+				// axios
+				// 	.get(
+				// 		`https://api.scryfall.com/cards/${this.state.scryfall_id}`
+				// 	)
+				// 	.then((response) => {
+				// 		this.setState({
+				// 		});
+				// 	})
+				// 	.catch((err) => {
+				// 		console.log(
+				// 			`Error getting card by Scryfall ID: ${err}`
+				// 		);
+				// 	});
 			})
 			.catch((err) => {
 				console.log(`Error getting card from deck: ${err}`);
@@ -132,6 +132,7 @@ class CardRow extends Component {
 						{this.props.card_id}
 					</span>
 				</td>
+				<td className='center-column'>{this.state.card_type}</td>
 				<td className='center-column'>
 					<CardSetDropdown
 						card_id={this.props.card_id}
