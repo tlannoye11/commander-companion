@@ -13,6 +13,7 @@ const cardSchema = new Schema({
 	card_qty: {
 		type: Number,
 		required: true,
+		default: 1,
 	},
 	card_name: {
 		type: String,
@@ -29,10 +30,17 @@ const cardSchema = new Schema({
 	card_cmc: {
 		type: Number,
 		required: true,
+		default: 0,
 	},
 	is_foil: {
 		type: Boolean,
 		required: true,
+		default: false,
+	},
+	is_commander: {
+		type: Boolean,
+		required: true,
+		default: false,
 	},
 });
 

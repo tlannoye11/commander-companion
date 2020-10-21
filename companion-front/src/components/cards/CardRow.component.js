@@ -24,6 +24,7 @@ class CardRow extends Component {
 			card_set: '',
 			is_foil: false,
 			card_cmc: 0,
+			is_commander: false,
 		};
 	}
 
@@ -48,22 +49,9 @@ class CardRow extends Component {
 					card_set: response.data.cards[0].card_set,
 					is_foil: response.data.cards[0].is_foil,
 					card_cmc: response.data.cards[0].card_cmc,
+					is_commander: response.data.cards[0].is_commander,
 					is_loading: false,
 				});
-
-				// axios
-				// 	.get(
-				// 		`https://api.scryfall.com/cards/${this.state.scryfall_id}`
-				// 	)
-				// 	.then((response) => {
-				// 		this.setState({
-				// 		});
-				// 	})
-				// 	.catch((err) => {
-				// 		console.log(
-				// 			`Error getting card by Scryfall ID: ${err}`
-				// 		);
-				// 	});
 			})
 			.catch((err) => {
 				console.log(`Error getting card from deck: ${err}`);
@@ -150,6 +138,14 @@ class CardRow extends Component {
 				</td>
 				<td className='center-column'>
 					<span>{this.state.card_cmc}</span>
+				</td>
+				<td className='center-column'>
+					<input
+						name='is_commander'
+						type='checkbox'
+						checked={this.state.is_commander}
+						onChange={this.handleInputChange}
+					/>
 				</td>
 				<td className='center-column'>
 					<Button

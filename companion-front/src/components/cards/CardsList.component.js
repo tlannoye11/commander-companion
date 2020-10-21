@@ -190,6 +190,8 @@ class CardsList extends Component {
 			let c1 = a.card_cmc;
 			let c2 = b.card_cmc;
 
+			if (a.is_commander) return -1;
+			if (b.is_commander) return 1;
 			if (ordering[t1] < ordering[t2]) return -1;
 			if (ordering[t1] > ordering[t2]) return 1;
 			if (c1 < c2) return -1;
@@ -220,6 +222,9 @@ class CardsList extends Component {
 							<th className='center-column'>Set</th>
 							<th className='center-column'>Foil</th>
 							<th className='center-column'>CMC</th>
+							<th className='center-column'>
+								<i className='fas fa-crown'></i>
+							</th>
 							<th className='center-column'>
 								<Link to='/create'>
 									<Button size='sm' variant='info'>

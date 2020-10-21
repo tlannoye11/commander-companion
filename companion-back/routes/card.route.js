@@ -48,6 +48,7 @@ cardRouter.post('/add', (request, response) => {
 		card_set: request.body.card_set,
 		is_foil: request.body.is_foil,
 		card_cmc: request.body.card_cmc,
+		is_commander: request.body.is_commander,
 	});
 
 	card.save()
@@ -94,6 +95,10 @@ cardRouter.post('/update/:id', (request, response) => {
 
 			if ('is_foil' in request.body) {
 				card.is_foil = request.body.is_foil;
+			}
+
+			if ('is_commander' in request.body) {
+				card.is_commander = request.body.is_commander;
 			}
 
 			card.save()
