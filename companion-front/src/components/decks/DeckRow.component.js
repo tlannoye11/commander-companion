@@ -56,6 +56,8 @@ class DeckRow extends Component {
 			});
 	}
 
+	// Find a way to re-use this in CardsList...
+	// ...put it in some external file?
 	getDeckStats(cards) {
 		let cmc_count = 0;
 		let foil_count = 0;

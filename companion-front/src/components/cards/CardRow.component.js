@@ -107,7 +107,7 @@ class CardRow extends Component {
 
 		return (
 			<tr>
-				<td className='center-column'>
+				<td className='center-column' colSpan='2'>
 					<NumericInput
 						min={0}
 						max={100}

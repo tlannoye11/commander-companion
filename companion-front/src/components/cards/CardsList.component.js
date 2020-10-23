@@ -17,6 +17,7 @@ class CardsList extends Component {
 		// Empty state
 		this.state = {
 			cardsInDeck: [],
+			card_count: 0,
 		};
 	}
 
@@ -25,7 +26,11 @@ class CardsList extends Component {
 	}
 
 	getCardsInDeck() {
-		this.setState({ cardsInDeck: [] });
+		this.setState({
+			cardsInDeck: [],
+			card_count: 0,
+		});
+
 		axios
 			.get('http://localhost:4000/cards/', {
 				params: {
@@ -34,14 +39,19 @@ class CardsList extends Component {
 			})
 			.then((response) => {
 				let cardsInDeck = [];
+				let card_count = 0;
 
 				this.sortCards(response.data.cards);
 
 				for (let card in response.data.cards) {
 					cardsInDeck.push(response.data.cards[card]._id);
+					card_count += response.data.cards[card].card_qty;
 				}
 
-				this.setState({ cardsInDeck: cardsInDeck });
+				this.setState({
+					cardsInDeck: cardsInDeck,
+					card_count: card_count,
+				});
 			})
 			.catch((err) => {
 				console.log(`Error getting cards for deck: ${err}`);
@@ -218,6 +228,9 @@ class CardsList extends Component {
 									deck_id={this.props.deck_id}
 									addCard={this.addCard}
 								/>
+							</th>
+							<th className='center-column'>
+								{this.state.card_count}
 							</th>
 							<th>Name</th>
 							<th className='center-column'>Type</th>
