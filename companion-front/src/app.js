@@ -3,11 +3,12 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import DecksList from './components/decks/DecksList.component';
-import Deck from './components/decks/Deck.component';
+// import DecksList from './components/decks/DecksList.component';
+// import Deck from './components/decks/Deck.component';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
+import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 
@@ -17,7 +18,7 @@ const App = () => {
 			<Header />
 			<main className='py-3'>
 				<Container>
-					<Route
+					{/* <Route
 						path='/edit/:id'
 						exact
 						render={(props) => (
@@ -28,10 +29,10 @@ const App = () => {
 						path='/create'
 						exact
 						render={(props) => <Deck {...props} />}
-					/>
+					/> */}
 					<Route path='/login' component={LoginScreen} />
 					<Route path='/register' component={RegisterScreen} />
-					<Route path='/' exact component={DecksList} />
+					<Route path='/' exact component={HomeScreen} />
 				</Container>
 			</main>
 			<Footer />
