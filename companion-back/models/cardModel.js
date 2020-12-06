@@ -2,42 +2,42 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const cardSchema = new Schema({
-	deck_id: {
+	deckId: {
 		type: String,
 		required: true,
 	},
-	scryfall_id: {
+	scryfallId: {
 		type: String,
 		required: true,
 	},
-	card_qty: {
+	qty: {
 		type: Number,
 		required: true,
 		default: 1,
 	},
-	card_name: {
+	name: {
 		type: String,
 		required: true,
 	},
-	card_type: {
+	type: {
 		type: String,
 		required: true,
 	},
-	card_set: {
+	set: {
 		type: String,
 		required: true,
 	},
-	card_cmc: {
+	cmc: {
 		type: Number,
 		required: true,
 		default: 0,
 	},
-	is_foil: {
+	isFoil: {
 		type: Boolean,
 		required: true,
 		default: false,
 	},
-	is_commander: {
+	isCommander: {
 		type: Boolean,
 		required: true,
 		default: false,
