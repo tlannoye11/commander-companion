@@ -2,7 +2,13 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { cardListReducer } from './reducers/cardReducers';
-import { deckListReducer, deckDetailsReducer } from './reducers/deckReducers';
+import {
+	deckListReducer,
+	deckDetailsReducer,
+	deckUpdateDetailsReducer,
+	deckCreateReducer,
+	deckDeleteReducer,
+} from './reducers/deckReducers';
 import {
 	userLoginReducer,
 	userRegisterReducer,
@@ -14,6 +20,9 @@ const reducer = combineReducers({
 	cardList: cardListReducer,
 	deckList: deckListReducer,
 	deckDetails: deckDetailsReducer,
+	deckUpdateDetails: deckUpdateDetailsReducer,
+	deckDelete: deckDeleteReducer,
+	deckCreate: deckCreateReducer,
 	userLogin: userLoginReducer,
 	userRegister: userRegisterReducer,
 	userDetails: userDetailsReducer,

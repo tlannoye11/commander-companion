@@ -20,11 +20,9 @@ const deckSchema = mongoose.Schema(
 		},
 		deck_theme: {
 			type: String,
-			required: true,
 		},
 		deck_sleeve_color: {
 			type: String,
-			required: true,
 		},
 		deck_basic_lands: {
 			type: Array,

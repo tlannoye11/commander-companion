@@ -5,12 +5,11 @@ import { Link } from 'react-router-dom';
 const DeckRow = ({ deck }) => {
 	return (
 		<tr>
-			<td>Deck Row</td>
-			{/* <Link to={`/edit/${deck.deck_id}`}> */}
 			<td>
-				<strong>{deck.deck_name}</strong>
-			</td>{' '}
-			{/* </Link> */}
+				<Link to={`/deck/${deck._id}`}>
+					<strong>{deck.deck_name}</strong>
+				</Link>
+			</td>
 			{deck.deck_id}
 			<td>Colors here</td>
 			<td className='center-column'>

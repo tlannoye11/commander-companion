@@ -6,6 +6,15 @@ import {
 	DECK_LIST_FAIL,
 	DECK_LIST_REQUEST,
 	DECK_LIST_SUCCESS,
+	DECK_UPDATE_DETAILS_FAIL,
+	DECK_UPDATE_DETAILS_REQUEST,
+	DECK_UPDATE_DETAILS_SUCCESS,
+	DECK_CREATE_FAIL,
+	DECK_CREATE_REQUEST,
+	DECK_CREATE_SUCCESS,
+	DECK_DELETE_REQUEST,
+	DECK_DELETE_SUCCESS,
+	DECK_DELETE_FAIL,
 } from '../constants/deckConstants';
 
 export const listDecks = () => async (dispatch) => {
@@ -29,7 +38,7 @@ export const listDecks = () => async (dispatch) => {
 	}
 };
 
-export const listDeckDetails = (id) => async (dispatch) => {
+export const getDeckDetails = (id) => async (dispatch) => {
 	try {
 		dispatch({ type: DECK_DETAILS_REQUEST });
 
@@ -42,6 +51,100 @@ export const listDeckDetails = (id) => async (dispatch) => {
 	} catch (error) {
 		dispatch({
 			type: DECK_DETAILS_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
+};
+
+export const deckUpdateDetails = (deck) => async (dispatch) => {
+	try {
+		dispatch({
+			type: DECK_UPDATE_DETAILS_REQUEST,
+		});
+
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		};
+
+		const { data } = await axios.put(`/api/decks`, deck, config);
+
+		dispatch({
+			type: DECK_UPDATE_DETAILS_SUCCESS,
+			payload: data,
+		});
+	} catch (error) {
+		dispatch({
+			type: DECK_UPDATE_DETAILS_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
+};
+
+export const deleteDeck = (id) => async (dispatch, getState) => {
+	try {
+		dispatch({
+			type: DECK_DELETE_REQUEST,
+		});
+
+		const {
+			userLogin: { userInfo },
+		} = getState();
+
+		const config = {
+			headers: {
+				Authorization: `Bearer ${userInfo.token}`,
+			},
+		};
+
+		await axios.delete(`/api/decks/${id}`, config);
+
+		dispatch({
+			type: DECK_DELETE_SUCCESS,
+		});
+	} catch (error) {
+		dispatch({
+			type: DECK_DELETE_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
+};
+
+export const createDeck = () => async (dispatch, getState) => {
+	try {
+		dispatch({
+			type: DECK_CREATE_REQUEST,
+		});
+
+		const {
+			userLogin: { userInfo },
+		} = getState();
+
+		const config = {
+			headers: {
+				Authorization: `Bearer ${userInfo.token}`,
+			},
+		};
+
+		const { data } = await axios.post(`/api/decks`, {}, config);
+
+		dispatch({
+			type: DECK_CREATE_SUCCESS,
+			payload: data,
+		});
+	} catch (error) {
+		dispatch({
+			type: DECK_CREATE_FAIL,
 			payload:
 				error.response && error.response.data.message
 					? error.response.data.message

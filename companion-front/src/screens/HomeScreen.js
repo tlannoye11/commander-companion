@@ -1,39 +1,85 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Table } from 'react-bootstrap';
-import DeckRow from '../components/decks/DeckRow';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { listDecks } from '../actions/deckActions';
-import { Link } from 'react-router-dom';
+import { listDecks, deleteDeck, createDeck } from '../actions/deckActions';
+import { DECK_CREATE_RESET } from '../constants/deckConstants';
 
-const HomeScreen = () => {
+const HomeScreen = ({ history }) => {
 	const dispatch = useDispatch();
 
 	const deckList = useSelector((state) => state.deckList);
 	const { loading, error, decks } = deckList;
 
+	const deckDelete = useSelector((state) => state.deckDelete);
+	const {
+		loading: loadingDelete,
+		error: errorDelete,
+		success: successDelete,
+	} = deckDelete;
+
+	const deckCreate = useSelector((state) => state.deckCreate);
+	const {
+		loading: loadingCreate,
+		error: errorCreate,
+		success: successCreate,
+		deck: createdDeck,
+	} = deckCreate;
+
+	const userLogin = useSelector((state) => state.userLogin);
+	const { userInfo } = userLogin;
+
 	useEffect(() => {
-		dispatch(listDecks());
-	}, [dispatch]);
+		dispatch({ type: DECK_CREATE_RESET });
+
+		if (!userInfo.isAdmin) {
+			history.push('/login');
+		}
+
+		if (successCreate) {
+			history.push(`/admin/deck/${createdDeck._id}/edit`);
+		} else {
+			dispatch(listDecks());
+		}
+	}, [
+		dispatch,
+		history,
+		userInfo,
+		successDelete,
+		successCreate,
+		createdDeck,
+	]);
+
+	const deleteHandler = (id) => {
+		if (window.confirm('Are you sure?')) {
+			dispatch(deleteDeck(id));
+		}
+	};
+
+	const createDeckHandler = () => {
+		dispatch(createDeck());
+	};
 
 	return (
 		<div>
 			<h1>My Deck Box</h1>
+			{loadingCreate && <Loader />}
+			{errorCreate && <Message variant='danger'>{errorCreate}</Message>}
+
 			{loading ? (
 				<Loader />
 			) : error ? (
 				<Message variant='danger'>{error}</Message>
 			) : (
-				<Table>
+				<Table striped bordered hover responsive className='table-sm'>
 					<thead>
 						<tr>
 							<th>
-								<Link to='/create'>
-									<Button size='sm' variant='info'>
-										<i className='fas fa-plus'></i>
-									</Button>
-								</Link>
+								<Button size='sm' onClick={createDeckHandler}>
+									<i className='fas fa-plus'></i>
+								</Button>
 							</th>
 							<th>Name</th>
 							<th>Colors</th>
@@ -47,7 +93,38 @@ const HomeScreen = () => {
 					</thead>
 					<tbody>
 						{decks.map((deck) => (
-							<DeckRow key={deck._id} deck={deck} />
+							<tr>
+								<td>
+									<Link to={`/deck/${deck._id}`}>
+										<strong>{deck.deck_name}</strong>
+									</Link>
+								</td>
+								{deck.deck_id}
+								<td>Colors here</td>
+								<td className='center-column'>
+									Spell + Land count
+									{/* {deck.spell_count + deck.land_count} */}
+								</td>
+								<td className='center-column'>
+									Foil count
+									{/* {deck.foil_count} */}
+								</td>
+								<td className='center-column'>
+									Avg CMC
+									{/* {deck.avg_cmc} */}
+								</td>
+								<td>{/* {deck.deck_theme} */}</td>
+								<td>{/* {deck.deck_sleeve_color} */}</td>
+								{/* <td>Basics{deck.deck_basic_lands}</td> */}
+								<td>
+									<Button
+										variant='danger'
+										className='btn-sm'
+										onClick={() => deleteHandler(deck._id)}>
+										<i className='fas fa-trash'></i>
+									</Button>
+								</td>
+							</tr>
 						))}
 					</tbody>
 				</Table>

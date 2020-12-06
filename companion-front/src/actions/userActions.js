@@ -27,7 +27,7 @@ export const login = (email, password) => async (dispatch) => {
 			},
 		};
 
-		console.log('login config', config);
+		console.log('login action config', config);
 
 		const { data } = await axios.post(
 			'/api/users/login',
@@ -35,12 +35,14 @@ export const login = (email, password) => async (dispatch) => {
 			config
 		);
 
-		console.log('login data', data);
+		console.log('login action data', data);
 
 		dispatch({
 			type: USER_LOGIN_SUCCESS,
 			payload: data,
 		});
+
+		localStorage.setItem('userInfo', JSON.stringify(data));
 	} catch (error) {
 		dispatch({
 			type: USER_LOGIN_FAIL,
@@ -157,6 +159,13 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
 			type: USER_UPDATE_PROFILE_SUCCESS,
 			payload: data,
 		});
+
+		dispatch({
+			type: USER_LOGIN_SUCCESS,
+			payload: data,
+		});
+
+		localStorage.setItem('userInfo', JSON.stringify(data));
 	} catch (error) {
 		dispatch({
 			type: USER_UPDATE_PROFILE_FAIL,

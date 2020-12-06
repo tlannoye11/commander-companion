@@ -10,6 +10,8 @@ const Header = () => {
 	const userLogin = useSelector((state) => state.userLogin);
 	const { userInfo } = userLogin;
 
+	console.log('Header userInfo', userInfo);
+
 	const logoutHandler = () => {
 		dispatch(logout());
 	};
@@ -24,13 +26,14 @@ const Header = () => {
 					<Navbar.Toggle aria-controls='basic-navbar-nav' />
 					<Navbar.Collapse id='basic-navbar-nav'>
 						<Nav className='ml-auto'>
-							{/* This is where links to other pages would go, if there were any */}
 							{userInfo ? (
 								<NavDropdown
 									title={userInfo.name}
 									id='username'>
 									<LinkContainer to='/profile'>
-										Profile
+										<NavDropdown.Item>
+											Profile
+										</NavDropdown.Item>
 									</LinkContainer>
 									<NavDropdown.Item onClick={logoutHandler}>
 										Log Out
@@ -39,7 +42,8 @@ const Header = () => {
 							) : (
 								<LinkContainer to='/login'>
 									<Nav.Link>
-										<i className='fas fa-user'></i>Sign In
+										<i className='fas fa-user px-2'></i>Sign
+										In
 									</Nav.Link>
 								</LinkContainer>
 							)}

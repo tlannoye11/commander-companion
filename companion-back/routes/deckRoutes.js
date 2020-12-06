@@ -1,8 +1,13 @@
 import express from 'express';
 const router = express.Router();
-import { getDeckById, getDecks } from '../controllers/deckController.js';
+import {
+	getDeckById,
+	getDecks,
+	createDeck,
+	deleteDeck,
+} from '../controllers/deckController.js';
 
-router.route('/').get(getDecks);
-router.route('/:id').get(getDeckById);
+router.route('/').get(getDecks).post(createDeck);
+router.route('/:id').get(getDeckById).delete(deleteDeck);
 
 export default router;

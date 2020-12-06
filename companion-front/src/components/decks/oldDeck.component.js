@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import DeckHeader from './DeckHeader.component';
+import DeckHeader from './oldDeckHeader.component';
 import CardsList from '../cards/CardsList.component';
 
 class Deck extends Component {
