@@ -2,29 +2,29 @@ import mongoose from 'mongoose';
 
 const deckSchema = mongoose.Schema(
 	{
-		deck_name: {
+		name: {
 			type: String,
 			required: true,
 		},
-		deck_colors: {
+		colors: {
 			type: String,
 		},
-		deck_count: {
+		count: {
 			type: Number,
 		},
-		deck_average_cmc: {
+		averageCmc: {
 			type: Number,
 		},
-		deck_foils: {
+		foils: {
 			type: String,
 		},
-		deck_theme: {
+		theme: {
 			type: String,
 		},
-		deck_sleeve_color: {
+		sleeveColor: {
 			type: String,
 		},
-		deck_basic_lands: {
+		basicLands: {
 			type: Array,
 		},
 	},

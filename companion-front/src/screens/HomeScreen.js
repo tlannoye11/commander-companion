@@ -32,7 +32,7 @@ const HomeScreen = ({ history }) => {
 	const { userInfo } = userLogin;
 
 	useEffect(() => {
-		dispatch({ type: DECK_CREATE_RESET });
+		// dispatch({ type: DECK_CREATE_RESET });
 
 		if (!userInfo.isAdmin) {
 			history.push('/login');
@@ -65,6 +65,8 @@ const HomeScreen = ({ history }) => {
 	return (
 		<div>
 			<h1>My Deck Box</h1>
+			{loadingDelete && <Loader />}
+			{errorDelete && <Message variant='danger'>{errorDelete}</Message>}
 			{loadingCreate && <Loader />}
 			{errorCreate && <Message variant='danger'>{errorCreate}</Message>}
 
@@ -93,13 +95,13 @@ const HomeScreen = ({ history }) => {
 					</thead>
 					<tbody>
 						{decks.map((deck) => (
-							<tr>
+							<tr key={deck._id}>
 								<td>
 									<Link to={`/deck/${deck._id}`}>
-										<strong>{deck.deck_name}</strong>
+										<strong>{deck.name}</strong>
 									</Link>
 								</td>
-								{deck.deck_id}
+								{deck.id}
 								<td>Colors here</td>
 								<td className='center-column'>
 									Spell + Land count
@@ -113,9 +115,9 @@ const HomeScreen = ({ history }) => {
 									Avg CMC
 									{/* {deck.avg_cmc} */}
 								</td>
-								<td>{/* {deck.deck_theme} */}</td>
-								<td>{/* {deck.deck_sleeve_color} */}</td>
-								{/* <td>Basics{deck.deck_basic_lands}</td> */}
+								<td>{/* {deck.theme} */}</td>
+								<td>{/* {deck.sleeve_color} */}</td>
+								{/* <td>Basics{deck.basic_lands}</td> */}
 								<td>
 									<Button
 										variant='danger'

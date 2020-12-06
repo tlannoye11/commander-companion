@@ -8,13 +8,15 @@ import {
 	DECK_DELETE_SUCCESS,
 	DECK_DETAILS_FAIL,
 	DECK_DETAILS_REQUEST,
+	DECK_DETAILS_RESET,
 	DECK_DETAILS_SUCCESS,
 	DECK_LIST_FAIL,
 	DECK_LIST_REQUEST,
 	DECK_LIST_SUCCESS,
-	DECK_UPDATE_DETAILS_FAIL,
-	DECK_UPDATE_DETAILS_REQUEST,
-	DECK_UPDATE_DETAILS_SUCCESS,
+	DECK_UPDATE_FAIL,
+	DECK_UPDATE_REQUEST,
+	DECK_UPDATE_RESET,
+	DECK_UPDATE_SUCCESS,
 } from '../constants/deckConstants';
 
 export const deckListReducer = (state = { decks: [] }, action) => {
@@ -38,19 +40,8 @@ export const deckDetailsReducer = (state = { deck: {} }, action) => {
 			return { loading: false, deck: action.payload };
 		case DECK_DETAILS_FAIL:
 			return { loading: false, error: action.payload };
-		default:
-			return state;
-	}
-};
-
-export const deckUpdateDetailsReducer = (state = {}, action) => {
-	switch (action.type) {
-		case DECK_UPDATE_DETAILS_REQUEST:
-			return { loading: true };
-		case DECK_UPDATE_DETAILS_SUCCESS:
-			return { loading: false, success: true, deck: action.payload };
-		case DECK_UPDATE_DETAILS_FAIL:
-			return { loading: false, error: action.payload };
+		case DECK_DETAILS_RESET:
+			return { deck: {} };
 		default:
 			return state;
 	}
@@ -77,6 +68,21 @@ export const deckCreateReducer = (state = {}, action) => {
 		case DECK_CREATE_FAIL:
 			return { loading: false, error: action.payload };
 		case DECK_CREATE_RESET:
+			return {};
+		default:
+			return state;
+	}
+};
+
+export const deckUpdateReducer = (state = { deck: {} }, action) => {
+	switch (action.type) {
+		case DECK_UPDATE_REQUEST:
+			return { loading: true };
+		case DECK_UPDATE_SUCCESS:
+			return { loading: false, success: true, deck: action.payload };
+		case DECK_UPDATE_FAIL:
+			return { loading: false, error: action.payload };
+		case DECK_UPDATE_RESET:
 			return {};
 		default:
 			return state;

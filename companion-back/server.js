@@ -4,6 +4,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import connectDB from './config/db.js';
+import morgan from 'morgan';
 
 import deckRoutes from './routes/deckRoutes.js';
 //import cardRoutes from './routes/card.route.js';
@@ -15,6 +16,10 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+if (process.env.NODE_ENV === 'development') {
+	app.use(morgan('dev'));
+}
 
 app.get('/', (request, response) => {
 	response.send('API is runnin and runnin');

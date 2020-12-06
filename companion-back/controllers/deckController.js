@@ -32,18 +32,50 @@ const deleteDeck = asyncHandler(async (request, response) => {
 
 const createDeck = asyncHandler(async (request, response) => {
 	const deck = new Deck({
-		deck_name: 'New Deck',
-		deck_colors: '',
-		deck_count: 0,
-		deck_average_cmc: 0,
-		deck_foils: '',
-		deck_theme: '',
-		deck_sleeves: '',
-		deck_basic_lands: '',
+		name: 'New Deck',
+		colors: '',
+		count: 0,
+		averageCmc: 0,
+		foils: '',
+		theme: '',
+		sleeveColor: '',
+		basicLands: '',
 	});
 
 	const createdDeck = await deck.save();
 	response.status(201).json(createdDeck);
 });
 
-export { getDecks, getDeckById, deleteDeck, createDeck };
+const updateDeck = asyncHandler(async (request, response) => {
+	const {
+		name,
+		colors,
+		count,
+		averageCmc,
+		foils,
+		theme,
+		sleeveColor,
+		basicLands,
+	} = request.body;
+
+	const deck = await Deck.findById(request.params.id);
+
+	if (deck) {
+		deck.name = name;
+		deck.colors = colors;
+		deck.count = count;
+		deck.averageCmc = averageCmc;
+		deck.foils = foils;
+		deck.theme = theme;
+		deck.sleeveColor = sleeveColor;
+		deck.basicLands = basicLands;
+
+		const updatedDeck = await deck.save();
+		response.json(updatedDeck);
+	} else {
+		response.status(404);
+		throw new Error('Deck not found');
+	}
+});
+
+export { getDecks, getDeckById, deleteDeck, createDeck, updateDeck };

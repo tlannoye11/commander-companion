@@ -5,9 +5,9 @@ import { cardListReducer } from './reducers/cardReducers';
 import {
 	deckListReducer,
 	deckDetailsReducer,
-	deckUpdateDetailsReducer,
 	deckCreateReducer,
 	deckDeleteReducer,
+	deckUpdateReducer,
 } from './reducers/deckReducers';
 import {
 	userLoginReducer,
@@ -20,9 +20,9 @@ const reducer = combineReducers({
 	cardList: cardListReducer,
 	deckList: deckListReducer,
 	deckDetails: deckDetailsReducer,
-	deckUpdateDetails: deckUpdateDetailsReducer,
 	deckDelete: deckDeleteReducer,
 	deckCreate: deckCreateReducer,
+	deckUpdate: deckUpdateReducer,
 	userLogin: userLoginReducer,
 	userRegister: userRegisterReducer,
 	userDetails: userDetailsReducer,
