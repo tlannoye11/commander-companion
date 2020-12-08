@@ -7,7 +7,7 @@ import connectDB from './config/db.js';
 import morgan from 'morgan';
 
 import deckRoutes from './routes/deckRoutes.js';
-//import cardRoutes from './routes/card.route.js';
+import cardRoutes from './routes/cardRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 //const db = require('./config/keys').deckURI;
 
@@ -30,7 +30,7 @@ app.use(express.json());
 // app.use(bodyParser.json());
 
 app.use('/api/decks', deckRoutes);
-//app.use('/cards', cardRoutes);
+app.use('/api/cards', cardRoutes);
 app.use('/api/users', userRoutes);
 
 app.use(notFound);

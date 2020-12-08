@@ -1,7 +1,7 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { cardListReducer } from './reducers/cardReducers';
+import { cardsInDeckReducer } from './reducers/cardReducers';
 import {
 	deckListReducer,
 	deckDetailsReducer,
@@ -17,7 +17,7 @@ import {
 } from './reducers/userReducers';
 
 const reducer = combineReducers({
-	cardList: cardListReducer,
+	cardsInDeck: cardsInDeckReducer,
 	deckList: deckListReducer,
 	deckDetails: deckDetailsReducer,
 	deckDelete: deckDeleteReducer,

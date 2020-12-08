@@ -1,5 +1,4 @@
 import express from 'express';
-const router = express.Router();
 import {
 	getDeckById,
 	getDecks,
@@ -7,6 +6,8 @@ import {
 	deleteDeck,
 	updateDeck,
 } from '../controllers/deckController.js';
+
+const router = express.Router();
 
 router.route('/').get(getDecks).post(createDeck);
 router.route('/:id').get(getDeckById).delete(deleteDeck).put(updateDeck);

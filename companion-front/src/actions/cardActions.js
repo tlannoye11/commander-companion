@@ -1,22 +1,35 @@
 import axios from 'axios';
 import {
-	CARD_LIST_REQUEST,
-	CARD_LIST_SUCCESS,
-	CARD_LIST_FAIL,
+	CARDS_IN_DECK_FAIL,
+	CARDS_IN_DECK_REQUEST,
+	CARDS_IN_DECK_SUCCESS,
 } from '../constants/cardConstants';
 
-export const listCards = () => async (dispatch) => {
+export const getCardsInDeck = (id) => async (dispatch, getState) => {
 	try {
-		dispatch({ type: CARD_LIST_REQUEST });
-		const { data } = await axios.get('/cards/');
+		dispatch({
+			type: CARDS_IN_DECK_REQUEST,
+		});
+
+		const {
+			userLogin: { userInfo },
+		} = getState();
+
+		const config = {
+			headers: {
+				Authorization: `Bearer ${userInfo.token}`,
+			},
+		};
+
+		const { data } = await axios.get(`/api/cards/deck/${id}`, config);
 
 		dispatch({
-			type: CARD_LIST_SUCCESS,
+			type: CARDS_IN_DECK_SUCCESS,
 			payload: data,
 		});
 	} catch (error) {
 		dispatch({
-			type: CARD_LIST_FAIL,
+			type: CARDS_IN_DECK_FAIL,
 			payload:
 				error.response && error.response.data.message
 					? error.response.data.message

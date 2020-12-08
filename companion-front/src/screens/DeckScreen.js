@@ -9,6 +9,7 @@ import {
 	DECK_DETAILS_RESET,
 	DECK_UPDATE_RESET,
 } from '../constants/deckConstants';
+import CardList from '../components/cards/CardList';
 
 const DeckScreen = ({ history, match }) => {
 	const deckId = match.params.id;
@@ -31,17 +32,12 @@ const DeckScreen = ({ history, match }) => {
 
 	useEffect(() => {
 		if (successUpdate) {
-			console.log('update successful');
-
+			// Need to reset both in order to make sure the component reloads all of the saved data.
 			dispatch({ type: DECK_UPDATE_RESET });
 			dispatch({ type: DECK_DETAILS_RESET });
 
-			console.log('after', deck);
-
 			history.push('/');
 		} else {
-			console.log('else deck', deck);
-
 			if (!deck.name || deck._id !== deckId) {
 				dispatch(getDeckDetails(deckId));
 			} else {
@@ -130,6 +126,7 @@ const DeckScreen = ({ history, match }) => {
 					</Button>
 				</Form>
 			)}
+			<CardList deckId={deckId} />
 		</>
 	);
 };
