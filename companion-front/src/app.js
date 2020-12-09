@@ -13,6 +13,7 @@ import DeckScreen from './screens/DeckScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import CardEditScreen from './screens/CardEditScreen';
 
 const App = () => {
 	return (
@@ -24,6 +25,7 @@ const App = () => {
 					<Route path='/register' component={RegisterScreen} />
 					<Route path='/profile' component={ProfileScreen} />
 					<Route path='/deck/:id' component={DeckScreen} />
+					<Route path='/card/:id' component={CardEditScreen} />
 					<Route path='/' exact component={HomeScreen} />
 				</Container>
 			</main>

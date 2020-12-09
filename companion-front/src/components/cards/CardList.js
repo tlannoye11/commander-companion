@@ -1,29 +1,51 @@
 import React, { useState, useEffect } from 'react';
-import { Table } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../Message';
 import Loader from '../Loader';
-import { getCardsInDeck } from '../../actions/cardActions';
+import { createCard, deleteCard, getCards } from '../../actions/cardActions';
+import NumericInput from 'react-numeric-input';
+import { CARD_CREATE_RESET } from '../../constants/cardConstants';
 
-const CardList = ({ deckId }) => {
-	// const [deckId, setDeckId] = useState('');
-	// const [scryfallId, setScryfallId] = useState('');
-	// const [qty, setQty] = useState(0);
-	// const [name, setName] = useState('');
-	// const [type, setType] = useState('');
-	// const [set, setSet] = useState('');
-	// const [cmc, setCMC] = useState(0);
-	// const [isFoil, setIsFoil] = useState(false);
-	// const [isCommander, setIsCommander] = useState(false);
-
+const CardList = ({ history, deckId }) => {
 	const dispatch = useDispatch();
 
-	const cardsInDeck = useSelector((state) => state.cardsInDeck);
-	const { loading, error, cards } = cardsInDeck;
+	const cardList = useSelector((state) => state.cardList);
+	const { loading, error, cards } = cardList;
+
+	const cardDelete = useSelector((state) => state.cardDelete);
+	const {
+		loading: loadingDelete,
+		error: errorDelete,
+		success: successDelete,
+	} = cardDelete;
+
+	const cardCreate = useSelector((state) => state.cardCreate);
+	const {
+		loading: loadingCreate,
+		error: errorCreate,
+		success: successCreate,
+		card: createdCard,
+	} = cardCreate;
 
 	useEffect(() => {
-		dispatch(getCardsInDeck(deckId));
-	}, [dispatch, deckId]);
+		dispatch({ type: CARD_CREATE_RESET });
+
+		if (!successCreate) {
+			dispatch(getCards(deckId));
+		}
+	}, [dispatch, history, successDelete, successCreate, createdCard, deckId]);
+
+	const deleteCardHandler = (id) => {
+		if (window.confirm('Are you sure')) {
+			dispatch(deleteCard(id));
+		}
+	};
+
+	const addToDeckHandler = (deckId) => {
+		console.log('add handler');
+		dispatch(createCard(deckId));
+	};
 
 	return (
 		<>
@@ -36,25 +58,64 @@ const CardList = ({ deckId }) => {
 				<Table striped bordered hover responsive className='table-sm'>
 					<thead>
 						<tr>
-							<th>##</th>
-							<th>NAME</th>
-							<th>TYPE</th>
-							<th>SET</th>
-							<th>CMC</th>
-							<th>Foil?</th>
-							<th>Commander?</th>
+							<th className='center_column'>
+								<Button
+									size='sm'
+									variant='info'
+									onClick={() => addToDeckHandler(deckId)}>
+									<i className='fas fa-plus'></i>
+								</Button>
+							</th>
+							<th>Name</th>
+							<th className='center_column'>Type</th>
+							<th className='center_column'>Edition</th>
+							<th className='center_column'>CMC</th>
+							<th className='center_column'>Foil?</th>
+							<th className='center_column'>Commander?</th>
 						</tr>
 					</thead>
 					<tbody>
 						{cards.map((card) => (
 							<tr key={card._id}>
-								<td>{card.qty}</td>
+								<td className='center_column'>
+									<NumericInput
+										min={1}
+										max={100}
+										value={card.qty}
+										// onChange={(e) => setQty(e.target.value)}
+									/>
+								</td>
 								<td>{card.name}</td>
-								<td>{card.type}</td>
-								<td>{card.set}</td>
-								<td>{card.cmc}</td>
-								<td>{card.isFoil}</td>
-								<td>{card.isCommander}</td>
+								<td className='center_column'>{card.type}</td>
+								<td className='center_column'>
+									{card.edition}
+								</td>
+								<td className='center_column'>{card.cmc}</td>
+								<td className='center_column'>
+									<input
+										name='is_foil'
+										type='checkbox'
+										checked={card.isFoil}
+									/>
+								</td>
+								<td className='center_column'>
+									<input
+										name='is_commander'
+										type='checkbox'
+										checked={card.isCommander}
+										// onChange=
+									/>
+								</td>
+								<td>
+									<Button
+										variant='danger'
+										className='btn-sm'
+										onClick={() =>
+											deleteCardHandler(card._id)
+										}>
+										<i className='fas fa-trash'></i>
+									</Button>
+								</td>
 							</tr>
 						))}
 					</tbody>

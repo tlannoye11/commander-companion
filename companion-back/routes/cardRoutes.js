@@ -1,9 +1,15 @@
 import express from 'express';
-import { getCards, getCardsByDeck } from '../controllers/cardController.js';
+import {
+	getCardById,
+	getCards,
+	deleteCard,
+	createCard,
+	updateCard,
+} from '../controllers/cardController.js';
 
 const router = express.Router();
 
-router.route('/').get(getCards);
-router.route('/deck/:id').get(getCardsByDeck);
+router.route('/').get(getCards).post(createCard);
+router.route('/:id').get(getCardById).delete(deleteCard).put(updateCard);
 
 export default router;

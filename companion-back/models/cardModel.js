@@ -8,7 +8,7 @@ const cardSchema = new Schema({
 	},
 	scryfallId: {
 		type: String,
-		required: true,
+		required: false,
 	},
 	qty: {
 		type: Number,
@@ -23,7 +23,7 @@ const cardSchema = new Schema({
 		type: String,
 		required: true,
 	},
-	set: {
+	edition: {
 		type: String,
 		required: true,
 	},

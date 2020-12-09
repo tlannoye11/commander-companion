@@ -39,7 +39,7 @@ const HomeScreen = ({ history }) => {
 		}
 
 		if (successCreate) {
-			history.push(`/admin/deck/${createdDeck._id}/edit`);
+			history.push(`/deck/${createdDeck._id}/edit`);
 		} else {
 			dispatch(listDecks());
 		}
