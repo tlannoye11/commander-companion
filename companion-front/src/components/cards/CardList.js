@@ -50,6 +50,10 @@ const CardList = ({ history, deckId }) => {
 	return (
 		<>
 			<h2>Cards in Deck</h2>
+			{loadingDelete && <Loader />}
+			{errorDelete && <Message variant='danger'>{errorDelete}</Message>}
+			{loadingCreate && <Loader />}
+			{errorCreate && <Message variant='danger'>{errorCreate}</Message>}
 			{loading ? (
 				<Loader />
 			) : error ? (

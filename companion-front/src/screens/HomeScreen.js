@@ -32,7 +32,7 @@ const HomeScreen = ({ history }) => {
 	const { userInfo } = userLogin;
 
 	useEffect(() => {
-		// dispatch({ type: DECK_CREATE_RESET });
+		dispatch({ type: DECK_CREATE_RESET });
 
 		if (!userInfo.isAdmin) {
 			history.push('/login');
