@@ -9,7 +9,7 @@ import {
 	DECK_DETAILS_RESET,
 	DECK_UPDATE_RESET,
 } from '../constants/deckConstants';
-import CardList from '../components/cards/CardList';
+import CardList from '../components/CardList';
 
 const DeckScreen = ({ history, match }) => {
 	const deckId = match.params.id;

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import Message from '../Message';
-import Loader from '../Loader';
-import { createCard, deleteCard, getCards } from '../../actions/cardActions';
+import Message from './Message';
+import Loader from './Loader';
+import { createCard, deleteCard, getCards } from '../actions/cardActions';
 import NumericInput from 'react-numeric-input';
-import { CARD_CREATE_RESET } from '../../constants/cardConstants';
+import { CARD_CREATE_RESET } from '../constants/cardConstants';
+import { Link } from 'react-router-dom';
 
 const CardList = ({ history, deckId }) => {
 	const dispatch = useDispatch();
@@ -49,7 +50,7 @@ const CardList = ({ history, deckId }) => {
 
 	return (
 		<>
-			<h2>Cards in Deck</h2>
+			{/* <h2>Cards in Deck</h2> */}
 			{loadingDelete && <Loader />}
 			{errorDelete && <Message variant='danger'>{errorDelete}</Message>}
 			{loadingCreate && <Loader />}
@@ -75,7 +76,9 @@ const CardList = ({ history, deckId }) => {
 							<th className='center_column'>Edition</th>
 							<th className='center_column'>CMC</th>
 							<th className='center_column'>Foil?</th>
-							<th className='center_column'>Commander?</th>
+							<th className='center_column'>
+								<i className='fas fa-crown'></i>
+							</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -84,12 +87,16 @@ const CardList = ({ history, deckId }) => {
 								<td className='center_column'>
 									<NumericInput
 										min={1}
-										max={100}
+										max={99}
 										value={card.qty}
 										// onChange={(e) => setQty(e.target.value)}
 									/>
 								</td>
-								<td>{card.name}</td>
+								<td>
+									<Link to={`/cards/${card._id}`}>
+										{card.name}
+									</Link>
+								</td>
 								<td className='center_column'>{card.type}</td>
 								<td className='center_column'>
 									{card.edition}

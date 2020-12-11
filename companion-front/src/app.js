@@ -24,8 +24,8 @@ const App = () => {
 					<Route path='/login' component={LoginScreen} />
 					<Route path='/register' component={RegisterScreen} />
 					<Route path='/profile' component={ProfileScreen} />
-					<Route path='/deck/:id' component={DeckScreen} />
-					<Route path='/card/:id' component={CardEditScreen} />
+					<Route path='/decks/:id' component={DeckScreen} />
+					<Route path='/cards/:id' component={CardEditScreen} exact />
 					<Route path='/' exact component={HomeScreen} />
 				</Container>
 			</main>

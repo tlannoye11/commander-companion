@@ -39,7 +39,7 @@ const HomeScreen = ({ history }) => {
 		}
 
 		if (successCreate) {
-			history.push(`/deck/${createdDeck._id}/edit`);
+			history.push(`/decks/${createdDeck._id}/edit`);
 		} else {
 			dispatch(listDecks());
 		}
@@ -97,7 +97,7 @@ const HomeScreen = ({ history }) => {
 						{decks.map((deck) => (
 							<tr key={deck._id}>
 								<td>
-									<Link to={`/deck/${deck._id}`}>
+									<Link to={`/decks/${deck._id}`}>
 										<strong>{deck.name}</strong>
 									</Link>
 								</td>
