@@ -1,8 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Form, Row } from 'react-bootstrap';
+import {
+	Button,
+	Card,
+	Col,
+	Dropdown,
+	DropdownButton,
+	Form,
+	Row,
+} from 'react-bootstrap';
+import NumericInput from 'react-numeric-input';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getCardDetails, updateCard } from '../actions/cardActions';
+import {
+	getCardDetails,
+	getCardScryfall,
+	updateCard,
+} from '../actions/cardActions';
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
@@ -25,6 +38,14 @@ const CardEditScreen = ({ match, history }) => {
 	const cardDetails = useSelector((state) => state.cardDetails);
 	const { loading, error, card } = cardDetails;
 
+	const cardScryfall = useSelector((state) => state.cardScryfall);
+	const {
+		loading: loadingScryfall,
+		error: errorScryfall,
+		success: successScryfall,
+		cardData,
+	} = getCardScryfall;
+
 	const cardUpdate = useSelector((state) => state.cardUpdate);
 	const {
 		loading: loadingUpdate,
@@ -40,6 +61,8 @@ const CardEditScreen = ({ match, history }) => {
 			if (!card.name || card._id !== cardId) {
 				dispatch(getCardDetails(cardId));
 			} else {
+				dispatch(getCardScryfall(card.name));
+
 				setDeckId(card.deckId);
 				setQty(card.qty);
 				setName(card.name);
@@ -50,7 +73,16 @@ const CardEditScreen = ({ match, history }) => {
 				setIsCommander(card.isCommander);
 			}
 		}
-	}, [dispatch, history, deckId, cardId, card, successUpdate]);
+	}, [
+		dispatch,
+		history,
+		deckId,
+		cardId,
+		card,
+		successUpdate,
+		cardData,
+		successScryfall,
+	]);
 
 	const submitHandler = (e) => {
 		e.preventDefault();
@@ -71,6 +103,12 @@ const CardEditScreen = ({ match, history }) => {
 
 	return (
 		<>
+			{loadingUpdate && <Loader />}
+			{errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
+			{loadingScryfall && <Loader />}
+			{errorScryfall && (
+				<Message variant='danger'>{errorScryfall}</Message>
+			)}
 			<Link to={`/decks/${deckId}`}>
 				<Button variant='info' className='btn btn-sm'>
 					<i className='fas fa-arrow-left'></i>
@@ -84,29 +122,11 @@ const CardEditScreen = ({ match, history }) => {
 					<Message variant='danger'>{error}</Message>
 				) : (
 					<Form onSubmit={submitHandler}>
-						<Form.Group as={Row} controlId='qty'>
-							<Form.Label column='sm' sm={1}>
-								Qty
-							</Form.Label>
-							<Col sm={2}>
-								<Form.Control
-									type='number'
-									min='1'
-									max='99'
-									size='sm'
-									placeholder='Enter quantity'
-									value={qty}
-									onChange={(e) =>
-										setQty(e.target.value)
-									}></Form.Control>
-							</Col>
-							{/* </Form.Group>
-
-						<Form.Group as={Row} controlId='name'> */}
-							<Form.Label column='sm' sm={1}>
+						<Form.Group as={Row}>
+							<Form.Label column='sm' sm={1} className='px-1'>
 								Name
 							</Form.Label>
-							<Col sm={5}>
+							<Col sm={11}>
 								<Form.Control
 									type='name'
 									size='sm'
@@ -118,27 +138,66 @@ const CardEditScreen = ({ match, history }) => {
 							</Col>
 						</Form.Group>
 
-						<Form.Group as={Row} controlId='type'>
+						<Form.Group as={Row}>
+							<Form.Label column='sm' sm={1}>
+								Qty
+							</Form.Label>
+							<Col sm={2} className='pt-1'>
+								<NumericInput
+									min={1}
+									max={99}
+									value={card.qty}
+								/>
+							</Col>
+
 							<Form.Label column='sm' sm={1}>
 								Type
 							</Form.Label>
 							<Col sm={2}>
-								<Form.Control
-									type='text'
+								<DropdownButton
+									id='card-type-dropdown'
+									title={type}
 									size='sm'
-									placeholder='Enter card type'
-									value={type}
-									onChange={(e) =>
-										setType(e.target.value)
-									}></Form.Control>
+									onSelect={(e) => setType(e)}>
+									<Dropdown.Item id='C' eventKey='C' key='0'>
+										C
+									</Dropdown.Item>
+									<Dropdown.Item id='P' eventKey='P' key='1'>
+										P
+									</Dropdown.Item>
+									<Dropdown.Item id='A' eventKey='A' key='2'>
+										A
+									</Dropdown.Item>
+									<Dropdown.Item id='E' eventKey='E' key='3'>
+										E
+									</Dropdown.Item>
+									<Dropdown.Item id='I' eventKey='I' key='4'>
+										I
+									</Dropdown.Item>
+									<Dropdown.Item id='S' eventKey='S' key='5'>
+										S
+									</Dropdown.Item>
+									<Dropdown.Item id='L' eventKey='L' key='6'>
+										L
+									</Dropdown.Item>
+									<Dropdown.Item id='B' eventKey='B' key='7'>
+										B
+									</Dropdown.Item>
+								</DropdownButton>
 							</Col>
-							{/* </Form.Group>
 
-						<Form.Group as={Row} controlId='edition'> */}
 							<Form.Label column='sm' sm={1}>
 								Set
 							</Form.Label>
-							<Col sm={3}>
+							<Col sm={2}>
+								{/* <DropdownButton>
+									id='card-edition-dropdown' title={edition}
+									size='sm' onSelect={(e) => setEdition(e)}>
+									<Dropdown.Item
+										id='C'
+										eventKey='C'
+										key='0'></Dropdown.Item>
+								</DropdownButton> */}
 								<Form.Control
 									type='text'
 									size='sm'
@@ -148,13 +207,11 @@ const CardEditScreen = ({ match, history }) => {
 										setEdition(e.target.value)
 									}></Form.Control>
 							</Col>
-							{/* </Form.Group>
 
-						<Form.Group as={Row} controlId='cmc'> */}
 							<Form.Label column='sm' sm={1}>
 								CMC
 							</Form.Label>
-							<Col sm={3}>
+							<Col sm={2}>
 								<Form.Control
 									type='number'
 									size='sm'
@@ -174,9 +231,7 @@ const CardEditScreen = ({ match, history }) => {
 								onChange={(e) =>
 									setIsFoil(e.target.checked)
 								}></Form.Check>
-							{/* </Form.Group>
 
-						<Form.Group controlId='isCommander'> */}
 							<Form.Check
 								type='checkbox'
 								label='Commander'

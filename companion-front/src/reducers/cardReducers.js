@@ -17,6 +17,9 @@ import {
 	CARD_UPDATE_SUCCESS,
 	CARD_UPDATE_FAIL,
 	CARD_UPDATE_RESET,
+	CARD_SCRYFALL_REQUEST,
+	CARD_SCRYFALL_SUCCESS,
+	CARD_SCRYFALL_FAIL,
 } from '../constants/cardConstants';
 
 export const cardListReducer = (state = { cards: [] }, action) => {
@@ -85,6 +88,19 @@ export const cardUpdateReducer = (state = { card: {} }, action) => {
 			return { loading: false, error: action.payload };
 		case CARD_UPDATE_RESET:
 			return { card: {} };
+		default:
+			return state;
+	}
+};
+
+export const cardScryfallReducer = (state = { card: {} }, action) => {
+	switch (action.type) {
+		case CARD_SCRYFALL_REQUEST:
+			return { loading: true };
+		case CARD_SCRYFALL_SUCCESS:
+			return { loading: false, success: true, cardData: action.payload };
+		case CARD_SCRYFALL_FAIL:
+			return { loading: false, error: action.payload };
 		default:
 			return state;
 	}

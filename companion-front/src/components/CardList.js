@@ -60,17 +60,19 @@ const CardList = ({ history, deckId }) => {
 			) : error ? (
 				<Message variant='danger'>{error}</Message>
 			) : (
-				<Table striped bordered hover responsive className='table-sm'>
+				<Table striped borderless hover responsive size='sm'>
 					<thead>
 						<tr>
 							<th className='center_column'>
 								<Button
-									size='sm'
 									variant='info'
+									// size='sm'
+									className='btn btn-sm py-0 px-1 mt-1'
 									onClick={() => addToDeckHandler(deckId)}>
 									<i className='fas fa-plus'></i>
 								</Button>
 							</th>
+							<th className='center_column'>{cards.length}</th>
 							<th>Name</th>
 							<th className='center_column'>Type</th>
 							<th className='center_column'>Edition</th>
@@ -85,6 +87,17 @@ const CardList = ({ history, deckId }) => {
 						{cards.map((card) => (
 							<tr key={card._id}>
 								<td className='center_column'>
+									<Button
+										variant='danger'
+										// size='sm'
+										className='btn btn-sm'
+										onClick={() =>
+											deleteCardHandler(card._id)
+										}>
+										<i className='fas fa-trash'></i>
+									</Button>
+								</td>
+								<td className='center_column pt-2'>
 									<NumericInput
 										min={1}
 										max={99}
@@ -92,40 +105,34 @@ const CardList = ({ history, deckId }) => {
 										// onChange={(e) => setQty(e.target.value)}
 									/>
 								</td>
-								<td>
+								<td className='pt-2'>
 									<Link to={`/cards/${card._id}`}>
 										{card.name}
 									</Link>
 								</td>
-								<td className='center_column'>{card.type}</td>
-								<td className='center_column'>
+								<td className='center_column pt-2'>
+									{card.type}
+								</td>
+								<td className='center_column pt-2'>
 									{card.edition}
 								</td>
-								<td className='center_column'>{card.cmc}</td>
-								<td className='center_column'>
+								<td className='center_column pt-2'>
+									{card.cmc}
+								</td>
+								<td className='center_column pt-2'>
 									<input
 										name='is_foil'
 										type='checkbox'
 										checked={card.isFoil}
 									/>
 								</td>
-								<td className='center_column'>
+								<td className='center_column pt-2'>
 									<input
 										name='is_commander'
 										type='checkbox'
 										checked={card.isCommander}
 										// onChange=
 									/>
-								</td>
-								<td>
-									<Button
-										variant='danger'
-										className='btn-sm'
-										onClick={() =>
-											deleteCardHandler(card._id)
-										}>
-										<i className='fas fa-trash'></i>
-									</Button>
 								</td>
 							</tr>
 						))}

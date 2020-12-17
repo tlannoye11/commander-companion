@@ -7,6 +7,7 @@ import {
 	cardDeleteReducer,
 	cardCreateReducer,
 	cardUpdateReducer,
+	cardScryfallReducer,
 } from './reducers/cardReducers';
 import {
 	deckListReducer,
@@ -28,6 +29,7 @@ const reducer = combineReducers({
 	cardDelete: cardDeleteReducer,
 	cardCreate: cardCreateReducer,
 	cardUpdate: cardUpdateReducer,
+	cardScryfall: cardScryfallReducer,
 	deckList: deckListReducer,
 	deckDetails: deckDetailsReducer,
 	deckDelete: deckDeleteReducer,

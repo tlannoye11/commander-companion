@@ -15,6 +15,9 @@ import {
 	CARD_UPDATE_REQUEST,
 	CARD_UPDATE_SUCCESS,
 	CARD_UPDATE_FAIL,
+	CARD_SCRYFALL_REQUEST,
+	CARD_SCRYFALL_SUCCESS,
+	CARD_SCRYFALL_FAIL,
 } from '../constants/cardConstants';
 
 export const getCards = (deck = '') => async (dispatch) => {
@@ -156,6 +159,31 @@ export const updateCard = (card) => async (dispatch, getState) => {
 	} catch (error) {
 		dispatch({
 			type: CARD_UPDATE_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
+};
+
+export const getCardScryfall = (name) => async (dispatch) => {
+	try {
+		dispatch({
+			type: CARD_SCRYFALL_REQUEST,
+		});
+
+		const { data } = await axios.get(
+			`https://api.scryfall.com/cards/named?exact=${name}`
+		);
+
+		dispatch({
+			type: CARD_SCRYFALL_SUCCESS,
+			payload: data,
+		});
+	} catch (error) {
+		dispatch({
+			type: CARD_SCRYFALL_FAIL,
 			payload:
 				error.response && error.response.data.message
 					? error.response.data.message
