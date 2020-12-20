@@ -11,11 +11,8 @@ import {
 import NumericInput from 'react-numeric-input';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import {
-	getCardDetails,
-	getCardScryfall,
-	updateCard,
-} from '../actions/cardActions';
+import { getCardDetails, updateCard } from '../actions/cardActions';
+import CardDisplay from '../components/CardDisplay';
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
@@ -38,14 +35,6 @@ const CardEditScreen = ({ match, history }) => {
 	const cardDetails = useSelector((state) => state.cardDetails);
 	const { loading, error, card } = cardDetails;
 
-	const cardScryfall = useSelector((state) => state.cardScryfall);
-	const {
-		loading: loadingScryfall,
-		error: errorScryfall,
-		success: successScryfall,
-		cardData,
-	} = getCardScryfall;
-
 	const cardUpdate = useSelector((state) => state.cardUpdate);
 	const {
 		loading: loadingUpdate,
@@ -61,8 +50,6 @@ const CardEditScreen = ({ match, history }) => {
 			if (!card.name || card._id !== cardId) {
 				dispatch(getCardDetails(cardId));
 			} else {
-				dispatch(getCardScryfall(card.name));
-
 				setDeckId(card.deckId);
 				setQty(card.qty);
 				setName(card.name);
@@ -73,16 +60,7 @@ const CardEditScreen = ({ match, history }) => {
 				setIsCommander(card.isCommander);
 			}
 		}
-	}, [
-		dispatch,
-		history,
-		deckId,
-		cardId,
-		card,
-		successUpdate,
-		cardData,
-		successScryfall,
-	]);
+	}, [dispatch, history, deckId, cardId, card, successUpdate]);
 
 	const submitHandler = (e) => {
 		e.preventDefault();
@@ -105,10 +83,6 @@ const CardEditScreen = ({ match, history }) => {
 		<>
 			{loadingUpdate && <Loader />}
 			{errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
-			{loadingScryfall && <Loader />}
-			{errorScryfall && (
-				<Message variant='danger'>{errorScryfall}</Message>
-			)}
 			<Link to={`/decks/${deckId}`}>
 				<Button variant='info' className='btn btn-sm'>
 					<i className='fas fa-arrow-left'></i>
@@ -116,6 +90,7 @@ const CardEditScreen = ({ match, history }) => {
 			</Link>
 			<FormContainer>
 				<h2>Edit Card</h2>
+				<CardDisplay name={name} />
 				{loading ? (
 					<Loader />
 				) : error ? (
