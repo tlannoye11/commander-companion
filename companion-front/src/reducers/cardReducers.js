@@ -98,7 +98,7 @@ export const cardScryfallReducer = (state = { card: {} }, action) => {
 		case CARD_SCRYFALL_REQUEST:
 			return { loading: true };
 		case CARD_SCRYFALL_SUCCESS:
-			return { loading: false, success: true, cardData: action.payload };
+			return { loading: false, cardData: action.payload };
 		case CARD_SCRYFALL_FAIL:
 			return { loading: false, error: action.payload };
 		default:
