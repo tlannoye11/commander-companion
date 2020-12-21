@@ -205,7 +205,7 @@ export const getCardScryfallEditions = (name) => async (dispatch) => {
             `https://api.scryfall.com/cards/search?q="${name}"&unique=prints`
         );
 
-        console.log('editions action:', data);
+        // console.log('editions action:', data);
 
         dispatch({
             type: CARD_SCRYFALL_EDITIONS_SUCCESS,

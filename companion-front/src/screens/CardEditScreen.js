@@ -129,7 +129,7 @@ const CardEditScreen = ({ match, history }) => {
                     <Col sm={6}>
                         <Form onSubmit={submitHandler}>
                             <Form.Group as={Row}>
-                                <Form.Label column='sm' sm={1} className='px-1'>
+                                <Form.Label column='sm' sm={1}>
                                     Name
                                 </Form.Label>
                                 <Col sm={11}>
@@ -167,62 +167,24 @@ const CardEditScreen = ({ match, history }) => {
                                         size='sm'
                                         onSelect={(e) => setType(e)}
                                     >
-                                        <Dropdown.Item
-                                            id='C'
-                                            eventKey='C'
-                                            key='0'
-                                        >
-                                            C
-                                        </Dropdown.Item>
-                                        <Dropdown.Item
-                                            id='P'
-                                            eventKey='P'
-                                            key='1'
-                                        >
-                                            P
-                                        </Dropdown.Item>
-                                        <Dropdown.Item
-                                            id='A'
-                                            eventKey='A'
-                                            key='2'
-                                        >
-                                            A
-                                        </Dropdown.Item>
-                                        <Dropdown.Item
-                                            id='E'
-                                            eventKey='E'
-                                            key='3'
-                                        >
-                                            E
-                                        </Dropdown.Item>
-                                        <Dropdown.Item
-                                            id='I'
-                                            eventKey='I'
-                                            key='4'
-                                        >
-                                            I
-                                        </Dropdown.Item>
-                                        <Dropdown.Item
-                                            id='S'
-                                            eventKey='S'
-                                            key='5'
-                                        >
-                                            S
-                                        </Dropdown.Item>
-                                        <Dropdown.Item
-                                            id='L'
-                                            eventKey='L'
-                                            key='6'
-                                        >
-                                            L
-                                        </Dropdown.Item>
-                                        <Dropdown.Item
-                                            id='B'
-                                            eventKey='B'
-                                            key='7'
-                                        >
-                                            B
-                                        </Dropdown.Item>
+                                        {[
+                                            ['C', 'Creature'],
+                                            ['P', 'Planeswalker'],
+                                            ['A', 'Artifact'],
+                                            ['E', 'Enchantment'],
+                                            ['I', 'Instant'],
+                                            ['S', 'Sorcery'],
+                                            ['L', 'Land'],
+                                            ['B', 'Basic Land'],
+                                        ].map((type, i) => (
+                                            <Dropdown.Item
+                                                id={type[0]}
+                                                eventKey={type[0]}
+                                                key={i}
+                                            >
+                                                {type[1]}
+                                            </Dropdown.Item>
+                                        ))}
                                     </DropdownButton>
                                 </Col>
 
@@ -245,31 +207,10 @@ const CardEditScreen = ({ match, history }) => {
                                                 {ed.set_name}
                                             </Dropdown.Item>
                                         ))}
-                                        {/* <Dropdown.Item
-                                            id='CNS'
-                                            eventKey='CNS'
-                                            key='0'
-                                        >
-                                            CNS
-                                        </Dropdown.Item>
-                                        <Dropdown.Item
-                                            id='JMP'
-                                            eventKey='JMP'
-                                            key='1'
-                                        >
-                                            JMP
-                                        </Dropdown.Item>
-                                        <Dropdown.Item
-                                            id='XXX'
-                                            eventKey='XXX'
-                                            key='2'
-                                        >
-                                            XXX
-                                        </Dropdown.Item> */}
                                     </DropdownButton>
                                 </Col>
 
-                                <Form.Label column='sm' sm={1}>
+                                {/* <Form.Label column='sm' sm={1}>
                                     CMC
                                 </Form.Label>
                                 <Col sm={2}>
@@ -280,7 +221,7 @@ const CardEditScreen = ({ match, history }) => {
                                         value={cmc}
                                         onChange={(e) => setCmc(e.target.value)}
                                     ></Form.Control>
-                                </Col>
+                                </Col> */}
                             </Form.Group>
 
                             <Form.Group controlId='isFoil'>
