@@ -15,11 +15,13 @@ const CardDisplay = ({ name }) => {
     const { loading, error, cardData } = cardScryfall;
 
     useEffect(() => {
-        if (!cardData) {
-            dispatch(getCardScryfall(name));
-        } else {
-            setImage(cardData.image_uris.small);
-            setUri(cardData.scryfall_uri);
+        if (name) {
+            if (!cardData) {
+                dispatch(getCardScryfall(name));
+            } else {
+                setImage(cardData.image_uris.small);
+                setUri(cardData.scryfall_uri);
+            }
         }
     }, [dispatch, name, cardData]);
 
