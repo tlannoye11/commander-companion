@@ -29,8 +29,6 @@ const CardList = ({ history, deckId }) => {
         card: createdCard,
     } = cardCreate;
 
-    const cardCount = 0;
-
     useEffect(() => {
         dispatch({ type: CARD_CREATE_RESET });
 
