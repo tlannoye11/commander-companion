@@ -36,7 +36,7 @@ const CardDisplay = ({ name }) => {
 				<Card
 					border='white'
 					className='text-center'
-					style={{ maxWidth: '200px' }}>
+					style={{ maxWidth: '240px' }}>
 					<Card.Img src={image} variant='top' />
 					<Card.Body>
 						{/* <Card.Title as='div'>
