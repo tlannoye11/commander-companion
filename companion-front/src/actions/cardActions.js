@@ -170,19 +170,19 @@ export const updateCard = (card) => async (dispatch, getState) => {
     }
 };
 
-export const getCardScryfall = (name) => async (dispatch) => {
+export const getCardScryfall = (name, edition) => async (dispatch) => {
     try {
         dispatch({
             type: CARD_SCRYFALL_REQUEST,
         });
 
         const { data } = await axios.get(
-            `https://api.scryfall.com/cards/named?exact=${name}`
+            `https://api.scryfall.com/cards/search?q=${name}+set%3A${edition}`
         );
 
         dispatch({
             type: CARD_SCRYFALL_SUCCESS,
-            payload: data,
+            payload: data.data[0],
         });
     } catch (error) {
         dispatch({

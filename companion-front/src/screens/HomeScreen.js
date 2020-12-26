@@ -110,9 +110,9 @@ const HomeScreen = ({ history }) => {
                                     Avg CMC
                                     {/* {deck.avg_cmc} */}
                                 </td>
-                                <td>{/* {deck.theme} */}</td>
-                                <td>{/* {deck.sleeve_color} */}</td>
-                                {/* <td>Basics{deck.basic_lands}</td> */}
+                                <td>{deck.theme}</td>
+                                <td>{deck.sleeveColor}</td>
+                                <td>Basics</td>
                             </tr>
                         ))}
                     </tbody>

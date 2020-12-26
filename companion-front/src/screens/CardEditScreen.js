@@ -194,7 +194,7 @@ const CardEditScreen = ({ match, history }) => {
                                 <Col sm={2}>
                                     <DropdownButton
                                         id='card-edition-dropdown'
-                                        title={edition}
+                                        title={edition.toUpperCase()}
                                         size='sm'
                                         onSelect={(e) => setEdition(e)}
                                     >
@@ -209,19 +209,6 @@ const CardEditScreen = ({ match, history }) => {
                                         ))}
                                     </DropdownButton>
                                 </Col>
-
-                                {/* <Form.Label column='sm' sm={1}>
-                                    CMC
-                                </Form.Label>
-                                <Col sm={2}>
-                                    <Form.Control
-                                        type='number'
-                                        size='sm'
-                                        placeholder='Enter CMC'
-                                        value={cmc}
-                                        onChange={(e) => setCmc(e.target.value)}
-                                    ></Form.Control>
-                                </Col> */}
                             </Form.Group>
 
                             <Form.Group controlId='isFoil'>
@@ -250,7 +237,7 @@ const CardEditScreen = ({ match, history }) => {
                         </Form>
                     </Col>
                     <Col sm={6}>
-                        <CardDisplay name={name} />
+                        <CardDisplay name={name} edition={edition} />
                     </Col>
                 </Row>
             )}
