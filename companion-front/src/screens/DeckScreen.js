@@ -73,7 +73,7 @@ const DeckScreen = ({ history, match }) => {
 				<Message variant='danger'>{error}</Message>
 			) : (
 				<Form inline onSubmit={submitDetailsHandler}>
-					<Link to='/'>
+					<Link to='/' style={{ padding: '.3rem' }}>
 						<Button variant='info' className='btn btn-sm'>
 							<i className='fas fa-arrow-left'></i>
 						</Button>
