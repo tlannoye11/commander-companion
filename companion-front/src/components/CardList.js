@@ -93,7 +93,6 @@ const CardList = ({ history, deckId }) => {
 							<th className='center_column'>
 								<Button
 									variant='info'
-									// size='sm'
 									className='btn btn-sm py-0 px-1 mt-1'
 									onClick={() => addCardHandler(deckId)}>
 									<i className='fas fa-plus'></i>

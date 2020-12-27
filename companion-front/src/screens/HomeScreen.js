@@ -61,7 +61,7 @@ const HomeScreen = ({ history }) => {
 			) : error ? (
 				<Message variant='danger'>{error}</Message>
 			) : (
-				<Table striped bordered hover responsive className='table-sm'>
+				<Table striped bordered hover responsive size='sm'>
 					<thead>
 						<tr>
 							<th>
@@ -90,28 +90,28 @@ const HomeScreen = ({ history }) => {
 										<i className='fas fa-trash'></i>
 									</Button>
 								</td>
-								<td>
+								<td className='pt-2'>
 									<Link to={`/decks/${deck._id}`}>
 										<strong>{deck.name}</strong>
 									</Link>
 								</td>
 								{deck.id}
-								<td>Colors here</td>
-								<td className='center-column'>
+								<td className='pt-2'>Colors here</td>
+								<td className='center-column pt-2'>
 									Spell + Land count
 									{/* {deck.spell_count + deck.land_count} */}
 								</td>
-								<td className='center-column'>
+								<td className='center-column pt-2'>
 									Foil count
 									{/* {deck.foil_count} */}
 								</td>
-								<td className='center-column'>
+								<td className='center-column pt-2'>
 									Avg CMC
 									{/* {deck.avg_cmc} */}
 								</td>
-								<td>{deck.theme}</td>
-								<td>{deck.sleeveColor}</td>
-								<td>Basics</td>
+								<td className='pt-2'>{deck.theme}</td>
+								<td className='pt-2'>{deck.sleeveColor}</td>
+								<td className='pt-2'>Basics</td>
 							</tr>
 						))}
 					</tbody>
