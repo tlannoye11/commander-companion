@@ -115,11 +115,10 @@ const CardList = ({ history, deckId }) => {
 					<tbody>
 						{[...cards].sort(sortCards).map((card) => (
 							<tr key={card._id}>
-								<td className='center_column'>
+								<td className='center_column trash_column'>
 									<Button
 										variant='danger'
-										// size='sm'
-										className='btn btn-sm'
+										className='btn-sm'
 										onClick={() =>
 											deleteCardHandler(card._id)
 										}>

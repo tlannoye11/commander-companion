@@ -2,6 +2,10 @@
 	text-align: center;
 }
 
+.trash_column {
+	width: 30px;
+}
+
 /* Make sure the card quantity field doesn't get too big */
 .react-numeric-input input {
 	max-width: 50px;
