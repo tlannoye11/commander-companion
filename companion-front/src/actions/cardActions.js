@@ -1,223 +1,225 @@
 import axios from 'axios';
 import {
-    CARD_LIST_FAIL,
-    CARD_LIST_REQUEST,
-    CARD_LIST_SUCCESS,
-    CARD_DETAILS_FAIL,
-    CARD_DETAILS_REQUEST,
-    CARD_DETAILS_SUCCESS,
-    CARD_DELETE_REQUEST,
-    CARD_DELETE_SUCCESS,
-    CARD_DELETE_FAIL,
-    CARD_CREATE_REQUEST,
-    CARD_CREATE_SUCCESS,
-    CARD_CREATE_FAIL,
-    CARD_UPDATE_REQUEST,
-    CARD_UPDATE_SUCCESS,
-    CARD_UPDATE_FAIL,
-    CARD_SCRYFALL_REQUEST,
-    CARD_SCRYFALL_SUCCESS,
-    CARD_SCRYFALL_FAIL,
-    CARD_SCRYFALL_EDITIONS_REQUEST,
-    CARD_SCRYFALL_EDITIONS_SUCCESS,
-    CARD_SCRYFALL_EDITIONS_FAIL,
+	CARD_LIST_FAIL,
+	CARD_LIST_REQUEST,
+	CARD_LIST_SUCCESS,
+	CARD_DETAILS_FAIL,
+	CARD_DETAILS_REQUEST,
+	CARD_DETAILS_SUCCESS,
+	CARD_DELETE_REQUEST,
+	CARD_DELETE_SUCCESS,
+	CARD_DELETE_FAIL,
+	CARD_CREATE_REQUEST,
+	CARD_CREATE_SUCCESS,
+	CARD_CREATE_FAIL,
+	CARD_UPDATE_REQUEST,
+	CARD_UPDATE_SUCCESS,
+	CARD_UPDATE_FAIL,
+	CARD_SCRYFALL_REQUEST,
+	CARD_SCRYFALL_SUCCESS,
+	CARD_SCRYFALL_FAIL,
+	CARD_SCRYFALL_EDITIONS_REQUEST,
+	CARD_SCRYFALL_EDITIONS_SUCCESS,
+	CARD_SCRYFALL_EDITIONS_FAIL,
 } from '../constants/cardConstants';
 
 export const getCards = (deck = '') => async (dispatch) => {
-    try {
-        dispatch({
-            type: CARD_LIST_REQUEST,
-        });
+	try {
+		dispatch({
+			type: CARD_LIST_REQUEST,
+		});
 
-        const { data } = await axios.get(`/api/cards?deck=${deck}`);
+		const { data } = await axios.get(`/api/cards?deck=${deck}`);
 
-        dispatch({
-            type: CARD_LIST_SUCCESS,
-            payload: data,
-        });
-    } catch (error) {
-        dispatch({
-            type: CARD_LIST_FAIL,
-            payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
-        });
-    }
+		dispatch({
+			type: CARD_LIST_SUCCESS,
+			payload: data,
+		});
+	} catch (error) {
+		dispatch({
+			type: CARD_LIST_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
 };
 
 export const getCardDetails = (id) => async (dispatch) => {
-    try {
-        dispatch({ type: CARD_DETAILS_REQUEST });
+	try {
+		dispatch({ type: CARD_DETAILS_REQUEST });
 
-        const { data } = await axios.get(`/api/cards/${id}`);
+		const { data } = await axios.get(`/api/cards/${id}`);
 
-        dispatch({
-            type: CARD_DETAILS_SUCCESS,
-            payload: data,
-        });
-    } catch (error) {
-        dispatch({
-            type: CARD_DETAILS_FAIL,
-            payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
-        });
-    }
+		dispatch({
+			type: CARD_DETAILS_SUCCESS,
+			payload: data,
+		});
+	} catch (error) {
+		dispatch({
+			type: CARD_DETAILS_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
 };
 
 export const deleteCard = (id) => async (dispatch, getState) => {
-    try {
-        dispatch({
-            type: CARD_DELETE_REQUEST,
-        });
+	try {
+		dispatch({
+			type: CARD_DELETE_REQUEST,
+		});
 
-        const {
-            userLogin: { userInfo },
-        } = getState();
+		const {
+			userLogin: { userInfo },
+		} = getState();
 
-        const config = {
-            headers: {
-                Authorization: `Bearer ${userInfo.token}`,
-            },
-        };
+		const config = {
+			headers: {
+				Authorization: `Bearer ${userInfo.token}`,
+			},
+		};
 
-        await axios.delete(`/api/cards/${id}`, config);
+		await axios.delete(`/api/cards/${id}`, config);
 
-        dispatch({
-            type: CARD_DELETE_SUCCESS,
-        });
-    } catch (error) {
-        dispatch({
-            type: CARD_DELETE_FAIL,
-            payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
-        });
-    }
+		dispatch({
+			type: CARD_DELETE_SUCCESS,
+		});
+	} catch (error) {
+		dispatch({
+			type: CARD_DELETE_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
 };
 
 export const createCard = (deckId) => async (dispatch, getState) => {
-    try {
-        dispatch({
-            type: CARD_CREATE_REQUEST,
-        });
+	try {
+		dispatch({
+			type: CARD_CREATE_REQUEST,
+		});
 
-        const {
-            userLogin: { userInfo },
-        } = getState();
+		const {
+			userLogin: { userInfo },
+		} = getState();
 
-        const config = {
-            headers: {
-                Authorization: `Bearer ${userInfo.token}`,
-            },
-        };
+		const config = {
+			headers: {
+				Authorization: `Bearer ${userInfo.token}`,
+			},
+		};
 
-        const { data } = await axios.post(`/api/cards`, { deckId }, config);
+		const { data } = await axios.post(`/api/cards`, { deckId }, config);
 
-        dispatch({
-            type: CARD_CREATE_SUCCESS,
-            payload: data,
-        });
-    } catch (error) {
-        dispatch({
-            type: CARD_CREATE_FAIL,
-            payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
-        });
-    }
+		dispatch({
+			type: CARD_CREATE_SUCCESS,
+			payload: data,
+		});
+	} catch (error) {
+		dispatch({
+			type: CARD_CREATE_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
 };
 
 export const updateCard = (card) => async (dispatch, getState) => {
-    try {
-        dispatch({
-            type: CARD_UPDATE_REQUEST,
-        });
+	try {
+		dispatch({
+			type: CARD_UPDATE_REQUEST,
+		});
 
-        const {
-            userLogin: { userInfo },
-        } = getState();
+		const {
+			userLogin: { userInfo },
+		} = getState();
 
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${userInfo.token}`,
-            },
-        };
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${userInfo.token}`,
+			},
+		};
 
-        const { data } = await axios.put(
-            `/api/cards/${card._id}`,
-            card,
-            config
-        );
+		const { data } = await axios.put(
+			`/api/cards/${card._id}`,
+			card,
+			config
+		);
 
-        dispatch({
-            type: CARD_UPDATE_SUCCESS,
-            payload: data,
-        });
-    } catch (error) {
-        dispatch({
-            type: CARD_UPDATE_FAIL,
-            payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
-        });
-    }
+		dispatch({
+			type: CARD_UPDATE_SUCCESS,
+			payload: data,
+		});
+	} catch (error) {
+		dispatch({
+			type: CARD_UPDATE_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
 };
 
-export const getCardScryfall = (name, edition) => async (dispatch) => {
-    try {
-        dispatch({
-            type: CARD_SCRYFALL_REQUEST,
-        });
+export const getCardScryfall = (name, edition, collectorNumber) => async (
+	dispatch
+) => {
+	try {
+		dispatch({
+			type: CARD_SCRYFALL_REQUEST,
+		});
 
-        const { data } = await axios.get(
-            `https://api.scryfall.com/cards/search?q=${name}+set%3A${edition}`
-        );
+		const { data } = await axios.get(
+			`https://api.scryfall.com/cards/search?q=${name}+set%3A${edition}+number%3A${collectorNumber}`
+		);
 
-        dispatch({
-            type: CARD_SCRYFALL_SUCCESS,
-            payload: data.data[0],
-        });
-    } catch (error) {
-        dispatch({
-            type: CARD_SCRYFALL_FAIL,
-            payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
-        });
-    }
+		dispatch({
+			type: CARD_SCRYFALL_SUCCESS,
+			payload: data.data[0],
+		});
+	} catch (error) {
+		dispatch({
+			type: CARD_SCRYFALL_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
 };
 
 export const getCardScryfallEditions = (name) => async (dispatch) => {
-    try {
-        dispatch({
-            type: CARD_SCRYFALL_EDITIONS_REQUEST,
-        });
+	try {
+		dispatch({
+			type: CARD_SCRYFALL_EDITIONS_REQUEST,
+		});
 
-        const { data } = await axios.get(
-            `https://api.scryfall.com/cards/search?q="${name}"&unique=prints`
-        );
+		const { data } = await axios.get(
+			`https://api.scryfall.com/cards/search?q="${name}"&unique=prints`
+		);
 
-        // console.log('editions action:', data);
+		// console.log('editions action:', data);
 
-        dispatch({
-            type: CARD_SCRYFALL_EDITIONS_SUCCESS,
-            payload: data,
-        });
-    } catch (error) {
-        dispatch({
-            type: CARD_SCRYFALL_EDITIONS_FAIL,
-            payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
-        });
-    }
+		dispatch({
+			type: CARD_SCRYFALL_EDITIONS_SUCCESS,
+			payload: data,
+		});
+	} catch (error) {
+		dispatch({
+			type: CARD_SCRYFALL_EDITIONS_FAIL,
+			payload:
+				error.response && error.response.data.message
+					? error.response.data.message
+					: error.message,
+		});
+	}
 };

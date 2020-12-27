@@ -27,6 +27,10 @@ const cardSchema = new Schema({
 		type: String,
 		required: true,
 	},
+	collectorNumber: {
+		type: String,
+		required: true,
+	},
 	cmc: {
 		type: Number,
 		required: true,

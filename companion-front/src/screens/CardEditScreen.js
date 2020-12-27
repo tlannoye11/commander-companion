@@ -33,6 +33,7 @@ const CardEditScreen = ({ match, history }) => {
 	const [type, setType] = useState('');
 	const [edition, setEdition] = useState('');
 	const [editions, setEditions] = useState([]);
+	const [collectorNumber, setCollectorNumber] = useState('');
 	const [cmc, setCmc] = useState(0);
 	const [isFoil, setIsFoil] = useState(false);
 	const [isCommander, setIsCommander] = useState(false);
@@ -72,6 +73,7 @@ const CardEditScreen = ({ match, history }) => {
 				setName(card.name);
 				setType(card.type);
 				setEdition(card.edition);
+				setCollectorNumber(card.collectorNumber);
 				setCmc(card.cmc);
 				setIsFoil(card.isFoil);
 				setIsCommander(card.isCommander);
@@ -94,6 +96,16 @@ const CardEditScreen = ({ match, history }) => {
 		cardEditions,
 	]);
 
+	const onChangeCardSearch = (e) => {
+		setName(e.target.value);
+	};
+
+	const updateEditionHandler = (e) => {
+		setEdition(e.split('|')[0].toUpperCase());
+		setCollectorNumber(e.split('|')[1]);
+		dispatch({ type: CARD_SCRYFALL_RESET });
+	};
+
 	const submitHandler = (e) => {
 		e.preventDefault();
 		dispatch(
@@ -104,16 +116,12 @@ const CardEditScreen = ({ match, history }) => {
 				name,
 				type,
 				edition,
+				collectorNumber,
 				cmc,
 				isFoil,
 				isCommander,
 			})
 		);
-	};
-
-	const updateEditionHandler = (e) => {
-		setEdition(e);
-		dispatch({ type: CARD_SCRYFALL_RESET });
 	};
 
 	return (
@@ -148,9 +156,9 @@ const CardEditScreen = ({ match, history }) => {
 										size='sm'
 										placeholder='Enter name'
 										value={name}
-										onChange={(e) =>
-											setName(e.target.value)
-										}></Form.Control>
+										onChange={(e) => {
+											this.onChangeCardSearch(e);
+										}}></Form.Control>
 								</Col>
 							</Form.Group>
 
@@ -209,9 +217,13 @@ const CardEditScreen = ({ match, history }) => {
 										{editions.map((ed, i) => (
 											<Dropdown.Item
 												id={ed.set}
-												eventKey={ed.set}
+												eventKey={
+													ed.set +
+													'|' +
+													ed.collector_number
+												}
 												key={i}>
-												{ed.set_name}
+												{`${ed.set_name} (${ed.collector_number})`}
 											</Dropdown.Item>
 										))}
 									</DropdownButton>
@@ -242,7 +254,11 @@ const CardEditScreen = ({ match, history }) => {
 						</Form>
 					</Col>
 					<Col sm={6}>
-						<CardDisplay name={name} edition={edition} />
+						<CardDisplay
+							name={name}
+							edition={edition}
+							collectorNumber={collectorNumber}
+						/>
 					</Col>
 				</Row>
 			)}
