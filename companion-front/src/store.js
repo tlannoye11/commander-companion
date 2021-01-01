@@ -7,8 +7,6 @@ import {
     cardDeleteReducer,
     cardCreateReducer,
     cardUpdateReducer,
-    cardScryfallReducer,
-    cardScryfallEditionsReducer,
 } from './reducers/cardReducers';
 import {
     deckListReducer,
@@ -17,6 +15,11 @@ import {
     deckDeleteReducer,
     deckUpdateReducer,
 } from './reducers/deckReducers';
+import {
+    scryfallCardReducer,
+    scryfallEditionsReducer,
+    scryfallListReducer,
+} from './reducers/scryfallReducers';
 import {
     userLoginReducer,
     userRegisterReducer,
@@ -30,8 +33,9 @@ const reducer = combineReducers({
     cardDelete: cardDeleteReducer,
     cardCreate: cardCreateReducer,
     cardUpdate: cardUpdateReducer,
-    cardScryfall: cardScryfallReducer,
-    cardScryfallEditions: cardScryfallEditionsReducer,
+    scryfallCard: scryfallCardReducer,
+    scryfallList: scryfallListReducer,
+    scryfallEditions: scryfallEditionsReducer,
     deckList: deckListReducer,
     deckDetails: deckDetailsReducer,
     deckDelete: deckDeleteReducer,

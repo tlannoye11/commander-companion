@@ -13,25 +13,34 @@ import DeckScreen from './screens/DeckScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import ProfileScreen from './screens/ProfileScreen';
-import CardEditScreen from './screens/CardEditScreen';
+import CardScreen from './screens/CardScreen';
 
 const App = () => {
-	return (
-		<Router>
-			<Header />
-			<main className='py-3'>
-				<Container>
-					<Route path='/login' component={LoginScreen} />
-					<Route path='/register' component={RegisterScreen} />
-					<Route path='/profile' component={ProfileScreen} />
-					<Route path='/decks/:id' component={DeckScreen} />
-					<Route path='/cards/:id' component={CardEditScreen} exact />
-					<Route path='/' exact component={HomeScreen} />
-				</Container>
-			</main>
-			<Footer />
-		</Router>
-	);
+    return (
+        <Router>
+            <Header />
+            <main className='py-3'>
+                <Container>
+                    <Route path='/login' component={LoginScreen} />
+                    <Route path='/register' component={RegisterScreen} />
+                    <Route path='/profile' component={ProfileScreen} />
+                    <Route path='/decks/:deckId' component={DeckScreen} exact />
+                    <Route
+                        path='/decks/:deckId/cards'
+                        component={CardScreen}
+                        exact
+                    />
+                    <Route
+                        path='/decks/:deckId/cards/:cardId'
+                        component={CardScreen}
+                        exact
+                    />
+                    <Route path='/' exact component={HomeScreen} />
+                </Container>
+            </main>
+            <Footer />
+        </Router>
+    );
 };
 
 export default App;
