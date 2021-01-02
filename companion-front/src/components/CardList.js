@@ -46,8 +46,6 @@ const CardList = ({ history, deckId }) => {
     };
 
     const createCardHandler = (deckId) => {
-        console.log('create card handler');
-        // dispatch(createCard(deckId));
         history.push(`/decks/${deckId}/cards`);
     };
 

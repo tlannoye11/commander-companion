@@ -9,6 +9,9 @@ import {
     SCRYFALL_LIST_FAIL,
     SCRYFALL_LIST_REQUEST,
     SCRYFALL_LIST_SUCCESS,
+    SCRYFALL_NAMED_FAIL,
+    SCRYFALL_NAMED_REQUEST,
+    SCRYFALL_NAMED_SUCCESS,
 } from '../constants/scryfallConstants';
 
 export const getScryfallCard = (name, edition, collectorNumber) => async (
@@ -19,9 +22,16 @@ export const getScryfallCard = (name, edition, collectorNumber) => async (
             type: SCRYFALL_CARD_REQUEST,
         });
 
+        const searchString =
+            `q=${name}` +
+            (edition ? `+set%3A${edition}` : '') +
+            (collectorNumber ? `+number%3A${collectorNumber}` : '');
+
         const { data } = await axios.get(
-            `https://api.scryfall.com/cards/search?q=${name}+set%3A${edition}+number%3A${collectorNumber}`
+            `https://api.scryfall.com/cards/search?${searchString}`
         );
+
+        // console.log('scryfall card action:', data);
 
         dispatch({
             type: SCRYFALL_CARD_SUCCESS,
@@ -30,6 +40,31 @@ export const getScryfallCard = (name, edition, collectorNumber) => async (
     } catch (error) {
         dispatch({
             type: SCRYFALL_CARD_FAIL,
+            payload:
+                error.response && error.response.data.message
+                    ? error.response.data.message
+                    : error.message,
+        });
+    }
+};
+
+export const getScryfallNamed = (name) => async (dispatch) => {
+    try {
+        dispatch({
+            type: SCRYFALL_NAMED_REQUEST,
+        });
+
+        const { data } = await axios.get(
+            `https://api.scryfall.com/cards/named?exact=${name}`
+        );
+
+        dispatch({
+            type: SCRYFALL_NAMED_SUCCESS,
+            payload: data,
+        });
+    } catch (error) {
+        dispatch({
+            type: SCRYFALL_NAMED_FAIL,
             payload:
                 error.response && error.response.data.message
                     ? error.response.data.message
@@ -48,7 +83,7 @@ export const getScryfallList = (str) => async (dispatch) => {
             `https://api.scryfall.com/cards/autocomplete?q=${str}`
         );
 
-        console.log('card list action:', data);
+        // console.log('scryfall list action:', data);
 
         dispatch({
             type: SCRYFALL_LIST_SUCCESS,
@@ -79,7 +114,7 @@ export const getScryfallEditions = (name) => async (dispatch) => {
 
         dispatch({
             type: SCRYFALL_EDITIONS_SUCCESS,
-            payload: data,
+            payload: data.data,
         });
     } catch (error) {
         dispatch({

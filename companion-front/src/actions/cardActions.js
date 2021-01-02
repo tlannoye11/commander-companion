@@ -93,7 +93,7 @@ export const deleteCard = (id) => async (dispatch, getState) => {
     }
 };
 
-export const createCard = (deckId) => async (dispatch, getState) => {
+export const createCard = (card) => async (dispatch, getState) => {
     try {
         dispatch({
             type: CARD_CREATE_REQUEST,
@@ -109,7 +109,11 @@ export const createCard = (deckId) => async (dispatch, getState) => {
             },
         };
 
-        const { data } = await axios.post(`/api/cards`, { deckId }, config);
+        console.log('card before create card action', card);
+
+        const { data } = await axios.post(`/api/cards`, card, config);
+
+        console.log('create card action:', data);
 
         dispatch({
             type: CARD_CREATE_SUCCESS,

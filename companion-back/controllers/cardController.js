@@ -32,25 +32,38 @@ const deleteCard = asyncHandler(async (request, response) => {
 });
 
 const createCard = asyncHandler(async (request, response) => {
-    const { deckId } = request.body;
-    const card = new Card({
-        qty: 1,
-        name: 'Sample name',
-        type: 'C',
-        edition: 'CMD',
-        collectorNumber: '0',
-        cmc: 0,
-        isFoil: false,
-        isCommander: false,
+    const {
+        deckId,
+        scryfallId,
+        qty,
+        name,
+        type,
+        edition,
+        collectorNumber,
+        cmc,
+        isFoil,
+        isCommander,
+    } = request.body;
+    const cardToSave = new Card({
         deckId: deckId,
+        scryfallId: scryfallId,
+        qty: qty,
+        name: name,
+        type: type,
+        edition: edition,
+        collectorNumber: collectorNumber,
+        cmc: cmc,
+        isFoil: isFoil,
+        isCommander: isCommander,
     });
 
-    const createdCard = await card.save();
+    const createdCard = await cardToSave.save();
     response.status(201).json(createdCard);
 });
 
 const updateCard = asyncHandler(async (request, response) => {
     const {
+        scryfallId,
         qty,
         name,
         type,
@@ -64,6 +77,7 @@ const updateCard = asyncHandler(async (request, response) => {
     const card = await Card.findById(request.params.id);
 
     if (card) {
+        card.scryfallId = scryfallId;
         card.qty = qty;
         card.name = name;
         card.type = type;

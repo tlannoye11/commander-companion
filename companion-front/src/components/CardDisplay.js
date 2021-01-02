@@ -13,19 +13,27 @@ const CardDisplay = ({ name, edition, collectorNumber }) => {
     const dispatch = useDispatch();
 
     const scryfallCard = useSelector((state) => state.scryfallCard);
-    const { loading, error, cardData } = scryfallCard;
+    const { loading, error, scryData } = scryfallCard;
 
     useEffect(() => {
+        // console.log(
+        //     'Name:',
+        //     name,
+        //     'Edition:',
+        //     edition,
+        //     'Collector number:',
+        //     collectorNumber
+        // );
         if (name && edition) {
-            if (!cardData) {
+            if (!scryData) {
                 dispatch({ type: SCRYFALL_CARD_RESET });
                 dispatch(getScryfallCard(name, edition, collectorNumber));
             } else {
-                setImage(cardData.image_uris.small);
-                setUri(cardData.scryfall_uri);
+                setImage(scryData.image_uris.small);
+                setUri(scryData.scryfall_uri);
             }
         }
-    }, [dispatch, name, edition, collectorNumber, cardData]);
+    }, [dispatch, name, edition, collectorNumber, scryData]);
 
     return (
         <>

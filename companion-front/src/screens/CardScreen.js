@@ -11,8 +11,9 @@ import {
 import NumericInput from 'react-numeric-input';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getCardDetails, updateCard } from '../actions/cardActions';
+import { createCard, getCardDetails, updateCard } from '../actions/cardActions';
 import {
+    CARD_CREATE_RESET,
     CARD_DETAILS_RESET,
     CARD_UPDATE_RESET,
 } from '../constants/cardConstants';
@@ -22,13 +23,20 @@ import Message from '../components/Message';
 import {
     getScryfallEditions,
     getScryfallList,
+    getScryfallNamed,
 } from '../actions/scryfallActions';
-import { SCRYFALL_CARD_RESET } from '../constants/scryfallConstants';
+import {
+    SCRYFALL_CARD_RESET,
+    SCRYFALL_EDITIONS_RESET,
+    SCRYFALL_LIST_RESET,
+    SCRYFALL_NAMED_RESET,
+} from '../constants/scryfallConstants';
 
 const CardScreen = ({ match, history }) => {
     const deckId = match.params.deckId;
     const cardId = match.params.cardId;
 
+    const [scryfallId, setScryfallId] = useState('');
     const [qty, setQty] = useState(0);
     const [name, setName] = useState('');
     const [type, setType] = useState('');
@@ -51,6 +59,13 @@ const CardScreen = ({ match, history }) => {
         success: successUpdate,
     } = cardUpdate;
 
+    const cardCreate = useSelector((state) => state.cardCreate);
+    const {
+        loading: loadingCreate,
+        error: errorCreate,
+        success: successCreate,
+    } = cardCreate;
+
     const scryfallEditions = useSelector((state) => state.scryfallEditions);
     const {
         loading: loadingEditions,
@@ -59,36 +74,69 @@ const CardScreen = ({ match, history }) => {
     } = scryfallEditions;
 
     const scryfallList = useSelector((state) => state.scryfallList);
-    const { loading: loadingList, error: errorList, cardList } = scryfallList;
+    const { loading: loadingList, error: errorList, scryList } = scryfallList;
+
+    const scryfallNamed = useSelector((state) => state.scryfallNamed);
+    const {
+        loading: loadingNamed,
+        error: errorNamed,
+        scryNamed,
+    } = scryfallNamed;
 
     useEffect(() => {
-        if (successUpdate) {
+        if (successUpdate || successCreate) {
+            console.log('Going back to deck', deckId);
             dispatch({ type: CARD_DETAILS_RESET });
             dispatch({ type: CARD_UPDATE_RESET });
+            dispatch({ type: CARD_CREATE_RESET });
+            dispatch({ type: SCRYFALL_NAMED_RESET });
+            dispatch({ type: SCRYFALL_EDITIONS_RESET });
+            setEditions([]);
             history.push(`/decks/${deckId}`);
         } else {
-            if (cardId) {
-                if (!card.name || card._id !== cardId) {
-                    dispatch(getCardDetails(cardId));
-                } else {
-                    setQty(card.qty);
-                    setName(card.name);
-                    setType(card.type);
-                    setEdition(card.edition);
-                    setCollectorNumber(card.collectorNumber);
-                    setCmc(card.cmc);
-                    setIsFoil(card.isFoil);
-                    setIsCommander(card.isCommander);
+            if (scryNamed) {
+                console.log('ScryNamed', scryNamed);
+                setScryfallId(scryNamed.id);
+                setQty(1);
+                setName(scryNamed.name);
+                setType(setCardType(scryNamed.type_line));
+                setEdition(scryNamed.set);
+                setCollectorNumber(scryNamed.collector_number);
+                setCmc(scryNamed.cmc);
+                setIsFoil(false);
+                setIsCommander(false);
 
-                    if (!cardEditions) {
-                        dispatch(getScryfallEditions(card.name));
-                    } else {
-                        setEditions(cardEditions.data);
-                    }
+                if (!cardEditions) {
+                    dispatch(getScryfallEditions(scryNamed.name));
+                } else {
+                    setEditions(cardEditions);
                 }
             } else {
-                setQty(1);
-                setName('');
+                if (cardId) {
+                    console.log('card ID', cardId);
+                    console.log('card', card);
+                    console.log('editions', editions);
+                    console.log('cardEditions', cardEditions);
+                    if (!card.name || card._id !== cardId) {
+                        dispatch(getCardDetails(cardId));
+                    } else {
+                        setScryfallId(card.scryfallId);
+                        setQty(card.qty);
+                        setName(card.name);
+                        setType(card.type);
+                        setEdition(card.edition);
+                        setCollectorNumber(card.collectorNumber);
+                        setCmc(card.cmc);
+                        setIsFoil(card.isFoil);
+                        setIsCommander(card.isCommander);
+
+                        if (!cardEditions) {
+                            dispatch(getScryfallEditions(card.name));
+                        } else {
+                            setEditions(cardEditions);
+                        }
+                    }
+                }
             }
         }
     }, [
@@ -97,20 +145,63 @@ const CardScreen = ({ match, history }) => {
         deckId,
         cardId,
         card,
+        scryNamed,
         successUpdate,
-        name,
+        successCreate,
         cardEditions,
     ]);
 
     const onChangeCardSearch = (e) => {
+        setName(e.target.value);
+
         if (e.target.value.length >= 3) {
-            // setName(e.target.value);
             dispatch(getScryfallList(e.target.value));
+        } else {
+            dispatch({ type: SCRYFALL_LIST_RESET });
         }
     };
 
+    const setCardType = (cardTypeLine) => {
+        return cardTypeLine.includes('Basic')
+            ? 'B'
+            : cardTypeLine.includes('Land')
+            ? 'L'
+            : cardTypeLine.includes('Creature')
+            ? 'C'
+            : cardTypeLine.includes('Planeswalker')
+            ? 'P'
+            : cardTypeLine.includes('Artifact')
+            ? 'A'
+            : cardTypeLine.includes('Enchantment')
+            ? 'E'
+            : cardTypeLine.includes('Instant')
+            ? 'I'
+            : cardTypeLine.includes('Sorcery')
+            ? 'S'
+            : 'X';
+    };
+
     const showCardResults = () => {
-        // do something here
+        if (scryList) {
+            let cardsToList =
+                scryList.data.length < 5
+                    ? scryList.data
+                    : scryList.data.slice(0, 5);
+            return cardsToList.map((card, i) => {
+                return (
+                    <ListGroup.Item
+                        key={i}
+                        onClick={() => {
+                            dispatch({ type: SCRYFALL_LIST_RESET });
+                            dispatch({ type: SCRYFALL_CARD_RESET });
+                            dispatch(getScryfallNamed(card));
+                        }}
+                    >
+                        {card}
+                    </ListGroup.Item>
+                );
+            });
+        }
     };
 
     const updateEditionHandler = (e) => {
@@ -121,20 +212,36 @@ const CardScreen = ({ match, history }) => {
 
     const submitHandler = (e) => {
         e.preventDefault();
-        dispatch(
-            updateCard({
-                _id: cardId,
-                deckId,
-                qty,
-                name,
-                type,
-                edition,
-                collectorNumber,
-                cmc,
-                isFoil,
-                isCommander,
-            })
-        );
+        cardId
+            ? dispatch(
+                  updateCard({
+                      _id: cardId,
+                      deckId,
+                      scryfallId,
+                      qty,
+                      name,
+                      type,
+                      edition,
+                      collectorNumber,
+                      cmc,
+                      isFoil,
+                      isCommander,
+                  })
+              )
+            : dispatch(
+                  createCard({
+                      deckId,
+                      scryfallId,
+                      qty,
+                      name,
+                      type,
+                      edition,
+                      collectorNumber,
+                      cmc,
+                      isFoil,
+                      isCommander,
+                  })
+              );
     };
 
     return (
@@ -145,8 +252,18 @@ const CardScreen = ({ match, history }) => {
             {errorEditions && (
                 <Message variant='danger'>{errorEditions}</Message>
             )}
+            {loadingNamed && <Loader />}
+            {errorNamed && <Message variant='danger'>{errorNamed}</Message>}
             <Link to={`/decks/${deckId}`}>
-                <Button variant='info' className='btn btn-sm'>
+                <Button
+                    variant='info'
+                    className='btn btn-sm'
+                    onClick={() => {
+                        dispatch({ type: SCRYFALL_CARD_RESET });
+                        dispatch({ type: SCRYFALL_NAMED_RESET });
+                        dispatch({ type: SCRYFALL_EDITIONS_RESET });
+                    }}
+                >
                     <i className='fas fa-arrow-left'></i>
                 </Button>
             </Link>
@@ -157,135 +274,154 @@ const CardScreen = ({ match, history }) => {
                 <Message variant='danger'>{error}</Message>
             ) : (
                 <Row>
-                    <Col sm={6}>
+                    <Col sm={8}>
                         <Form onSubmit={submitHandler}>
-                            <Form.Group as={Row}>
-                                <Form.Label column='sm' sm={1}>
-                                    Name
-                                </Form.Label>
-                                <Col sm={11}>
-                                    <Form.Control
-                                        type='name'
-                                        size='sm'
-                                        placeholder='Enter name'
-                                        value={name}
-                                        onChange={(e) => {
-                                            this.onChangeCardSearch(e);
-                                        }}
-                                    ></Form.Control>
+                            <Row>
+                                <Col sm={8}>
+                                    <Form.Group as={Row}>
+                                        <Col sm={2} className='pt-1'>
+                                            <Form.Label>Name</Form.Label>
+                                        </Col>
+                                        <Col sm={10}>
+                                            <Form.Control
+                                                type='text'
+                                                size='sm'
+                                                placeholder='Enter name'
+                                                value={name}
+                                                onChange={(e) => {
+                                                    onChangeCardSearch(e);
+                                                }}
+                                            ></Form.Control>
+                                            <ListGroup>
+                                                {showCardResults()}
+                                            </ListGroup>
+                                        </Col>
+                                    </Form.Group>
                                 </Col>
-                                <Col>
-                                    <ListGroup variant='flush'>
-                                        {/* {this.showCardResults()} */}
-                                    </ListGroup>
-                                </Col>
-                            </Form.Group>
+                                {scryfallId && (
+                                    <Col sm={4}>
+                                        <Form.Group as={Row}>
+                                            <Form.Label column='sm' sm={2}>
+                                                Qty
+                                            </Form.Label>
+                                            <Col className='pt-1'>
+                                                <NumericInput
+                                                    min={1}
+                                                    max={99}
+                                                    value={qty}
+                                                    onChange={(e) => setQty(e)}
+                                                />
+                                            </Col>
+                                        </Form.Group>
 
-                            {cardId && (
-                                <Form.Group as={Row}>
-                                    <Form.Label column='sm' sm={1}>
-                                        Qty
-                                    </Form.Label>
-                                    <Col sm={2} className='pt-1'>
-                                        <NumericInput
-                                            min={1}
-                                            max={99}
-                                            value={card.qty}
-                                        />
-                                    </Col>
-
-                                    <Form.Label column='sm' sm={1}>
-                                        Type
-                                    </Form.Label>
-                                    <Col sm={2}>
-                                        <DropdownButton
-                                            id='card-type-dropdown'
-                                            title={type}
-                                            size='sm'
-                                            onSelect={(e) => setType(e)}
-                                        >
-                                            {[
-                                                ['C', 'Creature'],
-                                                ['P', 'Planeswalker'],
-                                                ['A', 'Artifact'],
-                                                ['E', 'Enchantment'],
-                                                ['I', 'Instant'],
-                                                ['S', 'Sorcery'],
-                                                ['L', 'Land'],
-                                                ['B', 'Basic Land'],
-                                            ].map((type, i) => (
-                                                <Dropdown.Item
-                                                    id={type[0]}
-                                                    eventKey={type[0]}
-                                                    key={i}
+                                        <Form.Group as={Row}>
+                                            <Form.Label column='sm' sm={2}>
+                                                Type
+                                            </Form.Label>
+                                            <Col sm={3}>
+                                                <DropdownButton
+                                                    id='card-type-dropdown'
+                                                    title={type}
+                                                    size='sm'
+                                                    onSelect={(e) => setType(e)}
                                                 >
-                                                    {type[1]}
-                                                </Dropdown.Item>
-                                            ))}
-                                        </DropdownButton>
-                                    </Col>
+                                                    {[
+                                                        ['C', 'Creature'],
+                                                        ['P', 'Planeswalker'],
+                                                        ['A', 'Artifact'],
+                                                        ['E', 'Enchantment'],
+                                                        ['I', 'Instant'],
+                                                        ['S', 'Sorcery'],
+                                                        ['L', 'Land'],
+                                                        ['B', 'Basic Land'],
+                                                    ].map((type, i) => (
+                                                        <Dropdown.Item
+                                                            id={type[0]}
+                                                            eventKey={type[0]}
+                                                            key={i}
+                                                        >
+                                                            {type[1]}
+                                                        </Dropdown.Item>
+                                                    ))}
+                                                </DropdownButton>
+                                            </Col>
+                                        </Form.Group>
 
-                                    <Form.Label column='sm' sm={1}>
-                                        Set
-                                    </Form.Label>
-                                    <Col sm={2}>
-                                        <DropdownButton
-                                            id='card-edition-dropdown'
-                                            title={edition.toUpperCase()}
-                                            size='sm'
-                                            onSelect={(e) =>
-                                                updateEditionHandler(e)
-                                            }
-                                        >
-                                            {editions.map((ed, i) => (
-                                                <Dropdown.Item
-                                                    id={ed.set}
-                                                    eventKey={
-                                                        ed.set +
-                                                        '|' +
-                                                        ed.collector_number
+                                        <Form.Group as={Row}>
+                                            <Form.Label column='sm' sm={2}>
+                                                Set
+                                            </Form.Label>
+                                            <Col sm={3}>
+                                                <DropdownButton
+                                                    id='card-edition-dropdown'
+                                                    title={edition.toUpperCase()}
+                                                    size='sm'
+                                                    onSelect={(e) =>
+                                                        updateEditionHandler(e)
                                                     }
-                                                    key={i}
                                                 >
-                                                    {`${ed.set_name} (${ed.collector_number})`}
-                                                </Dropdown.Item>
-                                            ))}
-                                        </DropdownButton>
+                                                    {editions.map((ed, i) => (
+                                                        <Dropdown.Item
+                                                            id={ed.set}
+                                                            eventKey={
+                                                                ed.set +
+                                                                '|' +
+                                                                ed.collector_number
+                                                            }
+                                                            key={i}
+                                                        >
+                                                            {`${ed.set_name} (${ed.collector_number})`}
+                                                        </Dropdown.Item>
+                                                    ))}
+                                                </DropdownButton>
+                                            </Col>
+                                        </Form.Group>
+
+                                        <Form.Group as={Row}>
+                                            <Form.Label column='sm' sm={2}>
+                                                CMC
+                                            </Form.Label>
+                                            <Col sm={4}>
+                                                <Form.Control
+                                                    type='number'
+                                                    size='sm'
+                                                    value={cmc}
+                                                    readOnly
+                                                />
+                                            </Col>
+                                        </Form.Group>
+
+                                        <Form.Group controlId='isFoil'>
+                                            <Form.Check
+                                                type='checkbox'
+                                                label='Foil'
+                                                checked={isFoil}
+                                                onChange={(e) =>
+                                                    setIsFoil(e.target.checked)
+                                                }
+                                            ></Form.Check>
+
+                                            <Form.Check
+                                                type='checkbox'
+                                                label='Commander'
+                                                checked={isCommander}
+                                                onChange={(e) =>
+                                                    setIsCommander(
+                                                        e.target.checked
+                                                    )
+                                                }
+                                            ></Form.Check>
+                                        </Form.Group>
+                                        <Button type='submit' variant='primary'>
+                                            Save
+                                        </Button>
                                     </Col>
-                                </Form.Group>
-                            )}
-
-                            {cardId && (
-                                <Form.Group controlId='isFoil'>
-                                    <Form.Check
-                                        type='checkbox'
-                                        label='Foil'
-                                        checked={isFoil}
-                                        onChange={(e) =>
-                                            setIsFoil(e.target.checked)
-                                        }
-                                    ></Form.Check>
-
-                                    <Form.Check
-                                        type='checkbox'
-                                        label='Commander'
-                                        checked={isCommander}
-                                        onChange={(e) =>
-                                            setIsCommander(e.target.checked)
-                                        }
-                                    ></Form.Check>
-                                </Form.Group>
-                            )}
-
-                            {cardId && (
-                                <Button type='submit' variant='primary'>
-                                    Update
-                                </Button>
-                            )}
+                                )}
+                            </Row>
                         </Form>
                     </Col>
-                    <Col sm={6}>
-                        {cardId && (
+                    <Col sm={4}>
+                        {scryfallId && (
                             <CardDisplay
                                 name={name}
                                 edition={edition}
