@@ -252,19 +252,25 @@ const CardScreen = ({ match, history }) => {
 			)}
 			{loadingNamed && <Loader />}
 			{errorNamed && <Message variant='danger'>{errorNamed}</Message>}
-			<Link to={`/decks/${deckId}`}>
-				<Button
-					variant='info'
-					className='btn btn-sm'
-					onClick={() => {
-						dispatch({ type: SCRYFALL_CARD_RESET });
-						dispatch({ type: SCRYFALL_NAMED_RESET });
-						dispatch({ type: SCRYFALL_EDITIONS_RESET });
-					}}>
-					<i className='fas fa-arrow-left'></i>
-				</Button>
-			</Link>
-			<h2>Card Screen</h2>
+			<Row>
+				<Col sm={1} className='pt-1'>
+					<Link to={`/decks/${deckId}`}>
+						<Button
+							variant='info'
+							className='btn btn-sm'
+							onClick={() => {
+								dispatch({ type: SCRYFALL_CARD_RESET });
+								dispatch({ type: SCRYFALL_NAMED_RESET });
+								dispatch({ type: SCRYFALL_EDITIONS_RESET });
+							}}>
+							<i className='fas fa-arrow-left'></i>
+						</Button>
+					</Link>
+				</Col>
+				<Col>
+					<h2>Card Screen</h2>
+				</Col>
+			</Row>
 			{loading ? (
 				<Loader />
 			) : error ? (
@@ -385,24 +391,42 @@ const CardScreen = ({ match, history }) => {
 											</Col>
 										</Form.Group>
 
-										<Form.Group controlId='isFoil'>
-											<Form.Check
-												type='checkbox'
-												label='Foil'
-												checked={isFoil}
-												onChange={(e) =>
-													setIsFoil(e.target.checked)
-												}></Form.Check>
+										<Form.Group as={Row}>
+											<Form.Label column='sm' sm={2}>
+												Foil?
+											</Form.Label>
+											<Col sm={4}>
+												<Form.Check
+													type='switch'
+													id='is-foil-switch'
+													label=''
+													checked={isFoil}
+													className='pt-1'
+													onChange={(e) =>
+														setIsFoil(
+															e.target.checked
+														)
+													}></Form.Check>
+											</Col>
+										</Form.Group>
 
-											<Form.Check
-												type='checkbox'
-												label='Commander'
-												checked={isCommander}
-												onChange={(e) =>
-													setIsCommander(
-														e.target.checked
-													)
-												}></Form.Check>
+										<Form.Group as={Row}>
+											<Form.Label column='sm' sm={2}>
+												<i className='fas fa-crown'></i>
+											</Form.Label>
+											<Col sm={4}>
+												<Form.Check
+													type='switch'
+													id='is-commander-switch'
+													label=''
+													checked={isCommander}
+													className='pt-1'
+													onChange={(e) =>
+														setIsCommander(
+															e.target.checked
+														)
+													}></Form.Check>
+											</Col>
 										</Form.Group>
 										<Button type='submit' variant='primary'>
 											Save

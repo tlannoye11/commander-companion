@@ -16,15 +16,6 @@ const CardDisplay = ({ name, edition, collectorNumber }) => {
 	const { loading, error, scryData } = scryfallCard;
 
 	useEffect(() => {
-		console.log('Card Display useEffect');
-		console.log(
-			'Name:',
-			name,
-			'Edition:',
-			edition,
-			'Collector number:',
-			collectorNumber
-		);
 		if (name && edition) {
 			if (!scryData) {
 				dispatch({ type: SCRYFALL_CARD_RESET });
@@ -46,12 +37,12 @@ const CardDisplay = ({ name, edition, collectorNumber }) => {
 				<Card
 					border='white'
 					className='text-center'
-					style={{ maxWidth: '240px' }}>
+					style={{ maxWidth: '290px' }}>
 					<Card.Img src={image} variant='top' />
 					<Card.Body>
 						{/* <Card.Title as='div'>
-                            <strong>{name}</strong>
-                        </Card.Title> */}
+							<strong>{name}</strong>
+						</Card.Title> */}
 						{/* <Card.Text as='div'>{edition}</Card.Text> */}
 						<Card.Link href={uri}>Scryfall</Card.Link>
 					</Card.Body>
