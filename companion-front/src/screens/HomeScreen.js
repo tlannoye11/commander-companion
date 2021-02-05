@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Table } from 'react-bootstrap';
+import { Button, Dropdown, DropdownButton, Table } from 'react-bootstrap';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { listDecks, deleteDeck, createDeck } from '../actions/deckActions';
 import { DECK_CREATE_RESET } from '../constants/deckConstants';
 
 const HomeScreen = ({ history }) => {
+	const [color, setColor] = useState('');
+
 	const dispatch = useDispatch();
 
 	const deckList = useSelector((state) => state.deckList);
@@ -49,6 +51,19 @@ const HomeScreen = ({ history }) => {
 		dispatch(createDeck());
 	};
 
+	const sleeveColors = [
+		'red',
+		'orange',
+		'yellow',
+		'green',
+		'cyan',
+		'blue',
+		'purple',
+		'white',
+		'gray',
+		'black',
+	];
+
 	return (
 		<div>
 			<h1>My Deck Box</h1>
@@ -66,7 +81,10 @@ const HomeScreen = ({ history }) => {
 					<thead>
 						<tr>
 							<th>
-								<Button size='sm' onClick={createDeckHandler}>
+								<Button
+									className='btn btn-sm'
+									variant='success'
+									onClick={createDeckHandler}>
 									<i className='fas fa-plus'></i>
 								</Button>
 							</th>
@@ -97,9 +115,9 @@ const HomeScreen = ({ history }) => {
 									</Link>
 								</td>
 								{deck.id}
-								<td className='pt-2'>Colors here</td>
+								<td className='pt-2'>Deck colors</td>
 								<td className='center-column pt-2'>
-									Spell + Land count
+									Spells n Lands
 									{/* {deck.spell_count + deck.land_count} */}
 								</td>
 								<td className='center-column pt-2'>
@@ -111,7 +129,31 @@ const HomeScreen = ({ history }) => {
 									{/* {deck.avg_cmc} */}
 								</td>
 								<td className='pt-2'>{deck.theme}</td>
-								<td className='pt-2'>{deck.sleeveColor}</td>
+								<td className='pt-2'>
+									<DropdownButton
+										id='deck-color-dropdown'
+										title={deck.sleeveColor}
+										size='sm'
+										onSelect={(e) => setColor(e)}>
+										{sleeveColors.map((color, i) => (
+											<Dropdown.Item
+												id={color}
+												eventKey={i}
+												key={i}>
+												<div
+													className={`sleeve-color ${color}`}
+													style={{
+														height: 20,
+														width: 20,
+														backgroundColor: color,
+														borderRadius: '50%',
+														display: 'inline-block',
+														float: 'left',
+													}}></div>
+											</Dropdown.Item>
+										))}
+									</DropdownButton>
+								</td>
 								<td className='pt-2'>Basics</td>
 							</tr>
 						))}

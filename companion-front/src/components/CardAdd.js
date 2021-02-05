@@ -24,7 +24,7 @@ const CardAdd = ({ deckId }) => {
 	const handleOpen = () => setShow(true);
 	const handleBack = () => setName('');
 
-	// Step 1
+	// Step 1 - Search for card names
 	const onChangeCardSearch = (e) => {
 		setCardSearch(e.target.value);
 		dispatch({ type: SCRYFALL_NAMED_RESET });
@@ -36,7 +36,7 @@ const CardAdd = ({ deckId }) => {
 		}
 	};
 
-	// Step 2
+	// Step 2 - Show possible card names
 	const showCardResults = () => {
 		if (scryList) {
 			let cardsToList =
@@ -48,7 +48,6 @@ const CardAdd = ({ deckId }) => {
 					<ListGroup.Item
 						key={i}
 						onClick={() => {
-							// setCardSearch(cardName);
 							setName(cardName);
 							dispatch({ type: SCRYFALL_LIST_RESET });
 						}}>
@@ -62,8 +61,8 @@ const CardAdd = ({ deckId }) => {
 	return (
 		<>
 			<Button
-				className='btn btn-sm py-0 px-1 mt-1'
-				variant='info'
+				className='btn btn-sm'
+				variant='success'
 				onClick={handleOpen}>
 				<i className='fas fa-plus'></i>
 			</Button>

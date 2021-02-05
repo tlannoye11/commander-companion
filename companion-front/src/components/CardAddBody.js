@@ -68,9 +68,9 @@ const CardAddBody = ({ deckId, name }) => {
 				setEditions(cardEditions);
 			}
 		}
-	}, [dispatch, scryNamed]);
+	}, [dispatch, name, scryNamed, cardEditions]);
 
-	// Step 3 - Add the card to the deck.
+	// Step 3 - Add the card to the deck
 	const handleAddCard = (cardName) => {
 		dispatch({ type: SCRYFALL_NAMED_RESET });
 		dispatch(
@@ -80,7 +80,7 @@ const CardAddBody = ({ deckId, name }) => {
 				qty: qty,
 				name: name,
 				type: type,
-				edition: edition,
+				edition: edition.toUpperCase(),
 				collectorNumber: collectorNumber,
 				cmc: cmc,
 				isFoil: isFoil,
@@ -247,8 +247,8 @@ const CardAddBody = ({ deckId, name }) => {
 										Scryfall
 									</Card.Link>
 									<Button
-										className='btn btn-sm py-0 px-1 mt-1'
-										variant='info'
+										className='btn btn-sm'
+										variant='success'
 										onClick={handleAddCard}>
 										<i className='fas fa-plus'></i>
 									</Button>
