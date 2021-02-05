@@ -21,15 +21,15 @@ const cardSchema = new Schema({
 	},
 	type: {
 		type: String,
-		required: true,
+		required: false,
 	},
 	edition: {
 		type: String,
-		required: true,
+		required: false,
 	},
 	collectorNumber: {
 		type: String,
-		required: true,
+		required: false,
 	},
 	cmc: {
 		type: Number,
