@@ -88,14 +88,14 @@ const HomeScreen = ({ history }) => {
 									<i className='fas fa-plus'></i>
 								</Button>
 							</th>
-							<th>Name</th>
-							<th>Colors</th>
-							<th className='center-column'>Count</th>
-							<th className='center-column'>Foils</th>
-							<th className='center-column'>Avg CMC</th>
-							<th>Theme</th>
-							<th>Sleeves</th>
-							<th>Basic Lands</th>
+							<th className='pb-2'>Name</th>
+							<th className='pb-2'>Colors</th>
+							<th className='pb-2 center-column'>Count</th>
+							<th className='pb-2 center-column'>Foils</th>
+							<th className='pb-2 center-column'>Avg CMC</th>
+							<th className='pb-2'>Theme</th>
+							<th className='pb-2'>Sleeves</th>
+							<th className='pb-2'>Basic Lands</th>
 						</tr>
 					</thead>
 					<tbody>

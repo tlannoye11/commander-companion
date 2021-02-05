@@ -6,8 +6,6 @@ import NumericInput from 'react-numeric-input';
 import Message from './Message';
 import Loader from './Loader';
 import { deleteCard, getCardsInDeck } from '../actions/cardActions';
-import { CARD_CREATE_RESET } from '../constants/cardConstants';
-import CardAdd from './CardAdd';
 
 const CardList = ({ history, deckId }) => {
 	const dispatch = useDispatch();
@@ -22,21 +20,9 @@ const CardList = ({ history, deckId }) => {
 		success: successDelete,
 	} = cardDelete;
 
-	const cardCreate = useSelector((state) => state.cardCreate);
-	const {
-		loading: loadingCreate,
-		error: errorCreate,
-		success: successCreate,
-		card: createdCard,
-	} = cardCreate;
-
 	useEffect(() => {
-		dispatch({ type: CARD_CREATE_RESET });
-
-		if (!successCreate) {
-			dispatch(getCardsInDeck(deckId));
-		}
-	}, [dispatch, history, successDelete, successCreate, createdCard, deckId]);
+		dispatch(getCardsInDeck(deckId));
+	}, [dispatch, history, successDelete, deckId]);
 
 	const deleteCardHandler = (id) => {
 		if (window.confirm('Are you sure')) {
@@ -75,8 +61,6 @@ const CardList = ({ history, deckId }) => {
 		<>
 			{loadingDelete && <Loader />}
 			{errorDelete && <Message variant='danger'>{errorDelete}</Message>}
-			{loadingCreate && <Loader />}
-			{errorCreate && <Message variant='danger'>{errorCreate}</Message>}
 			{loading ? (
 				<Loader />
 			) : error ? (
@@ -86,17 +70,26 @@ const CardList = ({ history, deckId }) => {
 					<thead>
 						<tr>
 							<th className='center_column'>
-								<CardAdd deckId={deckId} />
+								{/* <CardAdd deckId={deckId} /> */}
+								<Link
+									to={`/decks/${deckId}/cards`}
+									style={{ padding: '.3rem' }}>
+									<Button
+										className='btn btn-sm'
+										variant='success'>
+										<i className='fas fa-plus'></i>
+									</Button>
+								</Link>
 							</th>
-							<th className='center_column'>
+							<th className='center_column pb-2'>
 								{cards.reduce((acc, cur) => acc + cur.qty, 0)}
 							</th>
 							<th>Name</th>
-							<th className='center_column'>Type</th>
-							<th className='center_column'>Edition</th>
-							<th className='center_column'>CMC</th>
-							<th className='center_column'>Foil?</th>
-							<th className='center_column'>
+							<th className='center_column pb-2'>Type</th>
+							<th className='center_column pb-2'>Edition</th>
+							<th className='center_column pb-2'>CMC</th>
+							<th className='center_column pb-2'>Foil?</th>
+							<th className='center_column pb-2'>
 								<i className='fas fa-crown'></i>
 							</th>
 						</tr>
