@@ -14,7 +14,6 @@ import {
 	getScryfallEditions,
 	getScryfallNamed,
 } from '../actions/scryfallActions';
-import { SCRYFALL_NAMED_RESET } from '../constants/scryfallConstants';
 import Loader from './Loader';
 import Message from './Message';
 
@@ -72,7 +71,6 @@ const CardAddBody = ({ deckId, name }) => {
 
 	// Step 3 - Add the card to the deck
 	const handleAddCard = (cardName) => {
-		dispatch({ type: SCRYFALL_NAMED_RESET });
 		dispatch(
 			createCard({
 				deckId: deckId,
