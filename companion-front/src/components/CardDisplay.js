@@ -21,7 +21,12 @@ const CardDisplay = ({ name, edition, collectorNumber }) => {
 				dispatch({ type: SCRYFALL_CARD_RESET });
 				dispatch(getScryfallCard(name, edition, collectorNumber));
 			} else {
-				setImage(scryData.image_uris.small);
+				if (scryData.hasOwnProperty('card_faces')) {
+					setImage(scryData.card_faces[0].image_uris.small);
+				} else {
+					setImage(scryData.image_uris.small);
+				}
+
 				setUri(scryData.scryfall_uri);
 			}
 		}
