@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import Deck from '../models/deckModel.js';
+import Card from '../models/cardModel.js';
 
 const getDecks = asyncHandler(async (request, response) => {
 	const decks = await Deck.find({});
@@ -21,8 +22,21 @@ const getDeckById = asyncHandler(async (request, response) => {
 const deleteDeck = asyncHandler(async (request, response) => {
 	const deck = await Deck.findById(request.params.id);
 
+	// console.log('Deck controller deck', deck);
+
 	if (deck) {
+		const cards = await Card.find({ deckId: request.params.id });
+
+		// console.log('Deck controller cards', cards[0]);
+
 		await deck.remove();
+
+		if (cards) {
+			cards.forEach((card) => {
+				card.remove();
+			});
+		}
+
 		response.json({ message: 'Deck removed' });
 	} else {
 		response.status(404);

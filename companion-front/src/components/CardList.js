@@ -125,7 +125,7 @@ const CardList = ({ history, deckId }) => {
 									{card.type}
 								</td>
 								<td className='center_column pt-2'>
-									{card.edition}
+									{card.edition.toUpperCase()}
 								</td>
 								<td className='center_column pt-2'>
 									{card.cmc}
