@@ -1,25 +1,17 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Table } from 'react-bootstrap';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { listDecks, deleteDeck, createDeck } from '../actions/deckActions';
+import DeckRow from '../components/DeckRow';
+import { listDecks, createDeck } from '../actions/deckActions';
 import { DECK_CREATE_RESET } from '../constants/deckConstants';
-import SleeveColor from '../components/SleeveColor';
 
 const HomeScreen = ({ history }) => {
     const dispatch = useDispatch();
 
     const deckList = useSelector((state) => state.deckList);
     const { loading, error, decks } = deckList;
-
-    const deckDelete = useSelector((state) => state.deckDelete);
-    const {
-        loading: loadingDelete,
-        error: errorDelete,
-        success: successDelete,
-    } = deckDelete;
 
     const deckCreate = useSelector((state) => state.deckCreate);
     const {
@@ -38,13 +30,7 @@ const HomeScreen = ({ history }) => {
         } else {
             dispatch(listDecks());
         }
-    }, [dispatch, history, successDelete, successCreate, createdDeck]);
-
-    const deleteHandler = (id) => {
-        if (window.confirm('Are you sure?')) {
-            dispatch(deleteDeck(id));
-        }
-    };
+    }, [dispatch, history, successCreate, createdDeck]);
 
     const createDeckHandler = () => {
         dispatch(createDeck());
@@ -53,8 +39,6 @@ const HomeScreen = ({ history }) => {
     return (
         <div>
             <h1>My Deck Box</h1>
-            {loadingDelete && <Loader />}
-            {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
             {loadingCreate && <Loader />}
             {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
 
@@ -88,41 +72,7 @@ const HomeScreen = ({ history }) => {
                     <tbody>
                         {decks.map((deck) => (
                             <tr key={deck._id}>
-                                <td>
-                                    <Button
-                                        variant='danger'
-                                        className='btn-sm'
-                                        onClick={() => deleteHandler(deck._id)}
-                                    >
-                                        <i className='fas fa-trash'></i>
-                                    </Button>
-                                </td>
-                                <td className='pt-2'>
-                                    <Link to={`/decks/${deck._id}`}>
-                                        <strong>{deck.name}</strong>
-                                    </Link>
-                                </td>
-                                {deck.id}
-                                <td className='pt-2'>Deck colors</td>
-                                <td className='center-column pt-2'>
-                                    Spells n Lands
-                                    {/* {deck.spell_count + deck.land_count} */}
-                                </td>
-                                <td className='center-column pt-2'>
-                                    Foil count
-                                    {/* {deck.foil_count} */}
-                                </td>
-                                <td className='center-column pt-2'>
-                                    Avg CMC
-                                    {/* {deck.avg_cmc} */}
-                                </td>
-                                <td className='pt-2'>{deck.theme}</td>
-                                <td className='pt-2'>
-                                    <SleeveColor
-                                        sleeveColor={deck.sleeveColor}
-                                    />
-                                </td>
-                                <td className='pt-2'>Basics</td>
+                                <DeckRow deck={deck} />
                             </tr>
                         ))}
                     </tbody>

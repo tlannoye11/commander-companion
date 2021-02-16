@@ -2,8 +2,11 @@ import asyncHandler from 'express-async-handler';
 import Card from '../models/cardModel.js';
 
 const getCards = asyncHandler(async (request, response) => {
-    const deck = request.query.deck ? { deckId: request.query.deck } : {};
-    const cards = await Card.find({ ...deck });
+    // const deck = request.query.deck ? { deckId: request.query.deck } : {};
+    const params = request.query || {};
+
+    // const cards = await Card.find({ ...deck });
+    const cards = await Card.find({ ...params });
 
     response.json(cards);
 });
@@ -17,6 +20,11 @@ const getCardById = asyncHandler(async (request, response) => {
         response.status(404);
         throw new Error('Card not found');
     }
+});
+
+const countCards = asyncHandler(async (request, response) => {
+    // const query = request.query
+    response.json({ message: 'To be continued...' });
 });
 
 const deleteCard = asyncHandler(async (request, response) => {
