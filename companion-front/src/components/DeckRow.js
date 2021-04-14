@@ -1,28 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { searchCards } from '../actions/cardActions';
 import { deleteDeck } from '../actions/deckActions';
-import Loader from './Loader';
-import Message from './Message';
 import SleeveColor from './SleeveColor';
 
 const DeckRow = ({ deck }) => {
     const dispatch = useDispatch();
 
+    const [sleeveColor, setSleeveColor] = useState(deck.sleeveColor);
+
     const cardSearch = useSelector((state) => state.cardSearch);
     const { loading, error, cards } = cardSearch;
 
-    const deckDelete = useSelector((state) => state.deckDelete);
-    const {
-        loading: loadingDelete,
-        error: errorDelete,
-        success: successDelete,
-    } = deckDelete;
-
     useEffect(() => {
         // Get all the stats for the deck row here.
-    }, [dispatch, successDelete]);
+        // Find the deck's color identity based on the combined color identity of all of its commanders.
+    }, [dispatch]);
 
     const deleteHandler = (id) => {
         if (window.confirm('Are you sure?')) {
@@ -32,8 +27,6 @@ const DeckRow = ({ deck }) => {
 
     return (
         <>
-            {loadingDelete && <Loader />}
-            {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
             <td>
                 <Button
                     variant='danger'
@@ -64,7 +57,10 @@ const DeckRow = ({ deck }) => {
             </td>
             <td className='pt-2'>{deck.theme}</td>
             <td className='pt-2'>
-                <SleeveColor sleeveColor={deck.sleeveColor} />
+                <SleeveColor
+                    sleeveColor={sleeveColor}
+                    setSleeveColor={setSleeveColor}
+                />
             </td>
             <td className='pt-2'>Basics</td>
         </>

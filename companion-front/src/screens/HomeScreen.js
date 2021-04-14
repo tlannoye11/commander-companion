@@ -13,6 +13,13 @@ const HomeScreen = ({ history }) => {
     const deckList = useSelector((state) => state.deckList);
     const { loading, error, decks } = deckList;
 
+    const deckDelete = useSelector((state) => state.deckDelete);
+    const {
+        loading: loadingDelete,
+        error: errorDelete,
+        success: successDelete,
+    } = deckDelete;
+
     const deckCreate = useSelector((state) => state.deckCreate);
     const {
         loading: loadingCreate,
@@ -30,7 +37,7 @@ const HomeScreen = ({ history }) => {
         } else {
             dispatch(listDecks());
         }
-    }, [dispatch, history, successCreate, createdDeck]);
+    }, [dispatch, history, successDelete, successCreate, createdDeck]);
 
     const createDeckHandler = () => {
         dispatch(createDeck());
@@ -39,6 +46,8 @@ const HomeScreen = ({ history }) => {
     return (
         <div>
             <h1>My Deck Box</h1>
+            {loadingDelete && <Loader />}
+            {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
             {loadingCreate && <Loader />}
             {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
 

@@ -50,11 +50,6 @@ const DeckScreen = ({ history, match }) => {
     }, [dispatch, history, deckId, deck, successUpdate]);
 
     const submitDetailsHandler = (e) => {
-        console.log('Deck screen submit handler');
-        console.log('deckId:', deckId);
-        console.log('name:', name);
-        console.log('theme:', theme);
-        console.log('sleeveColor:', sleeveColor);
         e.preventDefault();
 
         dispatch(

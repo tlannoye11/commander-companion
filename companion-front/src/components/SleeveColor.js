@@ -2,8 +2,6 @@ import React from 'react';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 
 const SleeveColor = ({ sleeveColor, setSleeveColor }) => {
-    // const [sleeveColor, setSleeveColor] = useState(colorIn);
-
     const sleeveColors = [
         'red',
         'orange',

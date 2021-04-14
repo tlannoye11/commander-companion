@@ -46,6 +46,7 @@ const createCard = asyncHandler(async (request, response) => {
         qty,
         name,
         type,
+        colorIdentity,
         edition,
         collectorNumber,
         cmc,
@@ -58,6 +59,7 @@ const createCard = asyncHandler(async (request, response) => {
         qty: qty,
         name: name,
         type: type,
+        colorIdentity: colorIdentity,
         edition: edition,
         collectorNumber: collectorNumber,
         cmc: cmc,
@@ -75,6 +77,7 @@ const updateCard = asyncHandler(async (request, response) => {
         qty,
         name,
         type,
+        colorIdentity,
         edition,
         collectorNumber,
         cmc,
@@ -89,6 +92,7 @@ const updateCard = asyncHandler(async (request, response) => {
         card.qty = qty;
         card.name = name;
         card.type = type;
+        card.colorIdentity = colorIdentity;
         card.edition = edition;
         card.collectorNumber = collectorNumber;
         card.cmc = cmc;
