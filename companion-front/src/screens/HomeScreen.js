@@ -6,6 +6,7 @@ import Loader from '../components/Loader';
 import DeckRow from '../components/DeckRow';
 import { listDecks, createDeck } from '../actions/deckActions';
 import { DECK_CREATE_RESET } from '../constants/deckConstants';
+import { searchCards } from '../actions/cardActions';
 
 const HomeScreen = ({ history }) => {
     const dispatch = useDispatch();
@@ -28,6 +29,13 @@ const HomeScreen = ({ history }) => {
         deck: createdDeck,
     } = deckCreate;
 
+    const cardSearch = useSelector((state) => state.cardSearch);
+    const {
+        loading: loadingCommander,
+        error: errorCommander,
+        cards: commanderCards,
+    } = cardSearch;
+
     useEffect(() => {
         dispatch({ type: DECK_CREATE_RESET });
 
@@ -36,6 +44,7 @@ const HomeScreen = ({ history }) => {
             // try not to move when a record is created
         } else {
             dispatch(listDecks());
+            dispatch(searchCards({ isCommander: true }));
         }
     }, [dispatch, history, successDelete, successCreate, createdDeck]);
 

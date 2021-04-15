@@ -41,8 +41,12 @@ const DeckRow = ({ deck }) => {
                     <strong>{deck.name}</strong>
                 </Link>
             </td>
-            {deck.id}
-            <td className='pt-2'>Deck colors</td>
+            <td className='pt-2'>
+                {cards &&
+                    cards
+                        .filter((card) => card.deckId === deck._id)
+                        .map((card) => <span>{card.colorIdentity}</span>)}
+            </td>
             <td className='center-column pt-2'>
                 Spells n Lands
                 {/* {deck.spell_count + deck.land_count} */}
