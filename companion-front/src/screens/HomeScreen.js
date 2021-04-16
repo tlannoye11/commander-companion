@@ -29,13 +29,6 @@ const HomeScreen = ({ history }) => {
         deck: createdDeck,
     } = deckCreate;
 
-    const cardSearch = useSelector((state) => state.cardSearch);
-    const {
-        loading: loadingCommander,
-        error: errorCommander,
-        cards: commanderCards,
-    } = cardSearch;
-
     useEffect(() => {
         dispatch({ type: DECK_CREATE_RESET });
 
@@ -44,7 +37,7 @@ const HomeScreen = ({ history }) => {
             // try not to move when a record is created
         } else {
             dispatch(listDecks());
-            dispatch(searchCards({ isCommander: true }));
+            dispatch(searchCards());
         }
     }, [dispatch, history, successDelete, successCreate, createdDeck]);
 
@@ -79,7 +72,9 @@ const HomeScreen = ({ history }) => {
                             </th>
                             <th className='pb-2'>Name</th>
                             <th className='pb-2'>Colors</th>
-                            <th className='pb-2 center-column'>Count</th>
+                            <th className='pb-2 center-column'>
+                                Spells / Lands
+                            </th>
                             <th className='pb-2 center-column'>Foils</th>
                             <th className='pb-2 center-column'>Avg CMC</th>
                             <th className='pb-2'>Theme</th>
