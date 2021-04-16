@@ -19,6 +19,20 @@ const DeckRow = ({ deck }) => {
         }
     };
 
+    const getColorIdentity = () => {
+        if (cards) {
+            let commanders = cards.filter(
+                (card) => card.deckId === deck._id && card.isCommander === true
+            );
+
+            return commanders
+                ? commanders.reduce((id, cur) => {
+                      return id + cur.colorIdentity;
+                  }, '')
+                : '';
+        }
+    };
+
     const getSpellCount = () => {
         if (cards) {
             let spells = cards.filter(
@@ -68,12 +82,6 @@ const DeckRow = ({ deck }) => {
     const getAverageCMC = () => {
         if (cards) {
             let cardsInDeck = cards.filter((card) => card.deckId === deck._id);
-            let temp = cardsInDeck.reduce((total, cur) => {
-                console.log('cur', cur);
-                return total + cur.cmc;
-            }, 0);
-
-            console.log(temp);
 
             return cardsInDeck
                 ? (
@@ -105,18 +113,7 @@ const DeckRow = ({ deck }) => {
                     <strong>{deck.name}</strong>
                 </Link>
             </td>
-            <td className='pt-2'>
-                {cards &&
-                    cards
-                        .filter(
-                            (card) =>
-                                card.deckId === deck._id &&
-                                card.isCommander === true
-                        )
-                        .map((card) => (
-                            <span key={card._id}>{card.colorIdentity}</span>
-                        ))}
-            </td>
+            <td className='pt-2'>{getColorIdentity()}</td>
             <td className='center-column pt-2'>
                 {getSpellCount()}/{getLandCount()}
             </td>
