@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -17,6 +17,19 @@ const DeckRow = ({ deck }) => {
         if (window.confirm('Are you sure?')) {
             dispatch(deleteDeck(id));
         }
+    };
+
+    const updateHandler = (e) => {
+        console.log('Sleeve update:', e.target.value);
+
+        // dispatch(
+        //     updateDeck({
+        //         _id: deck._id,
+        //         name: deck.name,
+        //         theme: deck.theme,
+        //         sleeveColor: deck.sleeveColor,
+        //     })
+        // );
     };
 
     const getColorIdentity = () => {
@@ -81,7 +94,11 @@ const DeckRow = ({ deck }) => {
 
     const getAverageCMC = () => {
         if (cards) {
-            let cardsInDeck = cards.filter((card) => card.deckId === deck._id);
+            let cardsInDeck = cards.filter(
+                (card) =>
+                    card.deckId === deck._id &&
+                    !(card.type === 'L' || card.type === 'B')
+            );
 
             return cardsInDeck
                 ? (

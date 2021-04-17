@@ -88,7 +88,7 @@ const CardList = ({ history, deckId }) => {
                             <th className='center_column pb-2'>
                                 {cards.reduce((acc, cur) => acc + cur.qty, 0)}
                             </th>
-                            <th>Name</th>
+                            <th className='pb-2'>Name</th>
                             <th className='center_column pb-2'>Type</th>
                             <th className='center_column pb-2'>Edition</th>
                             <th className='center_column pb-2'>CMC</th>

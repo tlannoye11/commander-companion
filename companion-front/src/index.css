@@ -12,7 +12,12 @@
     text-align: center;
 }
 
+/* Make sure the dropdown menus don't get too big */
 .dropdown-menu {
     max-height: 175px;
     overflow-y: scroll;
+}
+
+.popover-body {
+    max-width: 50px;
 }

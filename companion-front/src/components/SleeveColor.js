@@ -1,5 +1,10 @@
 import React from 'react';
-import { OverlayTrigger, Popover } from 'react-bootstrap';
+import {
+    Dropdown,
+    DropdownButton,
+    OverlayTrigger,
+    Popover,
+} from 'react-bootstrap';
 
 const SleeveColor = ({ sleeveColor, setSleeveColor }) => {
     const sleeveColors = [
@@ -26,7 +31,7 @@ const SleeveColor = ({ sleeveColor, setSleeveColor }) => {
                                 height: 30,
                                 width: 30,
                                 backgroundColor: color,
-                                borderRadius: '50%',
+                                borderRadius: '20%',
                                 display: 'inline-block',
                                 float: 'left',
                             }}
@@ -55,6 +60,29 @@ const SleeveColor = ({ sleeveColor, setSleeveColor }) => {
                 }}
             ></button>
         </OverlayTrigger>
+        // <DropdownButton
+        //     id='sleeve-color'
+        //     title={sleeveColor}
+        //     size='sm'
+        //     onSelect={(e) => setSleeveColor(e)}
+        // >
+        //     {sleeveColors.map((color, i) => (
+        //         <Dropdown.Item id={color} eventKey={color} key={i}>
+        //             <button
+        //                 key={i}
+        //                 style={{
+        //                     height: 30,
+        //                     width: 30,
+        //                     backgroundColor: color,
+        //                     borderRadius: '50%',
+        //                     display: 'inline-block',
+        //                     float: 'left',
+        //                 }}
+        //                 onClick={() => setSleeveColor(color)}
+        //             ></button>
+        //         </Dropdown.Item>
+        //     ))}
+        // </DropdownButton>
     );
 };
 
