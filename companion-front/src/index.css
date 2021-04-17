@@ -1,13 +1,18 @@
 .center_column {
-	text-align: center;
+    text-align: center;
 }
 
 .trash_column {
-	width: 30px;
+    width: 30px;
 }
 
 /* Make sure the card quantity field doesn't get too big */
 .react-numeric-input input {
-	max-width: 50px;
-	text-align: center;
+    max-width: 50px;
+    text-align: center;
+}
+
+.dropdown-menu {
+    max-height: 175px;
+    overflow-y: scroll;
 }
